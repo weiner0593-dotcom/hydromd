@@ -7,7 +7,7 @@ global.autoblockmorroco = false // auto block 212 (true to on, false to off)
 global.wlcm = false
 global.autokickmorroco = false // auto kick 212 (true to on, false to off) 
 global.antispam = false //auto kick spammer (true to on, false to off)
-global.autosahur = true // auto sahur (true to on, false to off)
+global.autosahur = false // auto sahur (true to on, false to off)
 
 //===============SETTING MENU==================\\
 global.channel = '120363416755002041@newsletter' // GANTI DENGAN ID CHMU KALO ADA
@@ -20,7 +20,7 @@ global.ig = '@focabar'
 global.tele = 'miminhydro'
 global.ttowner = '@focabar'
 global.ownername = 'FocaBars'
-global.owner = ['6285187063723','6288276554694', '6285792820173'] // SETTING JUGA DI FOLDER DATABASE 
+global.owner = ['6285187063723','6288276554694'] // SETTING JUGA DI FOLDER DATABASE 
 global.ownernomer = '6285187063723'
 global.socialm = 'GitHub: -'
 global.location = 'Indonesia' 
@@ -52,7 +52,7 @@ global.ownername = 'FocaBars'
 global.ownerNumber = ["6285187063723@s.whatsapp.net"]
 global.ownerweb = ""
 global.websitex = ""
-global.wagc = "https://chat.whatsapp.com/LqCKICVcCgiJcrxttSRci3"
+global.wagc = "https://chat.whatsapp.com/FvSBEz1UezQ4G7Xwfrr9sF"
 global.saluran = "https://whatsapp.com/channel/0029VbAYRBf4o7qSa74h2m0t"
 global.themeemoji = '🏞️'
 global.wm = "Asisten Hydro ||| WhatsApps Bots"
@@ -94,6 +94,7 @@ global.mess = {
    query: {
        text: "Teksnya mana? Aku kan gabisa baca pikiran kaka 😉",
        link: "Linknya dongg.. Aku gabisa tanpa link 😖",
+       image: "Gambarnya mana nih? jahat banget engga ngasi:<",
    },
    error: {
        fitur: "Whoops! Eror nih.. laporkan ke owner agar diperbaiki 6285187063723 🙏",
@@ -240,3 +241,4 @@ fs.watchFile(file, () => {
 	delete require.cache[file]
 	require(file)
 })
+	
