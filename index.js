@@ -25,6 +25,7 @@ const {
     getAggregateVotesInPollMessage,
     proto
 } = require("socketon")
+const { MongoClient } = require('mongodb');
 const crypto = require('crypto')
 const cfonts = require('cfonts');
 const { color, bgcolor } = require('./lib/color')
@@ -58,7 +59,6 @@ const { uncache, nocache, checkVersionUpdate } = require('./lib/loader')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetchJson, await, sleep, reSize } = require('./lib/myfunc')
 
-const prefix = ''
 let phoneNumber = "6285187063723"
 global.db = JSON.parse(fs.readFileSync('./database/database.json'))
 if (global.db) global.db = {
@@ -72,6 +72,9 @@ chats: {},
 settings: {},
 ...(global.db || {})
 }
+global.db = { users: {}, groups: {}, chats: {}, database: {}, settings: {}, others: {} };
+let isThirtySeconds = true;
+
 const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
 
 const useMobile = process.argv.includes("--mobile")
@@ -360,7 +363,7 @@ console.log(err)}})
 						})
 	                var toCmd = pollUpdate.filter(v => v.voters.length !== 0)[0]?.name
 	                if (toCmd == undefined) return
-                    var prefCmd = prefix+toCmd
+                    var prefCmd = global.prefix+toCmd
 	                hydro.appenTextMessage(prefCmd, chatUpdate)
 				}
 			}

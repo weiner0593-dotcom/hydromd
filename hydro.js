@@ -3,159 +3,417 @@
 • BEBAS RECODE 
 • JANGAN DI JUAL
 */
-require('./settings')
-require('./lib/listmenu')
-const {
-    downloadContentFromMessage,
-	extractImageThumb
-} = require('socketon')
-const { modul } = require('./module')
-const path = require('path')
-const { os, axios, baileys, chalk, cheerio, child_process, crypto, cookie, FormData, FileType, fetch, fs, fsx, ffmpeg, Jimp, jsobfus, PhoneNumber, process, moment, ms, speed, syntaxerror, util, ytdl, googleTTS, nodecron, maker } = modul
-const { exec, spawn, execSync } = child_process
-const { BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent, generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType, generateForwardMessageContent } = baileys
-const { clockString, parseMention, formatp, tanggal, getTime, isUrl, sleep, runtime, fetchJson, getBuffer, jsonformat, format, reSize, generateProfilePicture, getRandom } = require('./lib/myfunc')
-const { FajarNews, BBCNews, metroNews, CNNNews, iNews, KumparanNews, TribunNews, DailyNews, DetikNews, OkezoneNews, CNBCNews, KompasNews, SindoNews, TempoNews, IndozoneNews, AntaraNews, RepublikaNews, VivaNews, KontanNews, MerdekaNews, KomikuSearch, AniPlanetSearch, KomikFoxSearch, KomikStationSearch, MangakuSearch, KiryuuSearch, KissMangaSearch, KlikMangaSearch, PalingMurah, LayarKaca21, AminoApps, Mangatoon, WAModsSearch, Emojis, CoronaInfo, JalanTikusMeme,Cerpen, Quotes, Couples, Darkjokes } = require("dhn-api");
-const { Client } = require('ssh2');
-let _sewa = require("./lib/store")
-const { jadibot, stopjadibot, listjadibot } = require('./lib/clone')
-const salam = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('a')
-const { absenList, saveAbsen, resetAbsen } = require('./lib/absen');
-const { createClient } = require('@supabase/supabase-js');
-const supabase = createClient(global.supaurl, global.supakey);
-const { isSetWelcome, addSetWelcome, changeSetWelcome, removeSetWelcome } = require('./lib/setwelcome');
-const { Primbon } = require('scrape-primbon')
-const packageJson = require('./package.json'); 
-const primbon = new Primbon()
-const canvafy = require('canvafy')
-const { isSetLeft, addSetLeft, removeSetLeft, changeSetLeft } = require('./lib/setleft');
-const { getTextSetWelcome } = require('./lib/setwelcome');
-const { getTextSetLeft } = require('./lib/setleft');
-const { gameSlot } = require("./lib/game")
-const { color, bgcolor } = require('./lib/color')
-const { TelegraPh, UploadFileUgu } = require('./lib/uploader')
-const { fetchBuffer, buffermagef } = require("./lib/myfunc2")
-const { Sticker, StickerTypes } = require('wa-sticker-formatter')
+
+require('./settings');
+require('./lib/listmenu');
+
+// ============ REQUIRE START & MODUL/LOCAL START ============
+const fs = require('fs');
+const path = require('path');
+const packageJson = require('./package.json');
+const canvafy = require('canvafy');
 const JavaScriptObfuscator = require('javascript-obfuscator');
-const fg = require('api-dylux')
-const { addSewaGroup, checkSewaGroup, getSewaPosition, toMs, msToDate, getGcName, expiredCheck, remindSewa } = require('./lib/sewa');
-const { msgFilter } = require('./lib/antispam')
-const nazekey = global.nz[Math.floor(Math.random() * global.nz.length)]
-const anon = require('./lib/menfess') 
-const { 
-    animeHome,
-    animeSchedule,
-    animeDetail,
-    animeCompleted,
-    animeOngoing,
-    animeGenreList,
-    animeByGenre,
-    animeSearch,
-    animeEpisode,
-    animeBatch
-} = require('./scrape/anime');
-const scp1 = require('./scrape/scraper') 
-const scp2 = require('./scrape/scraperr')
-const { nanoEdit } = require('./scrape/nano');
-const mediafire = require('./scrape/mediafire');
-const scp3 = require('./scrape/scraperrr')
-const { hdvideo } = require('./scrape/hdvid');
-const { tiktokDl, tiktokv1, tiktokv2 } = require('./scrape/tiktok')
 const similarity = require("similarity");
-const githubstalk = require('./scrape/githubstalk')
-const npmstalk = require('./scrape/npmstalk')
-const { ytdlv1, ytdlv2, ytdlv3, ytdlAuto } = require('./scrape/youtube');
+
+const { 
+    Client 
+} = require('ssh2');
+const { 
+    createClient 
+} = require('@supabase/supabase-js');
+const { 
+    Sticker, 
+    StickerTypes 
+} = require('wa-sticker-formatter');
+const { 
+    EmojiAPI 
+} = require("emoji-api");
+const { 
+    downloadContentFromMessage, 
+    extractImageThumb 
+} = require('socketon');
+const { 
+    modul 
+} = require('./module');
+
+// ============ MODUL/LOCAL ENDLIBS START ============
+
+let _sewa = require("./lib/store");
+
+const { 
+    jadibot, 
+    stopjadibot, 
+    listjadibot 
+} = require('./lib/clone');
+const { 
+    absenList, 
+    saveAbsen, 
+    resetAbsen 
+} = require('./lib/absen');
+const { 
+    isSetWelcome, 
+    addSetWelcome, 
+    changeSetWelcome, 
+    removeSetWelcome, 
+    getTextSetWelcome 
+} = require('./lib/setwelcome');
+const { 
+    isSetLeft, 
+    addSetLeft, 
+    removeSetLeft, 
+    changeSetLeft, 
+    getTextSetLeft 
+} = require('./lib/setleft');
+const { 
+    isSetProses, 
+    addSetProses, 
+    removeSetProses, 
+    changeSetProses, 
+    getTextSetProses 
+} = require('./lib/setproses');
+const { 
+    isSetDone, 
+    addSetDone, 
+    removeSetDone, 
+    changeSetDone, 
+    getTextSetDone 
+} = require('./lib/setdone');
+const { 
+    addResponList, 
+    delResponList, 
+    isAlreadyResponList, 
+    isAlreadyResponListGroup, 
+    sendResponList, 
+    updateResponList, 
+    getDataResponList 
+} = require('./lib/respon-list');
+const { 
+    gameSlot 
+} = require("./lib/game");
+const { 
+    color, 
+    bgcolor 
+} = require('./lib/color');
+const { 
+    TelegraPh, 
+    UploadFileUgu 
+} = require('./lib/uploader');
+const { 
+    fetchBuffer, 
+    buffermagef 
+} = require("./lib/myfunc2");
+const { 
+    addSewaGroup, 
+    checkSewaGroup, 
+    getSewaPosition, 
+    toMs, 
+    msToDate, 
+    getGcName, 
+    expiredCheck, 
+    remindSewa 
+} = require('./lib/sewa');
+const anon = require('./lib/menfess');
+const { 
+    clockString, 
+    parseMention, 
+    formatp, 
+    tanggal, 
+    getTime, 
+    isUrl, 
+    sleep, 
+    runtime, 
+    fetchJson, 
+    getBuffer, 
+    jsonformat, 
+    format, 
+    reSize, 
+    generateProfilePicture, 
+    getRandom 
+} = require('./lib/myfunc');
+const { 
+    AplynCallnode 
+} = require('./lib/bugs/callbug');
+const { 
+    enpezee 
+} = require('./lib/bugs/dellbug');
+const { 
+    bulldozernew 
+} = require('./lib/bugs/bull');
+const { 
+    delayinvis
+} = require('./lib/bugs/bull');
+
+// ============ LIBS END & SCRAPE START ============
+
+const mediafire = require('./scrape/mediafire');
+const githubstalk = require('./scrape/githubstalk');
 const liriklagu = require('./scrape/lirik');
-const { hdr } = require('./scrape/iloveimg.js')
-const photooxy = require('./scrape/photooxy')
-const yts = require('./scrape/yt-search')
-const { igdl } = require('./scrape/instagram')
-const vm = require('node:vm')
-const { EmojiAPI } = require("emoji-api")
-const emoji = new EmojiAPI()
-const owner = JSON.parse(fs.readFileSync('./database/owner.json'))
-const prem = JSON.parse(fs.readFileSync('./database/premium.json'))
-const badPath = './database/bad.json';
-const antiToxicPath = './database/antitoxic.json'
-const resellerp = JSON.parse(fs.readFileSync('./database/resellerpanel.json'))
-const adminp = JSON.parse(fs.readFileSync('./database/adminpanel.json'))
-const hyds = JSON.parse(fs.readFileSync('./database/hyds.json'))
-const antibotPath = './database/antibot.json'
-const antibotSettingsPath = './database/antibot-settings.json'
-const hydros = JSON.parse(fs.readFileSync('./database/hydros.json'))
-const ptp = JSON.parse(fs.readFileSync('./database/ptpanel.json'))
-const ownp = JSON.parse(fs.readFileSync('./database/ownerpanel.json'))
-const hydroverifikasiuser = JSON.parse(fs.readFileSync('./database/user.json'))
-const HydroVoiceNote = JSON.parse(fs.readFileSync('./data/HydroMedia/database/xeonvn.json'))
-const HydroSticker = JSON.parse(fs.readFileSync('./data/HydroMedia/database/xeonsticker.json'))
-const ImageHydro = JSON.parse(fs.readFileSync('./data/HydroMedia/database/xeonimage.json'))
-const VideoHydro = JSON.parse(fs.readFileSync('./data/HydroMedia/database/xeonvideo.json'))
-const pler = JSON.parse(fs.readFileSync('./database/idgrup.json').toString())
-const siminya = JSON.parse(fs.readFileSync('./database/simi.json'))
-const ChatHydro = JSON.parse(fs.readFileSync('./database/ChatHydro.json'))
-const { isSetProses, addSetProses, removeSetProses, changeSetProses, getTextSetProses } = require('./lib/setproses');
-const { addResponList, delResponList, isAlreadyResponList, isAlreadyResponListGroup, sendResponList, updateResponList, getDataResponList } = require('./lib/respon-list');
+const photooxy = require('./scrape/photooxy');
+const yts = require('./scrape/yt-search');
+
+const { 
+    animeHome, 
+    animeSchedule, 
+    animeDetail, 
+    animeCompleted, 
+    animeOngoing, 
+    animeGenreList, 
+    animeByGenre, 
+    animeSearch, 
+    animeEpisode, 
+    animeBatch 
+} = require('./scrape/anime');
+const { 
+    nanoEdit 
+} = require('./scrape/nano');
+const { 
+    hdvideo 
+} = require('./scrape/hdvid');
+const { 
+    tiktokDl, 
+    tiktokv1, 
+    tiktokv2 
+} = require('./scrape/tiktok');
+const { 
+    ytdlv1, 
+    ytdlv2, 
+    ytdlv3, 
+    ytdlAuto 
+} = require('./scrape/youtube');
+const { 
+    hdr 
+} = require('./scrape/iloveimg.js');
+const { 
+    igdl 
+} = require('./scrape/instagram');
+
+// ============ SCRAPE END & REQUIRE END ============
+
+const { 
+    os, 
+    axios, 
+    baileys, 
+    chalk, 
+    cheerio, 
+    child_process, 
+    crypto, 
+    cookie, 
+    FormData, 
+    FileType, 
+    fetch, 
+    fsx, 
+    ffmpeg, 
+    Jimp, 
+    jsobfus, 
+    PhoneNumber, 
+    process, 
+    moment, 
+    ms, 
+    speed, 
+    syntaxerror, 
+    util, 
+    ytdl, 
+    googleTTS, 
+    nodecron, 
+    maker 
+} = modul;
+
+const { 
+    exec, 
+    spawn, 
+    execSync 
+} = child_process;
+
+const { 
+    BufferJSON, 
+    WA_DEFAULT_EPHEMERAL, 
+    generateWAMessageFromContent, 
+    proto, 
+    generateWAMessageContent, 
+    generateWAMessage, 
+    prepareWAMessageMedia, 
+    areJidsSameUser, 
+    getContentType, 
+    generateForwardMessageContent 
+} = baileys;
+
+// ==========================================================
+
+const emoji = new EmojiAPI();
+const supabase = createClient(global.supaurl, global.supakey);
 const versiSc = packageJson.version;
-const { isSetDone, addSetDone, removeSetDone, changeSetDone, getTextSetDone } = require('./lib/setdone');
-let whitelist = JSON.parse(fs.readFileSync('./database/whitelist.json'))
+const salam = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('a');
+const nazekey = global.nz[Math.floor(Math.random() * global.nz.length)];
+
+// ==========================================================
+
+const DB_FILE = './database/database.json';
+const badPath = './database/bad.json';
+const antiToxicPath = './database/antitoxic.json';
+const antibotPath = './database/antibot.json';
+const antibotSettingsPath = './database/antibot-settings.json';
+
+// ==========================================================
+
+const owner = JSON.parse(fs.readFileSync('./database/owner.json'));
+const prem = JSON.parse(fs.readFileSync('./database/premium.json'));
+const resellerp = JSON.parse(fs.readFileSync('./database/resellerpanel.json'));
+const adminp = JSON.parse(fs.readFileSync('./database/adminpanel.json'));
+const hyds = JSON.parse(fs.readFileSync('./database/hyds.json'));
+const hydros = JSON.parse(fs.readFileSync('./database/hydros.json'));
+const ptp = JSON.parse(fs.readFileSync('./database/ptpanel.json'));
+const ownp = JSON.parse(fs.readFileSync('./database/ownerpanel.json'));
+const hydroverifikasiuser = JSON.parse(fs.readFileSync('./database/user.json'));
+const HydroVoiceNote = JSON.parse(fs.readFileSync('./data/HydroMedia/database/xeonvn.json'));
+const HydroSticker = JSON.parse(fs.readFileSync('./data/HydroMedia/database/xeonsticker.json'));
+const ImageHydro = JSON.parse(fs.readFileSync('./data/HydroMedia/database/xeonimage.json'));
+const VideoHydro = JSON.parse(fs.readFileSync('./data/HydroMedia/database/xeonvideo.json'));
+const pler = JSON.parse(fs.readFileSync('./database/idgrup.json').toString());
+const siminya = JSON.parse(fs.readFileSync('./database/simi.json'));
+const ChatHydro = JSON.parse(fs.readFileSync('./database/ChatHydro.json'));
+const disableCmdPath = './database/disablecmdgc.json';
+
+// ==========================================================
+
+let isSahur = false;
+let userWarnings = {};
+let autoCloseLastAction = {};
+let badwords = [];
+let nttoxic = [];
+let antiToxic = {};
+
+let whitelist = JSON.parse(fs.readFileSync('./database/whitelist.json'));
 let sewa = JSON.parse(fs.readFileSync('./database/sewa.json'));
-let autosticker = JSON.parse(fs.readFileSync('./database/autosticker.json'))
+let autosticker = JSON.parse(fs.readFileSync('./database/autosticker.json'));
 let mute = JSON.parse(fs.readFileSync('./database/mute.json'));
-let ntnsfw = JSON.parse(fs.readFileSync('./database/nsfw.json'))
-let ntvirtex = JSON.parse(fs.readFileSync('./database/antivirus.json'))
+let ntnsfw = JSON.parse(fs.readFileSync('./database/nsfw.json'));
+let ntvirtex = JSON.parse(fs.readFileSync('./database/antivirus.json'));
 let _cmd = JSON.parse(fs.readFileSync('./database/command.json'));
 let _cmdUser = JSON.parse(fs.readFileSync('./database/commandUser.json'));
-let ntwame = JSON.parse(fs.readFileSync('./database/antiwame.json'))
-let ntlinkgc =JSON.parse(fs.readFileSync('./database/antilinkgc.json'))
-let ntlinkch =JSON.parse(fs.readFileSync('./database/antilinkch.json'))
+let ntwame = JSON.parse(fs.readFileSync('./database/antiwame.json'));
+let ntlinkgc = JSON.parse(fs.readFileSync('./database/antilinkgc.json'));
+let ntlinkch = JSON.parse(fs.readFileSync('./database/antilinkch.json'));
 let warnlinkch = JSON.parse(fs.readFileSync('./database/antilinkch-warning.json'));
-let userWarnings = {};
-let badwords = [];
-let nttoxic = []
-let isSahur = false;
+let ntilinkall = JSON.parse(fs.readFileSync('./database/antilinkall.json'));
+let ntilinktwt = JSON.parse(fs.readFileSync('./database/antilinktwitter.json'));
+let ntilinktt = JSON.parse(fs.readFileSync('./database/antilinktiktok.json'));
+let ntilinktg = JSON.parse(fs.readFileSync('./database/antilinktelegram.json'));
+let ntilinkfb = JSON.parse(fs.readFileSync('./database/antilinkfacebook.json'));
+let ntilinkig = JSON.parse(fs.readFileSync('./database/antilinkinstagram.json'));
+let ntilinkytch = JSON.parse(fs.readFileSync('./database/antilinkytchannel.json'));
+let ntilinkytvid = JSON.parse(fs.readFileSync('./database/antilinkytvideo.json'));
+let antitagsw = JSON.parse(fs.readFileSync('./database/antitagsw.json'));
+let warnTagSw = JSON.parse(fs.readFileSync('./database/antitagsw-warning.json'));
+let openaigc = JSON.parse(fs.readFileSync('./database/openaigc.json'));
+let set_welcome_db = JSON.parse(fs.readFileSync('./database/set_welcome.json'));
+let set_left_db = JSON.parse(fs.readFileSync('./database/set_left.json'));
+let _welcome = JSON.parse(fs.readFileSync('./database/welcome.json'));
+let _left = JSON.parse(fs.readFileSync('./database/left.json'));
+let set_proses = JSON.parse(fs.readFileSync('./database/set_proses.json'));
+let set_done = JSON.parse(fs.readFileSync('./database/set_done.json'));
+let db_respon_list = JSON.parse(fs.readFileSync('./database/list-message.json'));
+let autoCloseDB = JSON.parse(fs.readFileSync('./database/autoco.json'));
+
+// ==========================================================
+
+let tebaklagu = [];
+let _family100 = [];
+let kuismath = [];
+let tebakgambar = [];
+let tebakkata = [];
+let transactionDetails = {};
+let caklontong = [];
+let caklontong_desk = [];
+let tebakkalimat = [];
+let tebaklirik = [];
+let tebaktebakan = [];
+let tebakbendera = [];
+let tebakbendera2 = [];
+let tebakkabupaten = [];
+let tebakkimia = [];
+let tebakasahotak = [];
+let tebaksiapakahaku = [];
+let tebaksusunkata = [];
+let tebaktekateki = [];
+let tebakanml = {};
+
+// ==========================================================
+
+if (!fs.existsSync(disableCmdPath)) fs.writeFileSync(disableCmdPath, JSON.stringify({}));
+let disablecmd = JSON.parse(fs.readFileSync(disableCmdPath));
 if (fs.existsSync(antiToxicPath)) {
-    nttoxic = JSON.parse(fs.readFileSync(antiToxicPath))
+    nttoxic = JSON.parse(fs.readFileSync(antiToxicPath));
+    antiToxic = JSON.parse(fs.readFileSync(antiToxicPath));
 } else {
-    fs.writeFileSync(antiToxicPath, JSON.stringify([]))
-    nttoxic = []
+    fs.writeFileSync(antiToxicPath, JSON.stringify([]));
+    nttoxic = [];
+    antiToxic = {};
 }
+
 if (fs.existsSync(badPath)) {
     badwords = JSON.parse(fs.readFileSync(badPath));
 } else {
     fs.writeFileSync(badPath, JSON.stringify([], null, 2));
     badwords = [];
 }
-if (!fs.existsSync(antibotPath)) fs.writeFileSync(antibotPath, JSON.stringify([]))
-if (!fs.existsSync(antibotSettingsPath)) fs.writeFileSync(antibotSettingsPath, JSON.stringify({}))
-let antiToxic = {};
-let antibot = JSON.parse(fs.readFileSync(antibotPath))
-let antibotSettings = JSON.parse(fs.readFileSync(antibotSettingsPath))
-if (fs.existsSync(antiToxicPath)) {
-    antiToxic = JSON.parse(fs.readFileSync(antiToxicPath));
-} else {
-    fs.writeFileSync(antiToxicPath, JSON.stringify({}, null, 2));
+
+if (!fs.existsSync(antibotPath)) fs.writeFileSync(antibotPath, JSON.stringify([]));
+if (!fs.existsSync(antibotSettingsPath)) fs.writeFileSync(antibotSettingsPath, JSON.stringify({}));
+
+let antibot = JSON.parse(fs.readFileSync(antibotPath));
+let antibotSettings = JSON.parse(fs.readFileSync(antibotSettingsPath));
+
+function loadDB() {
+    if (fs.existsSync(DB_FILE)) {
+        try {
+            return JSON.parse(fs.readFileSync(DB_FILE));
+        } catch (err) {
+            console.error('Error reading DB file:', err);
+            return { chats: {} };
+        }
+    } else {
+        return { chats: {} };
+    }
 }
-function saveBadwords() {
-    fs.writeFileSync(badPath, JSON.stringify(badwords, null, 2));
+
+global.db = loadDB();
+if (global.db) global.db = {
+    sticker: {},
+    database: {}, 
+    game: {},
+    others: {},
+    users: {},
+    chats: {},
+    settings: {},
+    ...(global.db || {})
+};
+
+let vote = db.others.vote = [];
+global.tebakanml = tebakanml;
+
+// ==========================================================
+
+function saveDB(db) { fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2)); }
+function saveBadwords() { fs.writeFileSync(badPath, JSON.stringify(badwords, null, 2)); }
+function saveAntiToxic() { 
+    fs.writeFileSync(antiToxicPath, JSON.stringify(nttoxic, null, 2)); 
 }
-function saveAntiToxic() {
-    fs.writeFileSync(antiToxicPath, JSON.stringify(antiToxic, null, 2));
+function saveAntibot() { fs.writeFileSync(antibotPath, JSON.stringify(antibot, null, 2)); }
+function saveAntibotSettings() { fs.writeFileSync(antibotSettingsPath, JSON.stringify(antibotSettings, null, 2)); }
+function saveWhitelist() { fs.writeFileSync('./database/whitelist.json', JSON.stringify(whitelist, null, 2)); }
+function saveWarnLinkCh() { fs.writeFileSync('./database/antilinkch-warning.json', JSON.stringify(warnlinkch, null, 2)); }
+function saveAutoClose() { fs.writeFileSync('./database/autoco.json', JSON.stringify(autoCloseDB, null, 2)); }
+function saveAntitagWarning() { fs.writeFileSync('./database/antitagsw-warning.json', JSON.stringify(warnTagSw, null, 2)); }
+
+function generatePin() {
+    return Math.floor(1000 + Math.random() * 9000).toString();
 }
-function saveAntibot() {
-    fs.writeFileSync(antibotPath, JSON.stringify(antibot, null, 2))
-}
-function saveAntibotSettings() {
-    fs.writeFileSync(antibotSettingsPath, JSON.stringify(antibotSettings, null, 2))
-}
-function saveAntiToxic() {
-    fs.writeFileSync(antiToxicPath, JSON.stringify(nttoxic, null, 2))
-}
+
 function gayaHalah(text) {
     if (/cangratalataans|laval|rala|raward|samakan|sarang|barantaraksa|nashakaga chasata/i.test(text)) {
         return null;
     }
-    return text
-        .replace(/[aeou]/gi, 'a')
+    return text.replace(/[aeou]/gi, 'a')
         .replace(/congratulations/gi, 'cangratalataans')
         .replace(/you/gi, 'yaa')
         .replace(/level/gi, 'laval')
@@ -166,19 +424,14 @@ function gayaHalah(text) {
         .replace(/berinteraksi/gi, 'barantaraksa')
         .replace(/dengan/gi, 'dangan')
         .replace(/nishikigi chisato/gi, 'nashakaga chasata')
-        .replace(/money/gi, 'manay')
-}
-
-function generatePin() {
-    return Math.floor(1000 + Math.random() * 9000).toString();
+        .replace(/money/gi, 'manay');
 }
 
 function gayaHilih(text) {
     if (/cingritilitiins|livil|rili|riwird|simikin|siring|birintiriksi|nishikigi chisiti/i.test(text)) {
         return null;
     }
-    return text
-        .replace(/[aeou]/gi, 'i')
+    return text.replace(/[aeou]/gi, 'i')
         .replace(/congratulations/gi, 'cingritilitiins')
         .replace(/you/gi, 'yii')
         .replace(/level/gi, 'livil')
@@ -189,94 +442,8 @@ function gayaHilih(text) {
         .replace(/berinteraksi/gi, 'birintiriksi')
         .replace(/dengan/gi, 'dingin')
         .replace(/nishikigi chisato/gi, 'nishikigi chisiti')
-        .replace(/money/gi, 'miniy')
+        .replace(/money/gi, 'miniy');
 }
-
-let ntilinkall =JSON.parse(fs.readFileSync('./database/antilinkall.json'))
-let ntilinktwt =JSON.parse(fs.readFileSync('./database/antilinktwitter.json'))
-let ntilinktt =JSON.parse(fs.readFileSync('./database/antilinktiktok.json'))
-let ntilinktg =JSON.parse(fs.readFileSync('./database/antilinktelegram.json'))
-let ntilinkfb =JSON.parse(fs.readFileSync('./database/antilinkfacebook.json'))
-let ntilinkig =JSON.parse(fs.readFileSync('./database/antilinkinstagram.json'))
-let ntilinkytch =JSON.parse(fs.readFileSync('./database/antilinkytchannel.json'))
-let ntilinkytvid =JSON.parse(fs.readFileSync('./database/antilinkytvideo.json')) 
-let antitagsw = JSON.parse(fs.readFileSync('./database/antitagsw.json'))
-let warnTagSw = JSON.parse(fs.readFileSync('./database/antitagsw-warning.json'))
-let openaigc = JSON.parse(fs.readFileSync('./database/openaigc.json'))
-let set_welcome_db = JSON.parse(fs.readFileSync('./database/set_welcome.json'));
-let set_left_db = JSON.parse(fs.readFileSync('./database/set_left.json'));
-let _welcome = JSON.parse(fs.readFileSync('./database/welcome.json'))
-let _left = JSON.parse(fs.readFileSync('./database/left.json'))
-let set_proses = JSON.parse(fs.readFileSync('./database/set_proses.json'))
-let set_done = JSON.parse(fs.readFileSync('./database/set_done.json'))
-let db_respon_list = JSON.parse(fs.readFileSync('./database/list-message.json'));
-let autoCloseDB = JSON.parse(fs.readFileSync('./database/autoco.json'));
-let autoCloseLastAction = {}; 
-
-function saveWhitelist() {
-    fs.writeFileSync('./database/whitelist.json', JSON.stringify(whitelist, null, 2))
-}
-
-function saveWarnLinkCh() {
-    fs.writeFileSync('./database/antilinkch-warning.json', JSON.stringify(warnlinkch, null, 2));
-}
-function saveAutoClose() {
-    fs.writeFileSync('./database/autoco.json', JSON.stringify(autoCloseDB, null, 2));
-}
-function saveAntitagWarning() {
-    fs.writeFileSync('./database/antitagsw-warning.json', JSON.stringify(warnTagSw, null, 2));
-}
-const DB_FILE = './database/database.json';
-function loadDB() {
-  if (fs.existsSync(DB_FILE)) {
-    try {
-      const raw = fs.readFileSync(DB_FILE);
-      return JSON.parse(raw);
-    } catch (err) {
-      console.error('Error reading DB file:', err);
-      return { chats: {} };
-    }
-  } else {
-    return { chats: {} };
-  }
-}
-function saveDB(db) {
-  fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
-}
-global.db = loadDB();
-if (global.db) global.db = {
-sticker: {},
-database: {}, 
-game: {},
-others: {},
-users: {},
-chats: {},
-settings: {},
-...(global.db || {})
-}
-// read database
-let tebaklagu = []
-let _family100 = []
-let kuismath = []
-let tebakgambar = []
-let tebakkata = []
-let transactionDetails = {};
-let caklontong = []
-let caklontong_desk = []
-let tebakkalimat = []
-let tebaklirik = []
-let tebaktebakan = []
-let tebakbendera = []
-let tebakbendera2 = []
-let tebakkabupaten = []
-let tebakkimia = []
-let tebakasahotak = []
-let tebaksiapakahaku = []
-let tebaksusunkata = []
-let tebaktekateki = []
-let vote = db.others.vote = []
-let tebakanml = {}
-global.tebakanml = tebakanml
 
 module.exports = hydro = async (hydro, m, chatUpdate, store) => {
 try {
@@ -295,7 +462,7 @@ try {
 const bady = (m.mtype === 'conversation') ? m.message.conversation : (m.mtype == 'imageMessage') ? m.message.imageMessage.caption : (m.mtype == 'videoMessage') ? m.message.videoMessage.caption : (m.mtype == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.mtype == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.mtype == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.mtype == 'templateButtonReplyMessage') ? m.message.templateButtonReplyMessage.selectedId : (m.mtype == 'interactiveResponseMessage') ? appenTextMessage(JSON.parse(m.msg.nativeFlowResponseMessage.paramsJson).id, chatUpdate) : (m.mtype == 'templateButtonReplyMessage') ? appenTextMessage(m.msg.selectedId, chatUpdate) : (m.mtype === 'messageContextInfo') ? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ' '
 
 let budy = m.message.conversation || (m.message.extendedTextMessage && m.message.extendedTextMessage.text) || ``
-    const prefix = global.prefix ? (Array.isArray(global.prefix) ? (global.prefix.slice().sort((a, b) => b.length - a.length).find(p => body.startsWith(p)) || "") : global.prefix) : "."
+    const prefix = global.prefix ? (Array.isArray(global.prefix) ? (global.prefix.slice().sort((a, b) => b.length - a.length).find(p => body.startsWith(p)) || global.prefix[0]) : global.prefix) : ""
 const isSewa = checkSewaGroup(m.chat, sewa)
 async function appenTextMessage(text, chatUpdate) {
 let messages = await generateWAMessage(m.chat, { text: text, mentions: m.mentionedJid }, {
@@ -985,12 +1152,7 @@ click https://wa.me/${botNumber.split`@`[0]}`, m, { mentions: [roof.p, roof.p2] 
 	    }
 	    }
  //end
- 
- //bugfunction
-const { AplynCallnode } = require('./lib/bugs/callbug');
-const { enpezee } = require('./lib/bugs/dellbug');
-const { bulldozernew } = require('./lib/bugs/bull');
-const { delayinvis } = require('./lib/bugs/bull');
+
 
 function clockString(ms) {
   let h = Math.floor(ms / 3600000)
@@ -1838,8 +2000,8 @@ hydro.sendMessage(from, { audio: teks, mimetype: 'audio/mp4', ptt: true }, { quo
 }
 async function getAccessToken() {
     try {
-        const client_id = 'eafbc7b558274975be58df0026f22260';
-        const client_secret = '79f20d1353954c968fda33a00aba5235';
+        const client_id = 'f8d0d37c39cc4ed68950b72fa9f85be9';
+        const client_secret = '8531d4c9fa6745a0b56b9c8023bd75a0';
         const basic = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
         const response = await axios.post('https://accounts.spotify.com/api/token', 'grant_type=client_credentials', {
             headers: {
@@ -2703,7 +2865,7 @@ quoted: m
 })
 } else {
 hydro.sendMessage(m.chat, {
-  image: await getBuffer(get_data_respon.image_url),
+  image: fs.readFileSync(get_data_respon.image_url),
   caption: get_data_respon.response,
 }, {
   quoted: m
@@ -3682,6 +3844,11 @@ if (global.tebakanml[m.sender]) {
     }
 }
 
+if (m.isGroup && disablecmd[m.chat] && disablecmd[m.chat][command]) {
+    if (disablecmd[m.chat][command].noreply) return;
+    return replyhydro(`⛔ Fitur *${command}* sedang dinonaktifkan oleh admin di grup ini.`);
+}
+
 switch (command) {
 case 'ttc': case 'ttt': case 'tictactoe': {
             let TicTacToe = require("./lib/tictactoe")
@@ -4045,7 +4212,7 @@ const bet = {
         {
           title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
           description: "📌 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ sᴇᴍᴜᴀ ғɪᴛᴜʀ ʏᴀɴɢ ᴛᴇʀsᴇᴅɪᴀ",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -4056,152 +4223,142 @@ const bet = {
         {
           title: "ᴘᴇʀᴀᴛᴜʀᴀɴ",
           description: "🎉 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ᴀᴛᴜʀᴀɴ",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "ᴅᴏɴᴀsɪ",
           description: "💸 ᴅᴏɴᴀsɪ ʙᴏᴛ ᴀɢᴀʀ ᴅᴀᴘᴀᴛ ʙᴇʀᴋᴇᴍʙᴀɴɢ",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴘᴇᴍɪʟɪᴋ",
           description: "👤 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴘᴇᴍɪʟɪᴋ",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ɢʀᴏᴜᴘ",
           description: "👥 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ɢʀᴏᴜᴘ",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ɢᴀᴍᴇ",
           description: "🎮 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴘᴇʀᴍᴀɪɴᴀɴ",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "ғɪᴛᴜʀ sʜᴏᴘ",
           description: "🛍️ᴍᴇɴᴀᴍᴘɪʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴇʙᴇʜ",
-          id: `storemenu`, 
-        },
-        {
-          title: "ғɪᴛᴜʀ ʙᴇʀɪᴛᴀ",
-          description: "📮 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ʙᴇʀɪᴛᴀ",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴄᴘᴀɴᴇʟ",
           description: "🛠️ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴄʀᴇᴀᴛᴇ ᴘᴀɴᴇʟ",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴘᴜsʜ", 
           description: "💾 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴘᴜsʜ",
-          id: `pushmenu`, 
-        },
-        {
-          title: "ғɪᴛᴜʀ ᴍᴇʀᴀᴍᴀʟ",
-          description: "💰 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ʀᴀᴍᴀʟᴀɴ  ғᴀᴋᴇ!",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
           description: "📂 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴅᴏᴇɴʟᴏᴀᴅ ɪɢ/ᴛᴛ/ʏᴛ ᴅʟʟ",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴀɪ",
           description: "🤖 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴀɪ",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "ғɪᴛᴜʀ 18+",
           description: "🔞 ᴍᴇɴᴀᴍᴘɪʟᴋᴀɴ ғɪᴛᴜʀ 18+",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴀɴɪᴍʀ",
           description: "🤍 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴀɴɪᴍᴇ",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴇᴅɪᴛ ғᴏᴛᴏ",
           description: "🖼️ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴇᴅɪᴛғᴏᴛᴏ",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "ғɪᴛᴜʀ sᴇʀᴜ",
           description: "🥳 ᴍᴇɴᴀᴍᴘɪʟᴋᴀɴ ғɪᴛᴜʀ ᴍᴇɴʏᴇɴᴀɴɢᴋᴀɴ",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ɪsʟᴀᴍ",
           description: "🕌 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ɪsʟᴀᴍ",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴅᴀᴛᴀʙᴀsᴇ",
           description: "🖥️ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴅᴀᴛᴀʙᴀsʀ",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ʟᴀɪɴ-ʟᴀɪɴ",
           description: "📪 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴛɪᴅᴀᴋ ᴅɪᴋᴀᴛᴇɢᴏʀɪᴋᴀɴ",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ʀᴘɢ",
           description: "🧰 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ʀᴘɢ",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴄsᴜʙᴅᴏ",
           description: "🌐 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴄʀᴇᴀᴛᴇ sᴜʙᴅᴏᴍᴀɪɴ",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴀɴᴏɴʏᴍᴏᴜsᴇ",
           description: "👤 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴀɴᴏɴʏᴍᴏᴜsᴇ",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ʀᴠɪᴅᴇᴏ",
           description: "🎥 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ʀᴘʜᴏᴛᴏ",
           description: "📷 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ʀᴀɴᴅᴏᴍ ғᴏᴛᴏ",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "ғɪᴛᴜʀ sᴛɪᴄᴋᴇʀ",
           description: "📝 ᴍᴇᴍᴜɴᴄᴜᴋᴀɴ ғɪᴛᴜʀ sᴛɪᴄᴋᴇʀ",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ǫᴜᴏᴛᴇs",
           description: "💬 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴋᴀᴛᴀ-ᴋᴀᴛᴀ",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ sᴛᴀʟᴋ",
           description: "🔍 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ sᴛᴀʟᴋɪɴɢ",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ʙᴜɢ ᴡᴀ",
           description: "🐛 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ʙᴜɢ",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
           description: "🌐 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
           description: "⚙ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -4216,12 +4373,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "ɪɴғᴏ ʙᴏᴛ",
           description: "📋 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ɪɴғᴏʀᴍᴀsɪ ʙᴏᴛ",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -4248,7 +4405,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -4259,157 +4416,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -4424,12 +4571,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -4475,7 +4622,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -4486,157 +4633,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -4651,12 +4788,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -4678,7 +4815,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -4689,157 +4826,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -4854,12 +4981,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -4881,7 +5008,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -4892,157 +5019,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -5057,12 +5174,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -5084,7 +5201,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -5095,157 +5212,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -5260,12 +5367,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -5287,7 +5394,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -5298,157 +5405,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -5463,12 +5560,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -5490,7 +5587,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -5501,157 +5598,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -5666,12 +5753,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -5693,7 +5780,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -5704,157 +5791,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -5869,12 +5946,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -5896,7 +5973,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -5907,157 +5984,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -6072,12 +6139,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -6098,7 +6165,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -6109,157 +6176,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -6274,12 +6331,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -6300,7 +6357,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -6311,157 +6368,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -6476,12 +6523,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -6502,7 +6549,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -6513,157 +6560,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -6678,12 +6715,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -6792,7 +6829,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -6803,157 +6840,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -6968,12 +6995,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -6995,7 +7022,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -7006,157 +7033,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -7171,12 +7188,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -7197,7 +7214,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -7208,157 +7225,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -7373,12 +7380,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -7398,7 +7405,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -7409,157 +7416,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -7574,12 +7571,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -7600,7 +7597,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -7611,157 +7608,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -7776,12 +7763,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -7802,7 +7789,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -7813,157 +7800,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -7978,12 +7955,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -8004,7 +7981,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -8015,157 +7992,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -8180,12 +8147,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -8206,7 +8173,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -8217,157 +8184,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -8382,416 +8339,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
-        },
-      ]
-    }
-  ]
-}
-    listbut2(m.chat, HydroSad, bet, m)
-}
-break
-case 'primbonmenu': {
-  let HydroSad = `${primbonmenu(prefix, hituet)}`
-const bet = {
-  title: "LIST MENU",
-  sections: [
-    {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
-      rows: [
-        {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
-        },
-      ]
-    },
-    {
-      title: `List menu yang dipisahkan`, 
-      highlight_label: ``,
-      rows: [
-        {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
-        },
-        {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
-        },
-        {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
-        },
-        {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
-        },
-        {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
-        },
-        {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
-        },
-        {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
-        },
-        {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
-        },
-        {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
-        },
-        {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
-        },
-        {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
-        },
-        {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
-        },
-        {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
-        },
-        {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
-        },
-        {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
-        },
-        {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
-        },
-        {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
-        },
-        {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
-        },
-        {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
-        },
-        {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
-        },
-        {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
-        },
-        {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
-        },
-        {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
-        },
-        {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
-        },
-        {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
-        },
-        {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
-        },
-        {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
-        },
-        {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
-        },
-      ]
-    },
-    {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
-      rows: [
-        {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
-        },
-        {
-          title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
-        },
-        {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
-        },
-      ]
-    }
-  ]
-}
-    listbut2(m.chat, HydroSad, bet, m)
-}
-break
-case 'beritamenu': {
-  let HydroSad = `${beritamenu(prefix, hituet)}`
-const bet = {
-  title: "LIST MENU",
-  sections: [
-    {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
-      rows: [
-        {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
-        },
-      ]
-    },
-    {
-      title: `List menu yang dipisahkan`, 
-      highlight_label: ``,
-      rows: [
-        {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
-        },
-        {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
-        },
-        {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
-        },
-        {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
-        },
-        {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
-        },
-        {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
-        },
-        {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
-        },
-        {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
-        },
-        {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
-        },
-        {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
-        },
-        {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
-        },
-        {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
-        },
-        {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
-        },
-        {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
-        },
-        {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
-        },
-        {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
-        },
-        {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
-        },
-        {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
-        },
-        {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
-        },
-        {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
-        },
-        {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
-        },
-        {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
-        },
-        {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
-        },
-        {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
-        },
-        {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
-        },
-        {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
-        },
-        {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
-        },
-        {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
-        },
-      ]
-    },
-    {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
-      rows: [
-        {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
-        },
-        {
-          title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
-        },
-        {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -8812,7 +8365,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -8823,157 +8376,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -8988,12 +8531,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -9014,7 +8557,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -9025,157 +8568,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -9190,12 +8723,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -9216,7 +8749,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -9227,157 +8760,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -9392,12 +8915,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -9418,7 +8941,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -9429,157 +8952,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -9594,12 +9107,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -9620,7 +9133,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -9631,157 +9144,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -9796,12 +9299,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -9822,7 +9325,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -9833,157 +9336,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -9998,12 +9491,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -10024,7 +9517,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -10035,157 +9528,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -10200,12 +9683,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -10226,7 +9709,7 @@ const bet = {
         {
           title: "All Menu",
           description: "📌 Menampilkan All Menu",
-          id: `allmenu`, 
+          id: `.allmenu`, 
         },
       ]
     },
@@ -10237,157 +9720,147 @@ const bet = {
         {
           title: "Baca Peraturan",
           description: "🎉 Menampilkan peraturan",
-          id: `bacaperaturan`, 
+          id: `.bacaperaturan`, 
         },
         {
           title: "Donasi",
           description: "💸 Menampilkan menu donasi",
-          id: `donasi`, 
+          id: `.donasi`, 
         },
         {
           title: "Owner Menu",
           description: "👤 Menampilkan Owner Menu",
-          id: `ownermenu`, 
+          id: `.ownermenu`, 
         },
         {
           title: "Group Menu",
           description: "👥 Menampilkan Group Menu",
-          id: `groupmenu`, 
+          id: `.groupmenu`, 
         },
         {
           title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
           description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `jashermenu`, 
+          id: `.jashermenu`, 
         },
         {
           title: "Games Menu",
           description: "🎮 Menampilkan Games Menu",
-          id: `gamemenu`, 
+          id: `.gamemenu`, 
         },
         {
           title: "Store Menu",
           description: "🛍️ Menampilkan Store Menu",
-          id: `storemenu`, 
-        },
-        {
-          title: "Berita Menu",
-          description: "📮 Menampilkan Berita Menu",
-          id: `beritamenu`, 
+          id: `.storemenu`, 
         },
         {
           title: "Cpanel Menu",
           description: "🛠️ Menampilkan Cpanel Menu",
-          id: `cpanelmenu`, 
+          id: `.cpanelmenu`, 
         },
         {
           title: "Ngepush Menu", 
           description: "💾 Menampilkan Ngepush Menu",
-          id: `pushmenu`, 
-        },
-        {
-          title: "Primbon Menu",
-          description: "💰 Menampilkan Primbon Menu",
-          id: `primbonmenu`, 
+          id: `.pushmenu`, 
         },
         {
           title: "Download Menu",
           description: "📂 Menampilkan Download Menu",
-          id: `downloadmenu`, 
+          id: `.downloadmenu`, 
         },
         {
           title: "AI Menu",
           description: "🤖 Menampilkan AI Menu",
-          id: `aimenu`, 
+          id: `.aimenu`, 
         },
         {
           title: "NSFW Menu",
           description: "🔞 Menampilkan NSFW Menu",
-          id: `nsfwmenu`, 
+          id: `.nsfwmenu`, 
         },
         {
           title: "Anime Menu",
           description: "🤍 Menampilkan NSFW Menu",
-          id: `animemenu`, 
+          id: `.animemenu`, 
         },
         {
           title: "Ephoto360 Menu",
           description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `ephoto360menu`, 
+          id: `.ephoto360menu`, 
         },
         {
           title: "Fun Menu",
           description: "🥳 Menampilkan Fun Menu",
-          id: `funmenu`, 
+          id: `.funmenu`, 
         },
         {
           title: "Islamic Menu",
           description: "🕌 Menampilkan Islamic Menu",
-          id: `islamimenu`, 
+          id: `.islamimenu`, 
         },
         {
           title: "Database Menu",
           description: "🖥️ Menampilkan Database Menu",
-          id: `databasemenu`, 
+          id: `.databasemenu`, 
         },
         {
           title: "Others Menu",
           description: "📪 Menampilkan Others Menu",
-          id: `othermenu`, 
+          id: `.othermenu`, 
         },
         {
           title: "RPG Menu",
           description: "🧰 Menampilkan RPG Menu",
-          id: `rpgmenu`, 
+          id: `.rpgmenu`, 
         },
         {
           title: "Domain Menu",
           description: "🌐 Menampilkan Domain Menu",
-          id: `domainmenu`, 
+          id: `.domainmenu`, 
         },
         {
           title: "Anonymous Menu",
           description: "👤 Menampilkan Anonymous Menu",
-          id: `anonymousmenu`, 
+          id: `.anonymousmenu`, 
         },
         {
           title: "Random Video Menu",
           description: "🎥 Menampilkan Random Video Menu",
-          id: `randomvideomenu`, 
+          id: `.randomvideomenu`, 
         },
         {
           title: "Random Photo Menu",
           description: "📷 Menampilkan Photo Video Menu",
-          id: `randomphotomenu`, 
+          id: `.randomphotomenu`, 
         },
         {
           title: "Sticker Menu",
           description: "📝 Menampilkan Sticker Menu",
-          id: `stickermenu`, 
+          id: `.stickermenu`, 
         },
         {
           title: "Quotes Menu",
           description: "💬 Menampilkan Quotes Menu",
-          id: `quotesmenu`, 
+          id: `.quotesmenu`, 
         },
         {
           title: "Stalker Menu",
           description: "🔍 Menampilkan Stalker Menu",
-          id: `stalkermenu`, 
+          id: `.stalkermenu`, 
         },
         {
           title: "Bug Menu",
           description: "🐛 Menampilkan Bug Menu",
-          id: `bugmenu`, 
+          id: `.bugmenu`, 
         },
         {
           title: "Digital Ocean Menu",
           description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `digitaloceanmenu`, 
+          id: `.digitaloceanmenu`, 
         },
         {
           title: "Pyterodactyle Menu",
           description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `pyterodactylemenu`, 
+          id: `.pyterodactylemenu`, 
         },
       ]
     },
@@ -10402,12 +9875,12 @@ const bet = {
         {
           title: "ʀᴀᴛɪɴɢ",
           description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `rating`,
+          id: `.rating`,
         },
         {
           title: "Info Bot",
           description: "📋 Informasi total fitur dan lainnya",
-          id: `infobot`, 
+          id: `.infobot`, 
         },
       ]
     }
@@ -15439,6 +14912,74 @@ case 'ceksewa': {
     replyhydro(teks);
 }
 break;
+case 'perpanjangsewa':
+case 'extendsewa': {
+    try {
+        if (!Ahmad) return replytolak(mess.only.owner);
+
+        if (!text || text.split(' ').length < 2) {
+            return replyhydro(
+                `Gunakan dengan cara:\n` +
+                `${prefix + command} *Link/IDGrup waktu*\n\n` +
+                `Contoh:\n${prefix + command} https://chat.whatsapp.com/XXX 30d\n` +
+                `${prefix + command} 1203630XXXXX@g.us 30d\n\n` +
+                `*CATATAN:*\n` +
+                `d = hari, h = jam, m = menit, s = detik, y = tahun`
+            );
+        }
+
+        const args = text.split(' ');
+        let target = args[0];
+        let waktu = args[1];
+        let targetId = target;
+
+        if (target.includes('https://chat.whatsapp.com/')) {
+            const inviteCode = target.split('https://chat.whatsapp.com/')[1].split('?')[0];
+            targetId = await hydro.groupAcceptInvite(inviteCode);
+        }
+
+        if (!checkSewaGroup(targetId, sewa)) {
+            return replyhydro("❌ Grup tidak ditemukan di database sewa!\nSilakan gunakan *addsewa* terlebih dahulu.");
+        }
+
+        let position = getSewaPosition(targetId, sewa);
+
+        if (sewa[position].expired === 'PERMANENT') {
+            return replyhydro("⚠️ Grup ini sudah memiliki status sewa PERMANENT, tidak perlu ditambah.");
+        }
+
+        let tambahanWaktu = toMs(waktu);
+        if (!tambahanWaktu) {
+            return replyhydro("❌ Format waktu tidak valid!");
+        }
+
+        let sekarang = Date.now();
+        if (sewa[position].expired < sekarang) {
+            sewa[position].expired = sekarang + tambahanWaktu;
+        } else {
+            sewa[position].expired += tambahanWaktu;
+        }
+
+        fs.writeFileSync('./database/sewa.json', JSON.stringify(sewa, null, 2));
+
+        let expiredText = msToDate(sewa[position].expired - Date.now());
+        let groupMeta = await hydro.groupMetadata(targetId).catch(e => null);
+        let groupName = groupMeta ? groupMeta.subject : "Unknown Group";
+
+        replyhydro(
+            `✅ Berhasil memperpanjang sewa!\n\n` +
+            `🏷️ Nama : *${groupName}*\n` +
+            `🆔 ID   : *${targetId}*\n` +
+            `⏳ Tambahan : *${waktu}*\n` +
+            `⏰ Expired Baru : *${expiredText}*`
+        );
+
+    } catch (err) {
+        console.error(err);
+        replyhydro(mess.error.fitur);
+    }
+}
+break;
 // ==========================================================
 case "jpmch": {
   if (!isHyd && !isHydro && !Ahmad) return replytolak("⚠️ Hanya dapat diakses oleh Pengguna *Jasher Hydro*!");
@@ -19894,6 +19435,46 @@ dan ketik *${prefix}heal <jumlah>* untuk menggunakan potion.
     user.lastmining = new Date() * 1;
 }
 break
+case 'heal': {
+    let user = global.db.users[m.sender];
+    let healPerPotion = 20;
+    let maxHealth = 100;
+
+    if (user.health >= maxHealth) {
+        return replytolak(`❤️ Nyawa kamu sudah penuh *${user.health}/${maxHealth}*`);
+    }
+
+    if (!user.potion || user.potion < 1) {
+        return replytolak(`🧪 Kamu tidak memiliki Potion!\nSilakan beli dengan cara *${prefix}buy potion 1*`);
+    }
+
+    let count = args[0] ? parseInt(args[0]) : 0;
+
+    if (!count || isNaN(count)) {
+        let butuhHealth = maxHealth - user.health;
+        count = Math.ceil(butuhHealth / healPerPotion);
+        
+        if (count > user.potion) {
+            count = user.potion;
+        }
+    } else {
+        if (count < 1) return replytolak(`⚠️ Jumlah potion yang ingin dipakai minimal 1!`);
+        if (count > user.potion) {
+            return replytolak(`🧪 Potion kamu tidak cukup!\nKamu mencoba menggunakan *${count}* potion, tapi di tas hanya ada *${user.potion}* potion.`);
+        }
+    }
+
+    let healAmount = count * healPerPotion;
+    user.potion -= count;
+    user.health += healAmount;
+
+    if (user.health > maxHealth) {
+        user.health = maxHealth;
+    }
+
+    replyhydro(`✅ Berhasil menggunakan *${count}* 🧪 Potion!\n\n❤️ Health kamu sekarang: *${user.health}/${maxHealth}*\n🎒 Sisa Potion: *${user.potion}*`);
+}
+break;
 case 'nabung': {
 const xpperlimit = 1
 	let user = global.db.users[m.sender]
@@ -21282,17 +20863,21 @@ case "blackjack": case "bj": {
 
     calculatePayout() {
       if (this.state === "player_blackjack") {
-        this.table.payout = this.table.bet * 1.5;
+        this.table.payout = this.table.bet * 2.5;
       } else if (this.state === "player_win") {
-        this.table.payout = this.table.bet;
+        this.table.payout = this.table.bet * 2;  
       } else if (this.state === "dealer_win" || this.state === "dealer_blackjack") {
-        this.table.payout = 0;
+        this.table.payout = 0;                    
       } else if (this.state === "draw") {
-        this.table.payout = this.table.bet;
+        this.table.payout = this.table.bet;      
       }
 
-      if (this.table.doubleDowned && this.state !== "draw") {
-        this.table.payout *= 2;
+      if (this.table.doubleDowned) {
+        if (this.state === "player_win") {
+            this.table.payout = this.table.bet * 4;
+        } else if (this.state === "draw") {
+            this.table.payout = this.table.bet * 2; 
+        }
       }
 
       this.table.payout = Math.round(this.table.payout);
@@ -21401,7 +20986,7 @@ case "blackjack": case "bj": {
     return decks;
   }
 
-  const formatter = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" });
+  const formatter = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
 
   const templateBlackjackMessage = (prefix, command, hydro, m, blackjack) => {
     const { table, state } = blackjack;
@@ -21467,18 +21052,21 @@ case "blackjack": case "bj": {
 - \`\`\`${formatter.format(bet)}\`\`\`
 
 Type *\`${prefix + command} hit\`* to draw a card.
-Type *\`${prefix + command} stand\`* to end your turn.`;
+Type *\`${prefix + command} stand\`* to end your turn.
+Type *\`${prefix + command} double\`* to double down.`;
   };
 
   hydro.blackjack = hydro.blackjack || {};
   let [aksi, argumen] = args;
+  let user = global.db.users[m.sender]; 
 
   try {
     switch (aksi) {
       case "end":
         if (hydro.blackjack[m.chat]?.idPemain === m.sender) {
+          global.db.users[m.sender].money += hydro.blackjack[m.chat].table.bet;
           delete hydro.blackjack[m.chat];
-          await reply("*Anda keluar dari sesi blackjack.* 👋");
+          await reply("*Anda keluar dari sesi blackjack.* 👋\nUang taruhan telah dikembalikan.");
         } else {
           await reply("*Tidak ada sesi blackjack yang sedang berlangsung atau Anda bukan pemainnya.*");
         }
@@ -21488,12 +21076,17 @@ Type *\`${prefix + command} stand\`* to end your turn.`;
         if (hydro.blackjack[m.chat]) {
           await reply(`*Sesi blackjack sudah berlangsung.* Gunakan *${prefix + command} end* untuk keluar dari sesi.`);
         } else {
+          let betAmount = argumen ? parseInt(argumen) : 1000;
+          if (Number.isNaN(betAmount) || betAmount < 1) betAmount = 1000;
+
+          if (user.money < betAmount) {
+            return reply(`*Uang kamu tidak cukup untuk taruhan ini!*\n\n💸 *Uangmu saat ini:* ${formatter.format(user.money)}\n🎯 *Taruhan yang diminta:* ${formatter.format(betAmount)}`);
+          }
+
+          user.money -= betAmount;
+
           hydro.blackjack[m.chat] = new Blackjack(1);
           hydro.blackjack[m.chat].idPemain = m.sender;
-
-          let betAmount = argumen ? parseInt(argumen) : 1000;
-          if (Number.isNaN(betAmount)) betAmount = 1000;
-
           hydro.blackjack[m.chat].placeBet(betAmount);
           hydro.blackjack[m.chat].start();
 
@@ -21515,13 +21108,7 @@ Type *\`${prefix + command} stand\`* to end your turn.`;
           await reply(pesanHit);
 
           const st = tableHit.state;
-          if (
-            st === "player_win" ||
-            st === "dealer_win" ||
-            st === "draw" ||
-            st === "player_blackjack" ||
-            st === "dealer_blackjack"
-          ) {
+          if (["player_win", "dealer_win", "draw", "player_blackjack", "dealer_blackjack"].includes(st)) {
             global.db.users[hydro.blackjack[m.chat].idPemain].money += tableHit.table.payout;
             delete hydro.blackjack[m.chat];
           }
@@ -21540,13 +21127,7 @@ Type *\`${prefix + command} stand\`* to end your turn.`;
           await reply(pesanStand);
 
           const st = tableStand.state;
-          if (
-            st === "player_win" ||
-            st === "dealer_win" ||
-            st === "draw" ||
-            st === "player_blackjack" ||
-            st === "dealer_blackjack"
-          ) {
+          if (["player_win", "dealer_win", "draw", "player_blackjack", "dealer_blackjack"].includes(st)) {
             global.db.users[hydro.blackjack[m.chat].idPemain].money += tableStand.table.payout;
             delete hydro.blackjack[m.chat];
           }
@@ -21558,6 +21139,14 @@ Type *\`${prefix + command} stand\`* to end your turn.`;
           await reply("*Anda tidak sedang bermain blackjack atau bukan pemainnya.*");
           break;
         }
+
+        let betSaatIni = hydro.blackjack[m.chat].table.bet;
+        if (user.money < betSaatIni) {
+          return reply(`*Uang kamu tidak cukup untuk Double Down!*\n\nButuh tambahan: ${formatter.format(betSaatIni)}\nSisa uangmu: ${formatter.format(user.money)}`);
+        }
+
+        user.money -= betSaatIni;
+
         hydro.blackjack[m.chat].doubleDown();
         {
           const tableDouble = hydro.blackjack[m.chat];
@@ -21565,13 +21154,7 @@ Type *\`${prefix + command} stand\`* to end your turn.`;
           await reply(pesanDouble);
 
           const st = tableDouble.state;
-          if (
-            st === "player_win" ||
-            st === "dealer_win" ||
-            st === "draw" ||
-            st === "player_blackjack" ||
-            st === "dealer_blackjack"
-          ) {
+          if (["player_win", "dealer_win", "draw", "player_blackjack", "dealer_blackjack"].includes(st)) {
             global.db.users[hydro.blackjack[m.chat].idPemain].money += tableDouble.table.payout;
             delete hydro.blackjack[m.chat];
           }
@@ -21579,12 +21162,12 @@ Type *\`${prefix + command} stand\`* to end your turn.`;
         break;
 
       default:
-        await reply(`*Perintah tidak valid.*\nGunakan *${prefix + command} start* untuk memulai sesi blackjack.`);
+        await reply(`*Perintah tidak valid.*\nGunakan *${prefix + command} start <jumlah>* untuk memulai sesi blackjack.`);
         break;
     }
   } catch (err) {
     console.error(err);
-    await reply("*Terjadi kesalahan saat memproses perintah.*");
+    await reply(`*Terjadi kesalahan:* ${err.message}`);
   }
 }
 break;
@@ -26325,7 +25908,7 @@ case 'sc': case 'script': {
         footer: `${botname}`,
         buttons: [
             {
-                buttonId: `${prefix}git https://github.com/AhmadAkbarID/hydro`,
+                buttonId: `${prefix}git https://github.com/AhmadAkbarID/hydromd`,
                 buttonText: { displayText: 'Download SC' },
                 type: 1
             }
@@ -26335,144 +25918,187 @@ case 'sc': case 'script': {
     return hydro.sendMessage(m.chat, quickMsg, { quoted: m });
 }
 break;
-case 'swgc': case 'upswgc': case 'swgrup': case 'swgroup': case 'statusgrup': case 'statusgroup': {
-  if (!Ahmad) return replytolak(mess.only.owner)
-  const { fromBuffer } = require("file-type");
-  const fs = require("fs");
-  const path = require("path");
+case 'swgc': 
+case 'upswgc': 
+case 'swgrup': 
+case 'swgroup': 
+case 'statusgrup': 
+case 'statusgroup': {
+    if (!Ahmad) return replyhydro(global.mess.only.owner);
+    
+    const { fromBuffer } = require("file-type");
+    const fs = require("fs");
+    const path = require("path");
 
-  let content = {}
-  let buffer, ext, tempFile
+    let content = {};
+    let buffer, ext, tempFile;
 
-  if (m.quoted) {
-    try {
-      buffer = await m.quoted.download()
-      if (!buffer) return hydro.sendText(m.chat, "❌ Gagal mengambil media quoted.")
-      ext = (await fromBuffer(buffer))?.ext || 'bin'
-      tempFile = path.join(__dirname, `tmp_${Date.now()}.${ext}`)
-      fs.writeFileSync(tempFile, buffer)
+    await hydro.sendMessage(m.chat, { react: { text: '⏳', key: m.key } });
 
-      const quotedType = m.quoted.mtype || Object.keys(m.quoted.message || {})[0] || ''
-      if (/image|video|audio/.test(quotedType)) {
-        if (/image/.test(quotedType)) {
-          content.image = { url: tempFile }
-          if (text) content.caption = text
-        } else if (/video/.test(quotedType)) {
-          content.video = { url: tempFile }
-          if (text) content.caption = text
-        } else if (/audio/.test(quotedType)) {
-          if (text) {
-            fs.unlinkSync(tempFile)
-            return hydro.sendText(m.chat, "Audio tidak boleh disertai caption.")
-          }
-          content.audio = { url: tempFile }
-          content.ptt = false
+    if (m.quoted) {
+        try {
+            buffer = await m.quoted.download();
+            if (!buffer) return replyhydro("❌ Gagal mengambil media quoted.");
+            
+            const fileTypeRes = await fromBuffer(buffer);
+            ext = fileTypeRes ? fileTypeRes.ext : 'bin';
+            tempFile = path.join(__dirname, `tmp_${Date.now()}.${ext}`);
+            fs.writeFileSync(tempFile, buffer);
+
+            const quotedType = m.quoted.mtype || Object.keys(m.quoted.message || {})[0] || '';
+            if (/image|video|audio/.test(quotedType)) {
+                if (/image/.test(quotedType)) {
+                    content.image = { url: tempFile };
+                    if (text) content.caption = text;
+                } else if (/video/.test(quotedType)) {
+                    content.video = { url: tempFile };
+                    if (text) content.caption = text;
+                } else if (/audio/.test(quotedType)) {
+                    if (text) {
+                        fs.unlinkSync(tempFile);
+                        return replyhydro("Audio tidak boleh disertai caption.");
+                    }
+                    content.audio = { url: tempFile };
+                    content.ptt = false;
+                }
+            } else {
+                fs.unlinkSync(tempFile);
+                return replyhydro("Reply harus berupa image/video/audio.");
+            }
+        } catch (e) {
+            return replyhydro("❌ Media tidak valid atau gagal diproses.");
         }
-      } else {
-        fs.unlinkSync(tempFile)
-        return hydro.sendText(m.chat, "Reply harus berupa image/video/audio.")
-      }
-    } catch (e) {
-      return hydro.sendText(m.chat, "❌ Media tidak valid atau gagal diproses.")
+    } else if (text) {
+        content.text = text;
+    } else {
+        return replyhydro("Kirim media (foto/video/audio) atau teks, bisa dengan reply atau langsung.");
     }
-  } else if (text) {
-    content.text = text
-  } else {
-    return hydro.sendText(m.chat, "Kirim media (foto/video/audio) atau teks, bisa dengan reply atau langsung.")
-  }
 
-  if (content.text && !content.text.trim()) return hydro.sendText(m.chat, "Teks tidak boleh kosong.")
+    if (content.text && !content.text.trim()) return replyhydro("Teks tidak boleh kosong.");
 
-  let grupList = await store.chats.all().filter(v => v.id.endsWith('@g.us')).map(v => v.id)
-  let validGroups = []
-  
-  validGroups.push({
-  title: "All Group",
-  description: `Total ${grupList.length} grup`,
-  id: `.sendstatus all ${encodeURIComponent(JSON.stringify(content))}`
-  })
+    let getGroups = await hydro.groupFetchAllParticipating();
+    let groups = Object.values(getGroups);
 
-  for (let gid of grupList) {
-    try {
-      let metadata = await hydro.groupMetadata(gid)
-      validGroups.push({
-        title: metadata.subject,
-        description: gid,
-        id: `.sendstatus ${gid} ${encodeURIComponent(JSON.stringify(content))}`
-      })
-    } catch (e) {}
-  }
+    let validGroups = [];
+    
+    validGroups.push({
+        title: "All Group",
+        description: `Kirim ke ${groups.length} grup`,
+        id: `.sendstatus all ${encodeURIComponent(JSON.stringify(content))}`
+    });
 
-  if (!validGroups.length) {
-    if (tempFile && fs.existsSync(tempFile)) fs.unlinkSync(tempFile)
-    return hydro.sendText(m.chat, "Tidak ada grup valid yang bisa dipilih.")
-  }
+    for (let group of groups) {
+        validGroups.push({
+            title: group.subject || "Group",
+            description: group.id,
+            id: `.sendstatus ${group.id} ${encodeURIComponent(JSON.stringify(content))}`
+        });
+    }
 
-  let msg = generateWAMessageFromContent(m.chat, {
-    viewOnceMessage: {
-      message: {
-        messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 },
-        interactiveMessage: {
-          body: { text: "```Pilih Grup Tujuan ♨️```" },
-          nativeFlowMessage: {
-            buttons: [
-              {
-                name: "single_select",
-                buttonParamsJson: JSON.stringify({
-                  title: "PILIH GRUP",
-                  sections: [
-                    { title: "", rows: validGroups }
-                  ]
-                })
-              }
-            ]
-          }
+    if (validGroups.length <= 1) {
+        if (tempFile && fs.existsSync(tempFile)) fs.unlinkSync(tempFile);
+        return replyhydro("Tidak ada grup valid yang bisa dipilih.");
+    }
+
+    let msg = generateWAMessageFromContent(m.chat, {
+        viewOnceMessage: {
+            message: {
+                messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 },
+                interactiveMessage: {
+                    body: { text: "```Pilih Grup Tujuan ♨️```" },
+                    nativeFlowMessage: {
+                        buttons: [{
+                            name: "single_select",
+                            buttonParamsJson: JSON.stringify({
+                                title: "PILIH GRUP",
+                                sections: [{ title: "Daftar Grup", rows: validGroups }]
+                            })
+                        }]
+                    }
+                }
+            }
         }
-      }
-    }
-  }, { quoted: m }, {});
+    }, { quoted: m }, {});
 
-  await hydro.relayMessage(msg.key.remoteJid, msg.message, {
-    messageId: msg.key.id
-  });
+    await hydro.relayMessage(msg.key.remoteJid, msg.message, { messageId: msg.key.id });
+    await hydro.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 }
-break
+break;
 
 case 'sendstatus': {
-  if (!Ahmad) return replytolak(mess.only.owner)
-  const fs = require("fs")
+    if (!Ahmad) return replyhydro(global.mess.only.owner);
+    const fs = require("fs");
+    const crypto = require("crypto");
 
-  const [groupId, ...contentARR] = args
-  const contentDecoded = JSON.parse(decodeURIComponent(contentARR.join(' ')))
+    const [groupId, ...contentARR] = args;
+    const contentDecoded = JSON.parse(decodeURIComponent(contentARR.join(' ')));
 
-  let grupList = await store.chats.all().filter(v => v.id.endsWith('@g.us')).map(v => v.id)
-
-  let success = 0
-  let failed = 0
-
-  if (groupId === 'all') {
-    for (let gid of grupList) {
-      try {
-        await groupStatus(gid, contentDecoded)
-        success++
-      } catch (e) {
-        failed++
-      }
+    async function groupStatus(jid, contentObj) {
+        let content = { ...contentObj };
+        const { backgroundColor } = content;
+        delete content.backgroundColor;
+        
+        const inside = await baileys.generateWAMessageContent(content, {
+            upload: hydro.waUploadToServer,
+            backgroundColor
+        });
+        
+        const messageSecret = crypto.randomBytes(32);
+        const mStatus = baileys.generateWAMessageFromContent(jid, {
+            messageContextInfo: {
+                messageSecret
+            },
+            groupStatusMessageV2: {
+                message: {
+                    ...inside,
+                    messageContextInfo: {
+                        messageSecret
+                    }
+                }
+            }
+        }, {});
+        
+        await hydro.relayMessage(jid, mStatus.message, {
+            messageId: mStatus.key.id
+        });
+        return mStatus;
     }
-    hydro.sendText(m.chat, `✅ Berhasil dikirim ke ${success} group`)
-  } else {
-    await groupStatus(groupId, contentDecoded)
-    hydro.sendText(m.chat, `✅ Berhasil dikirim ke grup id: ${groupId}`)
-  }
 
-  try {
-    if (contentDecoded?.image?.url && fs.existsSync(contentDecoded.image.url)) fs.unlinkSync(contentDecoded.image.url)
-    if (contentDecoded?.video?.url && fs.existsSync(contentDecoded.video.url)) fs.unlinkSync(contentDecoded.video.url)
-    if (contentDecoded?.audio?.url && fs.existsSync(contentDecoded.audio.url)) fs.unlinkSync(contentDecoded.audio.url)
-  } catch (e) {}
+    let getGroups = await hydro.groupFetchAllParticipating();
+    let groups = Object.values(getGroups).map(v => v.id);
+
+    let success = 0;
+    let failed = 0;
+
+    if (groupId === 'all') {
+        for (let gid of groups) {
+            try {
+                await groupStatus(gid, contentDecoded);
+                success++;
+                await sleep(2000); 
+            } catch (e) {
+                failed++;
+            }
+        }
+        replyhydro(`✅ Berhasil ${success} group\n❌ Gagal: ${failed} group`);
+    } else {
+        try {
+            await groupStatus(groupId, contentDecoded);
+            replyhydro(`✅ Berhasil dikirim ke grup id: ${groupId}`);
+        } catch (e) {
+            replyhydro(`❌ Gagal mengirim ke grup id: ${groupId}`);
+        }
+    }
+
+    try {
+        if (contentDecoded?.image?.url && fs.existsSync(contentDecoded.image.url)) fs.unlinkSync(contentDecoded.image.url);
+        if (contentDecoded?.video?.url && fs.existsSync(contentDecoded.video.url)) fs.unlinkSync(contentDecoded.video.url);
+        if (contentDecoded?.audio?.url && fs.existsSync(contentDecoded.audio.url)) fs.unlinkSync(contentDecoded.audio.url);
+    } catch (e) {}
+
+    await hydro.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
 }
-break
-
+break;
 //==================================================================
 case 'aivo': {
   if (!text) return replyhydro(`Example : ${command} siapa jokowi`);
@@ -28664,384 +28290,6 @@ _Media Has been sent, Please wait...._`
       }
   } 
   break
-//=================================//
- case 'fajar':{
-FajarNews().then(async(res) => {
-console.log(res) 
-no = 0
-iwan = ""
-for (let i of res) {
-no += 1
-iwan += `\n• ${no.toString()} •\n`
-iwan += `Berita: ${i.berita}\n`
-iwan += `Upload: ${i.berita_diupload}\n`
-iwan += `Jenis: ${i.berita_jenis}\n`
-iwan += `Link: ${i.berita_url}\n`
-}
-iwan += ""
-reply(iwan) 
-})
-}
-break
-//=================================================//
-case 'cnn': {
-CNNNews().then(res => {
-no = 0
-iwann = ""
-for (let i of res) {
-no += 1
-iwann += `\n• ${no.toString()} •\n`
-iwann += `Berita: ${i.berita}\n`
-iwann += `Link: ${i.berita_url}\n`
-}
-iwann += ""
-reply(iwann) 
-})
-}
-break
-//=================================================//
-case 'layarkaca': {
-if (!q) return reply('Judul') 
-LayarKaca21(q).then(async(res) => {
-no = 0
-iwannn = ""
-for (let i of res) {
-no += 1
-iwannn += `\n• ${no.toString()} •\n`
-iwannn += `Film: ${i.film_title}\n`
-iwannn += `Link: ${i.film_link}\n`
-}
-iwannn += ``
-reply(iwannn) 
-})
-}
-break
-//=================================================//
-case 'cnbc': {
-    try {
-        CNBCNews().then(async (res) => {
-            let no = 0;
-            let iwannnn = "";
-            for (let i of res) {
-                no += 1;
-                iwannnn += `\n• ${no.toString()} •\n`;
-                iwannnn += `Berita: ${i.berita}\n`;
-                iwannnn += `Upload: ${i.berita_diupload}\n`;
-                iwannnn += `Link: ${i.berita_url}\n`;
-            }
-            iwannnn += "";
-
-            const thumb = res[0]?.berita_thumb || ''; // Pastikan 'berita_thumb' tidak undefined
-            await hydro.sendMessage(m.chat, { 
-                image: { url: thumb }, 
-                caption: iwannnn 
-            }, { quoted: m });
-        }).catch(err => {
-            console.error(err);
-            reply('Terjadi kesalahan saat mengambil berita.');
-        });
-    } catch (err) {
-        console.error(err);
-        reply('Terjadi kesalahan yang tidak terduga.');
-    }
-}
-break;
-
-//=================================================//
-case 'tribun': {
-  try {
-TribunNews().then(async(res) => {
-no = 0
-iwannnnn = ""
-for (let i of res) {
-no += 1
-iwannnnn += `\n• ${no.toString()} •\n`
-iwannnnn += `Berita: ${i.berita}\n`
-iwannnnn += `Upload: ${i.berita_diupload}\n`
-iwannnnn += `Jenis: ${i.berita_jenis}\n`
-iwannnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnn += ""
-hydro.sendMessage(m.chat, { image : { url : res[0].berita_thumb }, caption: iwannnnn }, { quoted:m })
-   }).catch(err => {
-            console.error(err);
-            reply('Terjadi kesalahan saat mengambil berita.');
-        });
-    } catch (err) {
-        console.error(err);
-        reply('Terjadi kesalahan yang tidak terduga.');
-    }
-}
-break
-//=================================================//
-case 'indozone': {
-  try {
-IndozoneNews().then(async(res) => {
-no = 0
-iwannnnnn = ""
-for (let i of res) {
-no += 1
-iwannnnnn += `\n• ${no.toString()} •\n`
-iwannnnnn += `Berita: ${i.berita}\n`
-iwannnnnn += `Upload: ${i.berita_diupload}\n`
-iwannnnnn += `Jenis: ${i.berita_jenis}\n`
-iwannnnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnnn += ""
-hydro.sendMessage(m.chat, { image : { url : res[0].berita_thumb }, caption: iwannnnnn }, { quoted:m })
-   }).catch(err => {
-            console.error(err);
-            reply('Terjadi kesalahan saat mengambil berita.');
-        });
-    } catch (err) {
-        console.error(err);
-        reply('Terjadi kesalahan yang tidak terduga.');
-    }
-}
-break
-//=================================================//
-case 'kompas': {
-  try {
-KompasNews().then(async(res) => {
-no = 0
-iwannnnnnn = ""
-for (let i of res) {
-no += 1
-iwannnnnnn += `\n• ${no.toString()} •\n`
-iwannnnnnn += `Berita: ${i.berita}\n`
-iwannnnnnn += `Upload: ${i.berita_diupload}\n`
-iwannnnnnn += `Jenis: ${i.berita_jenis}\n`
-iwannnnnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnnnn += ""
-hydro.sendMessage(m.chat, { image : { url : res[0].berita_thumb }, caption: iwannnnnnn }, { quoted:m })
-   }).catch(err => {
-            console.error(err);
-            reply('Terjadi kesalahan saat mengambil berita.');
-        });
-    } catch (err) {
-        console.error(err);
-        reply('Terjadi kesalahan yang tidak terduga.');
-    }
-}
-break
-//=================================================//
-case 'detiknews': {
-  try {
-DetikNews().then(async(res) => {
-no = 0
-iwannnnnnnn = ""
-for (let i of res) {
-no += 1
-iwannnnnnnn += `\n• ${no.toString()} •\n`
-iwannnnnnnn += `Berita: ${i.berita}\n`
-iwannnnnnnn += `Upload: ${i.berita_diupload}\n`
-iwannnnnnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnnnnn += ""
-hydro.sendMessage(m.chat, { image : { url : res[0].berita_thumb }, caption: iwannnnnnnn }, { quoted:m })
-   }).catch(err => {
-            console.error(err);
-            reply('Terjadi kesalahan saat mengambil berita.');
-        });
-    } catch (err) {
-        console.error(err);
-        reply('Terjadi kesalahan yang tidak terduga.');
-    }
-}
-break
-//=================================================//
-case 'dailynews': {
-DailyNews().then(async(res) => {
-no = 0
-iwannnnnnnnn = ""
-for (let i of res) {
-no += 1
-iwannnnnnnnn += `\n• ${no.toString()} •\n`
-iwannnnnnnnn += `Berita: ${i.berita}\n`
-iwannnnnnnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnnnnnn += ""
-hydro.sendMessage(m.chat, { image : { url : res[0].berita_thumb }, caption: iwannnnnnnnn }, { quoted:m })
-})
-}
-break
-//=================================================//
-case 'inews': {
-iNews().then(async(res) => {
-no = 0
-iwannnnnnnnnn = ""
-for (let i of res) {
-no += 1
-iwannnnnnnnnn += `\n• ${no.toString()} •\n`
-iwannnnnnnnnn += `Berita: ${i.berita}\n`
-iwannnnnnnnnn += `Upload: ${i.berita_diupload}\n`
-iwannnnnnnnnn += `Jenis: ${i.berita_jenis}\n`
-iwannnnnnnnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnnnnnnn += ""
-reply(iwannnnnnnnnn) 
-})
-}
-break
-//=================================================//
-case 'okezone': {
-  try {
-OkezoneNews().then(async(res) => {
-no = 0
-iwannnnnnnnnnn = ""
-for (let i of res) {
-no += 1
-iwannnnnnnnnnn += `\n• ${no.toString()} •\n`
-iwannnnnnnnnnn += `Berita: ${i.berita}\n`
-iwannnnnnnnnnn += `Upload: ${i.berita_diupload}\n`
-iwannnnnnnnnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnnnnnnnn += ""
-const thumb = res[0].berita_thumb || '';
-hydro.sendMessage(m.chat, { image : { url : thumb }, caption: iwannnnnnnnnnn }, { quoted:m })
-   }).catch(err => {
-            console.error(err);
-            reply('Terjadi kesalahan saat mengambil berita.');
-        });
-    } catch (err) {
-        console.error(err);
-        reply('Terjadi kesalahan yang tidak terduga.');
-    }
-}
-break
-//=================================================//
-case 'sindo':{
-SindoNews().then(async(res) => {
-no = 0
-iwannnnnnnnnnnn = ""
-for (let i of res) {
-no += 1
-iwannnnnnnnnnnn += `\n• ${no.toString()} •\n`
-iwannnnnnnnnnnn += `Berita: ${i.berita}\n`
-iwannnnnnnnnnnn += `Jenis: ${i.berita_jenis}\n`
-iwannnnnnnnnnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnnnnnnnnn += ""
-reply(iwannnnnnnnnnnn) 
-})
-}
-break
-//=================================================//
-case 'tempo': {
-  try {
-TempoNews().then(async(res) => {
-no = 0
-iwannnnnnnnnnnnn = ""
-for (let i of res) {
-no += 1
-iwannnnnnnnnnnnn += `\n• ${no.toString()} •\n`
-iwannnnnnnnnnnnn += `Berita: ${i.berita}\n`
-iwannnnnnnnnnnnn += `Upload: ${i.berita_diupload}\n`
-iwannnnnnnnnnnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnnnnnnnnnn += ""
-const thumb = res[0].berita_thumb || '';
-hydro.sendMessage(m.chat, { image : { url : thumb }, caption: iwannnnnnnnnnnnn }, { quoted:m })
-   }).catch(err => {
-            console.error(err);
-            reply('Terjadi kesalahan saat mengambil berita.');
-        });
-    } catch (err) {
-        console.error(err);
-        reply('Terjadi kesalahan yang tidak terduga.');
-    }
-}
-break
-//=================================================//
-case 'antara':{
-  try {
-AntaraNews().then(async(res) => {
-no = 0
-iwannnnnnnnnnnnnn = ""
-for (let i of res) {
-no += 1
-iwannnnnnnnnnnnnn += `\n• ${no.toString()} •\n`
-iwannnnnnnnnnnnnn += `Berita: ${i.berita}\n`
-iwannnnnnnnnnnnnn += `Upload: ${i.berita_diupload}\n`
-iwannnnnnnnnnnnnn += `Jenis: ${i.berita_jenis}\n`
-iwannnnnnnnnnnnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnnnnnnnnnnn += ""
-const thumb = res[0].berita_thumb || '';
-hydro.sendMessage(m.chat, { image : { url : thumb }, caption: iwannnnnnnnnnnnnn }, { quoted:m })
-   }).catch(err => {
-            console.error(err);
-            reply('Terjadi kesalahan saat mengambil berita.');
-        });
-    } catch (err) {
-        console.error(err);
-        reply('Terjadi kesalahan yang tidak terduga.');
-    }
-}
-break
-//=================================================//
-case 'kontan':{
-  try {
-KontanNews().then(async (res) => {
-iwannnnnnnnnnnnnnn = ""
-no = 0
-for (let i of res) {
-no += 1
-iwannnnnnnnnnnnnnn += `\n• ${no.toString()} •\n`
-iwannnnnnnnnnnnnnn += `Berita: ${i.berita}\n`
-iwannnnnnnnnnnnnnn += `Jenis: ${i.berita_jenis}\n`
-iwannnnnnnnnnnnnnn += `Upload: ${i.berita_diupload}\n`
-iwannnnnnnnnnnnnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnnnnnnnnnnnn += ""
-hydro.sendMessage(m.chat, { image : { url : res[0].berita_thumb }, caption: iwannnnnnnnnnnnnnn }, { quoted:m })
-   }).catch(err => {
-            console.error(err);
-            reply('Terjadi kesalahan saat mengambil berita.');
-        });
-    } catch (err) {
-        console.error(err);
-        reply('Terjadi kesalahan yang tidak terduga.');
-    }
-}
-break
-//=================================================//
-case 'merdeka': {
-  try {
-MerdekaNews().then(async (res) => {
-iwannnnnnnnnnnnnnnn = ""
-no = 0
-for (let i of res) {
-no += 1
-iwannnnnnnnnnnnnnnn += `\n• ${no.toString()} •\n`
-iwannnnnnnnnnnnnnnn += `Berita: ${i.berita}\n`
-iwannnnnnnnnnnnnnnn += `Upload: ${i.berita_diupload}\n`
-iwannnnnnnnnnnnnnnn += `Link: ${i.berita_url}\n`
-}
-iwannnnnnnnnnnnnnnn += ""
-const thumb = res[0].berita_thumb || '';
-hydro.sendMessage(m.chat, { image : { url : thumb }, caption: iwannnnnnnnnnnnnnnn }, { quoted:m })
-   }).catch(err => {
-            console.error(err);
-            reply('Terjadi kesalahan saat mengambil berita.');
-        });
-    } catch (err) {
-        console.error(err);
-        reply('Terjadi kesalahan yang tidak terduga.');
-    }
-}
-break
-//=================================================//
-case 'jalantikus': {
-var reis = await JalanTikusMeme()
-tekcs = ""
-tekcs += "Jalan Tikus Meme\n\n"
-tekcs += `Source: ${reis}`
-tekcs += ""
-hydro.sendMessage(m.chat, { image : { url : reis }, caption: tekcs }, { quoted:m })
-}
-break
 //=================================================//
 case 'stkbaik': {
     generateAndSendCertificate(pushname, "Anda dinyatakan Baik!");
@@ -32253,7 +31501,7 @@ case 'bratvideo': {
       try {
         res = await getBuffer('https://brat.siputzx.my.id/mp4?text=' + encodeURIComponent(currentText))
       } catch (e) {
-        res = await getBuffer('https://aqul-brat.hf.space/?text=' + encodeURIComponent(currentText))
+        res = await getBuffer('https://brat.siputzx.my.id/gif?text=' + encodeURIComponent(currentText))
       }
 
       const framePath = path.join(tempDir, `${m.sender}_${i}.mp4`)
@@ -32298,146 +31546,6 @@ break
 case 'furbrat': {
   if(!text) return reply('masukan text nya ler')
   hydro.sendImageAsSticker(from, `https://fastrestapis.fasturl.link/tool/furbrat?text=${encodeURIComponent(text)}`, m, { packname: global.botname, author: global.botname})
-}
-break
-case 'kaorinusantara': {
-  if(!text) return reply('masukan nama animenya')
-async function fetchKaoriNews() {
-  try {
-    const { data: html } = await axios.get("https://www.kaorinusantara.or.id/newsline")
-    const $ = cheerio.load(html)
-    const articles = []
-
-    $(".td_module_10").each((_, el) => {
-      const title = $(el).find(".entry-title a").text().trim()
-      const url = $(el).find(".entry-title a").attr("href")
-      const excerpt = $(el).find(".td-excerpt").text().trim()
-      const date = $(el).find(".td-post-date time").text().trim()
-      const author = $(el).find(".td-post-author-name a").text().trim()
-      const category = $(el).find(".td-post-category").text().trim()
-      const image = $(el).find(".td-module-thumb img").attr("data-src") || $(el).find(".td-module-thumb img").attr("src")
-
-      articles.push({ title, url, date, author, category, excerpt, image })
-    })
-
-    return await scrapeArticleDetails(articles)
-  } catch (error) {
-    return []
-  }
-}
-async function searchKaoriNews(query) {
-  try {
-    const { data: html } = await axios.get(`https://www.kaorinusantara.or.id/?s=${query}`)
-    const $ = cheerio.load(html)
-    const results = []
-
-    $(".td_module_10").each((_, el) => {
-      const title = $(el).find(".entry-title a").text().trim()
-      const url = $(el).find(".entry-title a").attr("href")
-      const excerpt = $(el).find(".td-excerpt").text().trim()
-      const date = $(el).find(".td-post-date time").text().trim()
-      const author = $(el).find(".td-post-author-name a").text().trim()
-      const category = $(el).find(".td-post-category").text().trim()
-      const image = $(el).find(".td-module-thumb img").attr("data-src") || $(el).find(".td-module-thumb img").attr("src")
-
-      results.push({ title, url, date, author, category, excerpt, image })
-    })
-
-    return await scrapeArticleDetails(results)
-  } catch (error) {
-    return []
-  }
-}
-async function scrapeArticleDetails(articles) {
-  return await Promise.all(
-    articles.map(async (article) => {
-      try {
-        const { data: html } = await axios.get(article.url)
-        const $ = cheerio.load(html)
-
-        const altTitle = $('meta[property="og:title"]').attr("content") || ""
-        const content = $(".td-post-content").find("p").text().trim() || "Tidak tersedia"
-
-        return { ...article, altTitle, content }
-      } catch (error) {
-        return article
-      }
-    })
-  )
-}
-  let isSearch = text.length > 0
-  let articles = isSearch ? await searchKaoriNews(text) : await fetchKaoriNews()
-  if (!articles.length) return hydro.sendMessage(m.chat, { text: "Gagal mengambil berita dari Kaori Nusantara Coba Lagi Nanti" }, { quoted: m })
-
-  let timestamp = new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" })
-  let caption = `📰 *${isSearch ? `Hasil Pencarian "${text}"` : "Berita Anime & Pop Culture Terbaru"}*\n\n📅 *Update:* ${timestamp}\n\n`
-
-  for (let i = 0; i < Math.min(articles.length, 5); i++) {
-    let article = articles[i]
-
-    caption += `🎯 *Judul:* ${article.title}\n`
-    if (article.altTitle) caption += `🔖 *Judul Alternatif:* ${article.altTitle}\n`
-    caption += `📆 *Tanggal:* ${article.date || "Tidak tersedia"}\n`
-    caption += `✍️ *Penulis:* ${article.author || "Tidak diketahui"}\n`
-    caption += `📂 *Kategori:* ${article.category || "Tidak tersedia"}\n\n`
-    caption += `📝 *Deskripsi:* ${article.excerpt}\n\n`
-    caption += `📖 *Isi Berita:* \n${article.content}\n\n`
-    caption += `*Baca Selengkapnya:* ${article.url}\n\n`
-  }
-  await hydro.sendMessage(m.chat, {
-    image: { url: articles[0].image },
-    caption
-  }, { quoted: m })
-}
-break
-case 'beritabola': {
-async function fetchBeritaBola() {
-  try {
-    const { data: html } = await axios.get("https://vivagoal.com/category/berita-bola/", {
-      httpsAgent: new https.Agent({ rejectUnauthorized: false })
-    })
-    const $ = cheerio.load(html)
-    const articles = []
-
-    $(".swiper-wrapper .swiper-slide, .col-lg-6.mb-4, .col-lg-4.mb-4").each((i, el) => {  
-      const url = $(el).find("a").attr("href") || null  
-      const image = $(el).find("figure img").attr("src") || null  
-      const title = $(el).find("h3 a").text().trim() || null  
-      const categories = $(el)  
-        .find("a.vg_pill_cat")  
-        .map((i, cat) => $(cat).text().trim())  
-        .get()  
-      let date = $(el).find("time").attr("datetime") || $(el).find(".posted-on").text().trim()  
-      if (!date) date = new Date().toISOString().split("T")[0]  
-
-      if (url && title && image) {  
-        articles.push({ url, image, title, categories, date })  
-      }  
-    })  
-
-    return articles
-  } catch (error) {
-    return []
-  }
-}
-const axios = require('axios')
-const cheerio = require('cheerio')
-const https = require('https')
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
-  let articles = await fetchBeritaBola()
-  if (!articles.length) return m.reply("Gagal mengambil berita bola.")
-  let timestamp = new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" })
-  let caption = `📢 Berita Bola Terbaru (Diperbarui: ${timestamp})\n\n`
-  articles.slice(0, 5).forEach((article, i) => {
-    caption += `${i + 1}. ${article.title}\n`
-    caption += `📅 Tanggal: ${article.date}\n`
-    caption += `🏷️ Kategori: ${article.categories.join(", ") || "Tidak diketahui"}\n`
-    caption += `🔗 Baca Selengkapnya: ${article.url}\n\n`
-  })
-  await hydro.sendMessage(m.chat, {
-    image: { url: articles[0].image },
-    caption
-  }, { quoted: m })
 }
 break
 case 'animebrat':
@@ -33482,23 +32590,36 @@ delResponList(m.chat, q.toLowerCase(), db_respon_list)
 reply(`Sukses delete list message dengan key *${q}*`)
 break
 case 'addlist':
-if (!m.isGroup) return replytolak(mess.only.group)
-if (!isAdmins) return replytolak(mess.only.admin)
-var args1 = q.split("|")[0].toLowerCase()
-var args2 = q.split("|")[1]
-if (!q.includes("|")) return reply(`Gunakan dengan cara ${prefix+command} *key|response*\n\n_Contoh_\n\n${prefix+command} tes|apa`)
-if (isAlreadyResponList(m.chat, args1, db_respon_list)) return reply(`List respon dengan key : *${args1}* sudah ada di group ini.`)
-if (/image/.test(mime)) {
-let media = await hydro.downloadAndSaveMediaMessage(quoted)
-                let mem = await uploadwidipe(media)
-addResponList(m.chat, args1, args2, true, mem, db_respon_list)
-reply(`Sukses set list message dengan key : *${args1}*`)
-if (fs.existsSync(media)) fs.unlinkSync(media)
-} else {
-addResponList(m.chat, args1, args2, false, '-', db_respon_list)
-reply(`Sukses set list message dengan key : *${args1}*`)
-}
-break
+    if (!m.isGroup) return replytolak(mess.only.group)
+    if (!isAdmins) return replytolak(mess.only.admin)
+    var args1 = q.split("|")[0].toLowerCase()
+    var args2 = q.split("|")[1]
+    
+    if (!q.includes("|")) return reply(`Gunakan dengan cara ${prefix+command} *key|response*\n\n_Contoh_\n\n${prefix+command} tes|apa\n\n*(Catatan: Bisa dengan mengirim gambar disertai caption atau reply gambar)*`)
+    
+    if (isAlreadyResponList(m.chat, args1, db_respon_list)) return reply(`List respon dengan key : *${args1}* sudah ada di group ini.`)
+    
+    if (/image/.test(mime)) {
+        const listDir = './data/image/list/'
+        
+        if (!fs.existsSync(listDir)) {
+            fs.mkdirSync(listDir, { recursive: true })
+        }
+        
+        let media = await hydro.downloadAndSaveMediaMessage(quoted)
+        let ext = media.split('.').pop() || 'jpg'
+        let fileName = `list_${m.chat.split('@')[0]}_${Date.now()}.${ext}`
+        let finalPath = listDir + fileName
+        
+        fs.copyFileSync(media, finalPath)
+        
+        addResponList(m.chat, args1, args2, true, finalPath, db_respon_list)
+        reply(`Sukses set list message bergambar dengan key : *${args1}*`)
+    } else {
+        addResponList(m.chat, args1, args2, false, '-', db_respon_list)
+        reply(`Sukses set list message text dengan key : *${args1}*`)
+    }
+    break
 case 'updatelist': case 'update':
 if (!m.isGroup) return replytolak(mess.only.group)
 if (!isAdmins) return replytolak(mess.only.admin)
@@ -33553,90 +32674,137 @@ var nilai_one = Number(atas)
 var nilai_two = Number(bawah)
 reply(`${nilai_one / nilai_two}`)}
 break
-case 'setproses': case 'setp':
-if (!m.isGroup) return replytolak(mess.only.group)
-if (!isAdmins) return replytolak(mess.only.admin)
-if (!text) return reply(`Gunakan dengan cara ${prefix + command} *teks*\n\n_Contoh_\n\n${prefix + command} Pesanan sedang di proses ya @user\n\n- @user (tag org yg pesan)\n- @pesanan (pesanan)\n- @jam (waktu pemesanan)\n- @tanggal (tanggal pemesanan) `)
-if (isSetProses(m.chat, set_proses)) return reply(`Set proses already active`)
-addSetProses(text, m.chat, set_proses)
-reply(`✅ Done set proses!`)
-break
-case 'changeproses': case 'changep':
-if (!m.isGroup) return replytolak(mess.only.group)
-if (!isAdmins) return replytolak(mess.only.admin)
-if (!text) return reply(`Gunakan dengan cara ${prefix + command} *teks*\n\n_Contoh_\n\n${prefix + command} Pesanan sedang di proses ya @user\n\n- @user (tag org yg pesan)\n- @pesanan (pesanan)\n- @jam (waktu pemesanan)\n- @tanggal (tanggal pemesanan) `)
-if (isSetProses(m.chat, set_proses)) {
-changeSetProses(text, m.chat, set_proses)
-reply(`Sukses ubah set proses!`)
-} else {
-addSetProses(text, m.chat, set_proses)
-reply(`Sukses ubah set proses!`)
-}
-break
-case 'delsetproses': case 'delsetp':
-if (!m.isGroup) return replytolak(mess.only.group)
-if (!isAdmins) return replytolak(mess.only.admin)
-if (!isSetProses(m.chat, set_proses)) return reply(`Belum ada set proses di gc ini`)
-removeSetProses(m.chat, set_proses)
-reply(`Sukses delete set proses`)
-break
 case 'setdone':{
-if (!m.isGroup) return replytolak(mess.only.group)
-if (!isAdmins) return replytolak(mess.only.admin)
-if (!text) return reply(`Gunakan dengan cara ${prefix + command} *teks*\n\n_Contoh_\n\n${prefix + command} Done @user\n\n- @user (tag org yg pesan)\n- @pesanan (pesanan)\n- @jam (waktu pemesanan)\n- @tanggal (tanggal pemesanan) `)
-if (isSetDone(m.chat, set_done)) return reply(`Udh set done sebelumnya`)
-addSetDone(text, m.chat, set_done)
-reply(`Sukses set done!`)
-break
+    if (!m.isGroup) return replytolak(mess.only.group)
+    if (!isAdmins) return replytolak(mess.only.admin)
+    if (!text) return reply(`Gunakan dengan cara ${prefix + command} *teks*\n\n_Contoh_\n\n${prefix + command} Done @user\n\n- @user (tag org yg pesan)\n- @pesanan (pesanan)\n- @jam (waktu pemesanan)\n- @tanggal (tanggal pemesanan) `)
+    if (isSetDone(m.chat, set_done)) return reply(`Udh set done sebelumnya`)
+    addSetDone(text, m.chat, set_done)
+    reply(`Sukses set done!`)
+    break
 }
-case 'changedone': case 'changed':
-if (!m.isGroup) return replytolak(mess.only.group)
-if (!isAdmins) return replytolak(mess.only.admin)
-if (!text) return reply(`Gunakan dengan cara ${prefix + command} *teks*\n\n_Contoh_\n\n${prefix + command} Done @user\n\n- @user (tag org yg pesan)\n- @pesanan (pesanan)\n- @jam (waktu pemesanan)\n- @tanggal (tanggal pemesanan) `)
-if (isSetDone(m.chat, set_done)) {
-changeSetDone(text, m.chat, set_done)
-reply(`Sukses ubah set done!`)
-} else {
-addSetDone(text, m.chat, set_done)
-reply(`Sukses ubah set done!`)
+
+case 'changedone': case 'changed':{
+    if (!m.isGroup) return replytolak(mess.only.group)
+    if (!isAdmins) return replytolak(mess.only.admin)
+    if (!text) return reply(`Gunakan dengan cara ${prefix + command} *teks*\n\n_Contoh_\n\n${prefix + command} Done @user\n\n- @user (tag org yg pesan)\n- @pesanan (pesanan)\n- @jam (waktu pemesanan)\n- @tanggal (tanggal pemesanan) `)
+    if (isSetDone(m.chat, set_done)) {
+        changeSetDone(text, m.chat, set_done)
+        reply(`Sukses ubah set done!`)
+    } else {
+        addSetDone(text, m.chat, set_done)
+        reply(`Sukses ubah set done!`)
+    }
+    break
 }
-break
-case 'd': case'done':{
-      if (!isAdmins) return
-      if (!m.isGroup) return replytolak(mess.only.group)
-			if (!m.quoted) return m.reply('Reply pesanan yang telah di proses')
-            let tek = m.quoted ? quoted.text : quoted.text.split(args[0])[1]
-            let sukses = `── 「 *DETAIL PESANAN* 」 ──\n\n\`\`\`› Status : 「 Transaksi Success 」\n› Pesanan : @user\n› Date : @tanggal\n› Clock : @jam\n› Status Pesanan : Terkirim ✅\n› Catatan Pesanan 📝 :\`\`\`\n*@pesanan*\n\n_*Terimakasih sudah order di @group*_\n*_kami tunggu orderan berikutnya_* 🤗🤗`            
-            const getTextD = getTextSetDone((m.isGroup? m.chat: botNumber), set_done);
-            if (getTextD !== undefined) {
-            	var anunya = (getTextD.replace('@pesanan', tek ? tek : '-').replace('@user', '@' + m.quoted.sender.split("@")[0]).replace('@admin', pushname).replace('@group', groupMetadata.subject).replace('@jam', time).replace('@tanggal', tanggal(new Date())).replace('@user', '@' + m.quoted.sender.split("@")[0]))
-            	hydro.sendTextWithMentions(m.chat, anunya, m)
-               } else {
-               	hydro.sendTextWithMentions(m.chat, (sukses.replace('@pesanan', tek ? tek : '-').replace('@user', '@' + m.quoted.sender.split("@")[0]).replace('@admin', pushname).replace('@group', groupMetadata.subject).replace('@jam', time).replace('@tanggal', tanggal(new Date())).replace('@user', '@' + m.quoted.sender.split("@")[0])), m)
-               }
-   }
-   break
-case 'delsetdone': case 'delsetd':
-if (!m.isGroup) return replytolak(mess.only.group)
-if (!isAdmins) return replytolak(mess.only.admin)
-if (!isSetDone(m.chat, set_done)) return reply(`Belum ada set done di gc ini`)
-removeSetDone(m.chat, set_done)
-reply(`Sukses delete set done`)
-break
-case'proses':{
-  if (!m.isGroup) return replytolak(mess.only.group)
-			if (!m.quoted) return m.reply('Reply pesanan yang akan proses')
-            let tek = m.quoted ? quoted.text : quoted.text.split(args[0])[1]
-            let proses = `── 「 *DETAIL PESANAN* 」 ──\n\n\`\`\`› Status : 「 Transaksi Pending 」\n› Pesanan : @user\n› Date : @tanggal\n› Clock : @jam\n› Status Pesanan : Diproses ⌛\n› Catatan Pesanan 📝 :\`\`\`\n*@pesanan*\n\n_*Tunggu Sebentar, Orderan Kamu Sedang Diproses Oleh Admin @admin.*_`
-            const getTextP = getTextSetProses((m.isGroup? m.chat: botNumber), set_proses);
-            if (getTextP !== undefined) {
-            	var anunya = (getTextP.replace('@pesanan', tek ? tek : '-').replace('@user', '@' + m.quoted.sender.split("@")[0]).replace('@admin', pushname).replace('@jam', time).replace('@tanggal', tanggal(new Date())).replace('@user', '@' + m.quoted.sender.split("@")[0]))
-                hydro.sendTextWithMentions(m.chat, anunya, m)
-            } else {
-   hydro.sendTextWithMentions(m.chat, (proses.replace('@pesanan', tek ? tek : '-').replace('@user', '@' + m.quoted.sender.split("@")[0]).replace('@admin', pushname).replace('@jam', time).replace('@tanggal', tanggal(new Date())).replace('@user', '@' + m.quoted.sender.split("@")[0])), m)
-            }
-            }
-            break
+
+case 'delsetdone': case 'delsetd':{
+    if (!m.isGroup) return replytolak(mess.only.group)
+    if (!isAdmins) return replytolak(mess.only.admin)
+    if (!isSetDone(m.chat, set_done)) return reply(`Belum ada set done di gc ini`)
+    removeSetDone(m.chat, set_done)
+    reply(`Sukses delete set done`)
+    break
+}
+
+case 'd': case 'done': {
+    if (!isAdmins) return
+    if (!m.isGroup) return replytolak(mess.only.group)
+    if (!m.quoted) return m.reply('Reply pesanan yang telah di proses')
+    
+    let tek = m.quoted ? m.quoted.text : ''
+    let sukses = `── 「 *DETAIL PESANAN* 」 ──\n\n\`\`\`› Status : 「 Transaksi Success 」\n› Pesanan : @pesanan\n› Date : @tanggal\n› Clock : @jam\n› Status Pesanan : Terkirim ✅\`\`\`\n\n_*Terimakasih sudah order kak @user*_\n*_kami tunggu orderan berikutnya_* 🤗🤗`            
+    const getTextD = getTextSetDone((m.isGroup ? m.chat : botNumber), set_done);
+   
+    let targetReply = m.quoted.fakeObj ? m.quoted.fakeObj : m.quoted;
+
+    if (getTextD !== undefined) {
+        let pesannya = getTextD.replace('@pesanan', tek ? tek : '-')
+            .replace(/@user/g, '@' + m.quoted.sender.split("@")[0])
+            .replace('@admin', pushname)
+            .replace('@group', groupMetadata.subject)
+            .replace('@jam', time)
+            .replace('@tanggal', tanggal(new Date()));
+            
+        hydro.sendTextWithMentions(m.chat, pesannya, targetReply) 
+    } else {
+        let pesannya = sukses.replace('@pesanan', tek ? tek : '-')
+            .replace(/@user/g, '@' + m.quoted.sender.split("@")[0])
+            .replace('@admin', pushname)
+            .replace('@group', groupMetadata.subject)
+            .replace('@jam', time)
+            .replace('@tanggal', tanggal(new Date()));
+            
+        hydro.sendTextWithMentions(m.chat, pesannya, targetReply) 
+    }
+    break
+}
+
+case 'setproses':{
+    if (!m.isGroup) return replytolak(mess.only.group)
+    if (!isAdmins) return replytolak(mess.only.admin)
+    if (!text) return reply(`Gunakan dengan cara ${prefix + command} *teks*\n\n_Contoh_\n\n${prefix + command} Proses @user\n\n- @user (tag org yg pesan)\n- @pesanan (pesanan)\n- @jam (waktu pemesanan)\n- @tanggal (tanggal pemesanan) `)
+    if (isSetProses(m.chat, set_proses)) return reply(`Udh set proses sebelumnya`)
+    addSetProses(text, m.chat, set_proses)
+    reply(`Sukses set proses!`)
+    break
+}
+
+case 'changeproses': case 'changep':{
+    if (!m.isGroup) return replytolak(mess.only.group)
+    if (!isAdmins) return replytolak(mess.only.admin)
+    if (!text) return reply(`Gunakan dengan cara ${prefix + command} *teks*\n\n_Contoh_\n\n${prefix + command} Proses @user\n\n- @user (tag org yg pesan)\n- @pesanan (pesanan)\n- @jam (waktu pemesanan)\n- @tanggal (tanggal pemesanan) `)
+    if (isSetProses(m.chat, set_proses)) {
+        changeSetProses(text, m.chat, set_proses)
+        reply(`Sukses ubah set proses!`)
+    } else {
+        addSetProses(text, m.chat, set_proses)
+        reply(`Sukses ubah set proses!`)
+    }
+    break
+}
+
+case 'delsetproses': case 'delsetp':{
+    if (!m.isGroup) return replytolak(mess.only.group)
+    if (!isAdmins) return replytolak(mess.only.admin)
+    if (!isSetProses(m.chat, set_proses)) return reply(`Belum ada set proses di gc ini`)
+    removeSetProses(m.chat, set_proses)
+    reply(`Sukses delete set proses`)
+    break
+}
+
+case 'p': case 'proses':{
+    if (!isAdmins) return
+    if (!m.isGroup) return replytolak(mess.only.group)
+    if (!m.quoted) return m.reply('Reply pesanan yang ingin di proses')
+    
+    let tek = m.quoted ? m.quoted.text : ''
+    let proses = `── 「 *DETAIL PESANAN* 」 ──\n\n\`\`\`› Status : 「 Sedang Diproses ⏳ 」\n› Pesanan : @pesanan\n› Date : @tanggal\n› Clock : @jam\`\`\`\n\n_*Mohon ditunggu ya kak @user*_ 🤗🤗`            
+    const getTextP = getTextSetProses((m.isGroup ? m.chat : botNumber), set_proses);
+    
+    let targetReply = m.quoted.fakeObj ? m.quoted.fakeObj : m.quoted;
+
+    if (getTextP !== undefined) {
+        let pesannya = getTextP.replace('@pesanan', tek ? tek : '-')
+            .replace(/@user/g, '@' + m.quoted.sender.split("@")[0])
+            .replace('@admin', pushname)
+            .replace('@group', groupMetadata.subject)
+            .replace('@jam', time)
+            .replace('@tanggal', tanggal(new Date()));
+            
+        hydro.sendTextWithMentions(m.chat, pesannya, targetReply)
+    } else {
+        let pesannya = proses.replace('@pesanan', tek ? tek : '-')
+            .replace(/@user/g, '@' + m.quoted.sender.split("@")[0])
+            .replace('@admin', pushname)
+            .replace('@group', groupMetadata.subject)
+            .replace('@jam', time)
+            .replace('@tanggal', tanggal(new Date()));
+            
+        hydro.sendTextWithMentions(m.chat, pesannya, targetReply)
+    }
+    break
+}
 //=========================================\\	
 case 'gptimg':
 case 'bingimg': {
@@ -34137,6 +33305,7 @@ case 'mp3': {
     }
 }
 break;
+
 case "get": case ".g": {
   if (m.key.fromMe) return
   if (!text) return reply("https://example.com");
@@ -34649,6 +33818,65 @@ global.db.sticker[hash].locked = !/^un/i.test(command)
 replyhydro('Done!')
             }
             break
+            case 'disablecmdgc': {
+    if (!m.isGroup) return replytolak(mess.only.group)
+    if (!isAdmins && !Ahmad) return replytolak(mess.only.admin)
+    if (!q) return replyhydro(`Masukkan nama fitur yang ingin dimatikan!\nContoh: ${prefix}disablecmd pay noreply\natau: ${prefix}disablecmd pay`)
+    
+    let argsCmd = q.toLowerCase().split(' ')
+    let cmdToDisable = argsCmd[0]
+    let isNoreply = argsCmd[1] === 'noreply'
+    
+    if (!disablecmd[m.chat]) {
+        disablecmd[m.chat] = {}
+    }
+    
+    if (disablecmd[m.chat][cmdToDisable]) {
+        return replyhydro(`Fitur *${cmdToDisable}* sudah dalam keadaan mati di grup ini.`)
+    }
+    
+    disablecmd[m.chat][cmdToDisable] = { noreply: isNoreply }
+    fs.writeFileSync(disableCmdPath, JSON.stringify(disablecmd, null, 2))
+    replyhydro(`✅ Berhasil mematikan fitur *${cmdToDisable}* di grup ini`)
+}
+break
+
+case 'enablecmdgc': {
+    if (!m.isGroup) return replytolak(mess.only.group)
+    if (!isAdmins && !Ahmad) return replytolak(mess.only.admin)
+    if (!q) return replyhydro(`Masukkan nama fitur yang ingin dihidupkan!\nContoh: ${prefix}enablecmd pay`)
+    
+    let cmdToEnable = q.toLowerCase().split(' ')[0]
+    
+    if (!disablecmd[m.chat] || !disablecmd[m.chat][cmdToEnable]) {
+        return replyhydro(`Fitur *${cmdToEnable}* tidak sedang dimatikan di grup ini.`)
+    }
+    
+    delete disablecmd[m.chat][cmdToEnable]
+    fs.writeFileSync(disableCmdPath, JSON.stringify(disablecmd, null, 2))
+    replyhydro(`✅ Berhasil menghidupkan kembali fitur *${cmdToEnable}* di grup ini.`)
+}
+break
+
+case 'listdisablecmdgc': {
+    if (!m.isGroup) return replytolak(mess.only.group)
+    
+    if (!disablecmd[m.chat] || Object.keys(disablecmd[m.chat]).length === 0) {
+        return replyhydro(`Tidak ada fitur yang dimatikan di grup ini.`)
+    }
+    
+    let teks = `*Daftar Fitur Nonaktif Grup:*\n\n`
+    let index = 1
+    
+    for (let cmd in disablecmd[m.chat]) {
+        let status = disablecmd[m.chat][cmd].noreply ? '(Tanpa Notif)' : '(Dengan Notif)'
+        teks += `${index}. ${cmd} ${status}\n`
+        index++
+    }
+    
+    replyhydro(teks.trim())
+}
+break
 case 'addmsg': {
 if (!m.quoted) return replyhydro('Reply Message You Want To Save In Database')
 if (!text) return replyhydro(`Example : ${prefix + command} filename`)
@@ -35268,6 +34496,7 @@ case 'iqc': {
   }
 }
 break
+
 case 'quotechat':
 case 'xquote':
 case 'quotly':
@@ -37894,270 +37123,6 @@ hydro.sendImage(from, response.data.data[0].url, text, m);
 } catch (err) {
 console.log(err);
 replyhydro("Sorry, there seems to be an error :"+ err);
-}
-break
-
-case 'nomerhoki': case 'nomorhoki': {
-if (!Number(text)) return reply(`Contoh : ${prefix + command} 6288292024190`)
-let anu = await primbon.nomer_hoki(Number(text))
-if (anu.status == false) return reply(anu.message)
-reply(`• *Nomor HP :* ${anu.message.nomer_hp}\n• *Angka Shuzi :* ${anu.message.angka_shuzi}\n• *Energi Positif :*\n- Kekayaan : ${anu.message.energi_positif.kekayaan}\n- Kesehatan : ${anu.message.energi_positif.kesehatan}\n- Cinta : ${anu.message.energi_positif.cinta}\n- Kestabilan : ${anu.message.energi_positif.kestabilan}\n- Persentase : ${anu.message.energi_positif.persentase}\n• *Energi Negatif :*\n- Perselisihan : ${anu.message.energi_negatif.perselisihan}\n- Kehilangan : ${anu.message.energi_negatif.kehilangan}\n- Malapetaka : ${anu.message.energi_negatif.malapetaka}\n- Kehancuran : ${anu.message.energi_negatif.kehancuran}\n- Persentase : ${anu.message.energi_negatif.persentase}`)
-}
-break
-case 'artimimpi': case 'tafsirmimpi': {
-if (!text) return reply(`Contoh : ${prefix + command} belanja`)
-let anu = await primbon.tafsir_mimpi(text)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Mimpi :* ${anu.message.mimpi}\n• *Arti :* ${anu.message.arti}\n• *Solusi :* ${anu.message.solusi}`)
-}
-break
-case 'ramalanjodoh': case 'ramaljodoh': {
-if (!text) return reply(`Contoh : ${prefix + command} Dika, 7, 7, 2005, Novia, 16, 11, 2004`)
-let [nama1, tgl1, bln1, thn1, nama2, tgl2, bln2, thn2] = text.split`,`
-let anu = await primbon.ramalan_jodoh(nama1, tgl1, bln1, thn1, nama2, tgl2, bln2, thn2)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Nama Anda :* ${anu.message.nama_anda.nama}\n• *Lahir Anda :* ${anu.message.nama_anda.tgl_lahir}\n• *Nama Pasangan :* ${anu.message.nama_pasangan.nama}\n• *Lahir Pasangan :* ${anu.message.nama_pasangan.tgl_lahir}\n• *Hasil :* ${anu.message.result}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'ramalanjodohbali': case 'ramaljodohbali': {
-if (!text) return reply(`Contoh : ${prefix + command} Dika, 7, 7, 2005, Novia, 16, 11, 2004`)
-let [nama1, tgl1, bln1, thn1, nama2, tgl2, bln2, thn2] = text.split`,`
-let anu = await primbon.ramalan_jodoh_bali(nama1, tgl1, bln1, thn1, nama2, tgl2, bln2, thn2)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Nama Anda :* ${anu.message.nama_anda.nama}\n• *Lahir Anda :* ${anu.message.nama_anda.tgl_lahir}\n• *Nama Pasangan :* ${anu.message.nama_pasangan.nama}\n• *Lahir Pasangan :* ${anu.message.nama_pasangan.tgl_lahir}\n• *Hasil :* ${anu.message.result}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'suamiistri': {
-if (!text) return reply(`Contoh : ${prefix + command} Dika, 7, 7, 2005, Novia, 16, 11, 2004`)
-let [nama1, tgl1, bln1, thn1, nama2, tgl2, bln2, thn2] = text.split`,`
-let anu = await primbon.suami_istri(nama1, tgl1, bln1, thn1, nama2, tgl2, bln2, thn2)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Nama Suami :* ${anu.message.suami.nama}\n• *Lahir Suami :* ${anu.message.suami.tgl_lahir}\n• *Nama Istri :* ${anu.message.istri.nama}\n• *Lahir Istri :* ${anu.message.istri.tgl_lahir}\n• *Hasil :* ${anu.message.result}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'ramalancinta': case 'ramalcinta': {
-if (!text) return reply(`Contoh : ${prefix + command} Dika, 7, 7, 2005, Novia, 16, 11, 2004`)
-let [nama1, tgl1, bln1, thn1, nama2, tgl2, bln2, thn2] = text.split`,`
-let anu = await primbon.ramalan_cinta(nama1, tgl1, bln1, thn1, nama2, tgl2, bln2, thn2)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Nama Anda :* ${anu.message.nama_anda.nama}\n• *Lahir Anda :* ${anu.message.nama_anda.tgl_lahir}\n• *Nama Pasangan :* ${anu.message.nama_pasangan.nama}\n• *Lahir Pasangan :* ${anu.message.nama_pasangan.tgl_lahir}\n• *Sisi Positif :* ${anu.message.sisi_positif}\n• *Sisi Negatif :* ${anu.message.sisi_negatif}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'artinama': {
-if (!text) return reply(`Contoh : ${prefix + command} Dika Ardianta`)
-let anu = await primbon.arti_nama(text)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Nama :* ${anu.message.nama}\n• *Arti :* ${anu.message.arti}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'kecocokannama': case 'cocoknama': {
-if (!text) return reply(`Contoh : ${prefix + command} Dika, 7, 7, 2005`)
-let [nama, tgl, bln, thn] = text.split`,`
-let anu = await primbon.kecocokan_nama(nama, tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Nama :* ${anu.message.nama}\n• *Lahir :* ${anu.message.tgl_lahir}\n• *Life Path :* ${anu.message.life_path}\n• *Destiny :* ${anu.message.destiny}\n• *Destiny Desire :* ${anu.message.destiny_desire}\n• *Personality :* ${anu.message.personality}\n• *Persentase :* ${anu.message.persentase_kecocokan}`)
-}
-break
-case 'kecocokanpasangan': case 'cocokpasangan': case 'pasangan': {
-if (!text) return reply(`Contoh : ${prefix + command} Dika|Novia`)
-let [nama1, nama2] = text.split`|`
-let anu = await primbon.kecocokan_nama_pasangan(nama1, nama2)
-if (anu.status == false) return reply(anu.message)
-hydro.sendImage(m.chat,  anu.message.gambar, `• *Nama Anda :* ${anu.message.nama_anda}\n• *Nama Pasangan :* ${anu.message.nama_pasangan}\n• *Sisi Positif :* ${anu.message.sisi_positif}\n• *Sisi Negatif :* ${anu.message.sisi_negatif}`)
-}
-break
-case 'jadianpernikahan': case 'jadiannikah': {
-if (!text) return reply(`Contoh : ${prefix + command} 6, 12, 2020`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.tanggal_jadian_pernikahan(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Tanggal Pernikahan :* ${anu.message.tanggal}\n• *karakteristik :* ${anu.message.karakteristik}`)
-}
-break
-case 'sifatusaha': {
-if (!ext)return reply(`Contoh : ${prefix+ command} 28, 12, 2021`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.sifat_usaha_bisnis(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Lahir :* ${anu.message.hari_lahir}\n• *Usaha :* ${anu.message.usaha}`)
-}
-break
-case 'rejeki': case 'rezeki': {
-if (!text) return reply(`Contoh : ${prefix + command} 7, 7, 2005`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.rejeki_hoki_weton(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Lahir :* ${anu.message.hari_lahir}\n• *Rezeki :* ${anu.message.rejeki}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'pekerjaan': {
-if (!text) return reply(`Contoh : ${prefix + command} 7, 7, 2005`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.pekerjaan_weton_lahir(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Lahir :* ${anu.message.hari_lahir}\n• *Pekerjaan :* ${anu.message.pekerjaan}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'ramalannasib': case 'ramalnasib': case 'nasib': {
-if (!text) return reply(`Contoh : 7, 7, 2005`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.ramalan_nasib(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Analisa :* ${anu.message.analisa}\n• *Angka Akar :* ${anu.message.angka_akar}\n• *Sifat :* ${anu.message.sifat}\n• *Elemen :* ${anu.message.elemen}\n• *Angka Keberuntungan :* ${anu.message.angka_keberuntungan}`)
-}
-break
-case 'potensipenyakit': case 'penyakit': {
-if (!text) return reply(`Contoh : ${prefix + command} 7, 7, 2005`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.cek_potensi_penyakit(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Analisa :* ${anu.message.analisa}\n• *Sektor :* ${anu.message.sektor}\n• *Elemen :* ${anu.message.elemen}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'artitarot': case 'tarot': {
-if (!text) return reply(`Contoh : ${prefix + command} 7, 7, 2005`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.arti_kartu_tarot(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-hydro.sendImage(m.chat, anu.message.image, `• *Lahir :* ${anu.message.tgl_lahir}\n• *Simbol Tarot :* ${anu.message.simbol_tarot}\n• *Arti :* ${anu.message.arti}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'fengshui': {
-if (!text) return `Contoh : ${prefix + command} Dika, 1, 2005\n\nNote : ${prefix + command} Nama, gender, tahun lahir\nGender : 1 untuk laki-laki & 2 untuk perempuan`
-let [nama, gender, tahun] = text.split`,`
-let anu = await primbon.perhitungan_feng_shui(nama, gender, tahun)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Nama :* ${anu.message.nama}\n• *Lahir :* ${anu.message.tahun_lahir}\n• *Gender :* ${anu.message.jenis_kelamin}\n• *Angka Kua :* ${anu.message.angka_kua}\n• *Kelompok :* ${anu.message.kelompok}\n• *Karakter :* ${anu.message.karakter}\n• *Sektor Baik :* ${anu.message.sektor_baik}\n• *Sektor Buruk :* ${anu.message.sektor_buruk}`)
-}
-break
-case 'haribaik': {
-if (!text) return reply(`Contoh : ${prefix + command} 7, 7, 2005`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.petung_hari_baik(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Lahir :* ${anu.message.tgl_lahir}\n• *Kala Tinantang :* ${anu.message.kala_tinantang}\n• *Info :* ${anu.message.info}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'harisangar': case 'taliwangke': {
-if (!text) return reply(`Contoh : ${prefix + command} 7, 7, 2005`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.hari_sangar_taliwangke(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Lahir :* ${anu.message.tgl_lahir}\n• *Hasil :* ${anu.message.result}\n• *Info :* ${anu.message.info}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'harinaas': case 'harisial': {
-if (!text) return reply(`Contoh : ${prefix + command} 7, 7, 2005`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.primbon_hari_naas(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Hari Lahir :* ${anu.message.hari_lahir}\n• *Tanggal Lahir :* ${anu.message.tgl_lahir}\n• *Hari Naas :* ${anu.message.hari_naas}\n• *Info :* ${anu.message.catatan}\n• *Catatan :* ${anu.message.info}`)
-}
-break
-case 'nagahari': case 'harinaga': {
-if (!text) return reply(`Contoh : ${prefix + command} 7, 7, 2005`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.rahasia_naga_hari(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Hari Lahir :* ${anu.message.hari_lahir}\n• *Tanggal Lahir :* ${anu.message.tgl_lahir}\n• *Arah Naga Hari :* ${anu.message.arah_naga_hari}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'arahrejeki': case 'arahrezeki': {
-if (!text) return reply(`Contoh : ${prefix + command} 7, 7, 2005`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.primbon_arah_rejeki(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Hari Lahir :* ${anu.message.hari_lahir}\n• *tanggal Lahir :* ${anu.message.tgl_lahir}\n• *Arah Rezeki :* ${anu.message.arah_rejeki}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'peruntungan': {
-if (!text) return reply(`Contoh : ${prefix + command} DIka, 7, 7, 2005, 2022\n\nNote : ${prefix + command} Nama, tanggal lahir, bulan lahir, tahun lahir, untuk tahun`)
-let [nama, tgl, bln, thn, untuk] = text.split`,`
-let anu = await primbon.ramalan_peruntungan(nama, tgl, bln, thn, untuk)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Nama :* ${anu.message.nama}\n• *Lahir :* ${anu.message.tgl_lahir}\n• *Peruntungan Tahun :* ${anu.message.peruntungan_tahun}\n• *Hasil :* ${anu.message.result}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'weton': case 'wetonjawa': {
-if (!text) return reply(`Contoh : ${prefix + command} 7, 7, 2005`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.weton_jawa(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Tanggal :* ${anu.message.tanggal}\n• *Jumlah Neptu :* ${anu.message.jumlah_neptu}\n• *Watak Hari :* ${anu.message.watak_hari}\n• *Naga Hari :* ${anu.message.naga_hari}\n• *Jam Baik :* ${anu.message.jam_baik}\n• *Watak Kelahiran :* ${anu.message.watak_kelahiran}`)
-}
-break
-case 'sifat': case 'karakter': {
-if (!text) return reply(`Contoh : ${prefix + command} Dika, 7, 7, 2005`)
-let [nama, tgl, bln, thn] = text.split`,`
-let anu = await primbon.sifat_karakter_tanggal_lahir(nama, tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Nama :* ${anu.message.nama}\n• *Lahir :* ${anu.message.tgl_lahir}\n• *Garis Hidup :* ${anu.message.garis_hidup}`)
-}
-break
-case 'keberuntungan': {
-if (!text) return reply(`Contoh : ${prefix + command} Dika, 7, 7, 2005`)
-let [nama, tgl, bln, thn] = text.split`,`
-let anu = await primbon.potensi_keberuntungan(nama, tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Nama :* ${anu.message.nama}\n• *Lahir :* ${anu.message.tgl_lahir}\n• *Hasil :* ${anu.message.result}`)
-}
-break
-case 'memancing': {
-if (!text) return reply(`Contoh : ${prefix + command} 12, 1, 2022`)
-let [tgl, bln, thn] = text.split`,`
-let anu = await primbon.primbon_memancing_ikan(tgl, bln, thn)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Tanggal :* ${anu.message.tgl_memancing}\n• *Hasil :* ${anu.message.result}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'masasubur': {
-if (!text) return reply(`Contoh : ${prefix + command} 12, 1, 2022, 28\n\nNote : ${prefix + command} hari pertama menstruasi, siklus`)
-let [tgl, bln, thn, siklus] = text.split`,`
-let anu = await primbon.masa_subur(tgl, bln, thn, siklus)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Hasil :* ${anu.message.result}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'zodiak': case 'zodiac': {
-if (!text) return reply(`Contoh : ${prefix+ command} 7 7 2005`)
-let zodiak = [
-["capricorn", new Date(1970, 0, 1)],
-["aquarius", new Date(1970, 0, 20)],
-["pisces", new Date(1970, 1, 19)],
-["aries", new Date(1970, 2, 21)],
-["taurus", new Date(1970, 3, 21)],
-["gemini", new Date(1970, 4, 21)],
-["cancer", new Date(1970, 5, 22)],
-["leo", new Date(1970, 6, 23)],
-["virgo", new Date(1970, 7, 23)],
-["libra", new Date(1970, 8, 23)],
-["scorpio", new Date(1970, 9, 23)],
-["sagittarius", new Date(1970, 10, 22)],
-["capricorn", new Date(1970, 11, 22)]
-].reverse()
-
-function getZodiac(month, day) {
-let d = new Date(1970, month - 1, day)
-return zodiak.find(([_,_d]) => d >= _d)[0]
-}
-let date = new Date(text)
-if (date == 'Invalid Date') return date
-let d = new Date()
-let [tahun, bulan, tanggal] = [d.getFullYear(), d.getMonth() + 1, d.getDate()]
-let birth = [date.getFullYear(), date.getMonth() + 1, date.getDate()]
-
-let zodiac = await getZodiac(birth[1], birth[2])
-
-let anu = await primbon.zodiak(zodiac)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Zodiak :* ${anu.message.zodiak}\n• *Nomor :* ${anu.message.nomor_keberuntungan}\n• *Aroma :* ${anu.message.aroma_keberuntungan}\n• *Planet :* ${anu.message.planet_yang_mengitari}\n• *Bunga :* ${anu.message.bunga_keberuntungan}\n• *Warna :* ${anu.message.warna_keberuntungan}\n• *Batu :* ${anu.message.batu_keberuntungan}\n• *Elemen :* ${anu.message.elemen_keberuntungan}\n• *Pasangan Zodiak :* ${anu.message.pasangan_zodiak}\n• *Catatan :* ${anu.message.catatan}`)
-}
-break
-case 'shio': {
-if (!text) return reply(`Contoh : ${prefix + command} tikus\n\nNote : For Detail https://primbon.com/shio.htm`)
-let anu = await primbon.shio(text)
-if (anu.status == false) return reply(anu.message)
-reply(`• *Hasil :* ${anu.message}`)
 }
 break
 case 'ttp': {
