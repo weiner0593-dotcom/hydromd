@@ -1,7 +1,50 @@
 const axios = require('axios')
+const cloudscraper = require('cloudscraper')
 const cheerio = require('cheerio')
 
-async function tiktokv3(url) {
+async function requestHandler(config, useCF = false) {
+	if (!useCF) {
+		try {
+			const res = await axios(config)
+			const htmlCheck = typeof res.data === 'string' ? res.data : JSON.stringify(res.data)
+			if (res.status >= 400 || htmlCheck.includes('cf-browser-verification') || htmlCheck.includes('Checking your browser')) {
+				throw new Error('CF detected')
+			}
+			return res
+		} catch (err) {
+			return requestHandler(config, true)
+		}
+	}
+
+	const options = {
+		method: config.method || 'GET',
+		uri: config.url,
+		headers: config.headers || {},
+		resolveWithFullResponse: true,
+		simple: false,
+		followAllRedirects: true,
+		timeout: config.timeout || 30000,
+	}
+
+	if (config.data) {
+		options.body = config.data
+	}
+
+	const response = await cloudscraper(options)
+	let parsedData = response.body
+	try {
+		parsedData = JSON.parse(response.body)
+	} catch (e) {}
+
+	return {
+		data: parsedData,
+		status: response.statusCode,
+		headers: response.headers,
+		request: { res: { responseUrl: response.request.uri.href } }
+	}
+}
+
+async function tiktokv1(url) {
 	return new Promise(async (resolve, reject) => {
 		try {
 			let data = []
@@ -25,21 +68,25 @@ async function tiktokv3(url) {
 
 			async function expandTikTokUrl(u) {
 				if (!/https?:\/\/(vt|vm)\.tiktok\.com\//i.test(u)) return u
-				const r = await axios.get(u, {
-					maxRedirects: 10,
+				const r = await requestHandler({
+					method: 'GET',
+					url: u,
 					timeout: 20000,
 					headers: {
-						'User-Agent': 'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Mobile Safari/537.36',
+						'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
 						'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
 					},
-					validateStatus: s => s >= 200 && s < 400
+					validateStatus: () => true
 				})
 				return r?.request?.res?.responseUrl || u
 			}
 
 			async function tikwmFetch(form, attempt = 1) {
 				try {
-					const r = await axios.post('https://www.tikwm.com/api/', form.toString(), {
+					const r = await requestHandler({
+						method: 'POST',
+						url: 'https://www.tikwm.com/api/',
+						data: form.toString(),
 						timeout: 45000,
 						headers: {
 							'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -47,26 +94,15 @@ async function tiktokv3(url) {
 							'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
 							'Origin': 'https://www.tikwm.com',
 							'Referer': 'https://www.tikwm.com/',
-							'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
-							'X-Requested-With': 'XMLHttpRequest',
-							'Connection': 'keep-alive'
+							'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+							'X-Requested-With': 'XMLHttpRequest'
 						},
 						validateStatus: () => true
 					})
-					if (r.status >= 500) throw new Error(`Request failed with status code ${r.status}`)
+					if (r.status >= 500) throw new Error(`Status ${r.status}`)
 					return r.data
 				} catch (e) {
-					const msg = String(e && e.message ? e.message : e)
-					const retriable =
-						msg.includes('timeout') ||
-						msg.includes('ECONNRESET') ||
-						msg.includes('ETIMEDOUT') ||
-						msg.includes('EAI_AGAIN') ||
-						msg.includes('502') ||
-						msg.includes('503') ||
-						msg.includes('504')
-
-					if (attempt < 6 && retriable) {
+					if (attempt < 3) {
 						const jitter = Math.floor(Math.random() * 600)
 						await new Promise(res => setTimeout(res, 700 * attempt + jitter))
 						return tikwmFetch(form, attempt + 1)
@@ -109,13 +145,13 @@ async function tiktokv3(url) {
 			} else {
 				data.push({
 					type: 'watermark',
-					url: res?.wmplay ? 'https://www.tikwm.com' + res.wmplay : '/undefined'
+					url: res?.wmplay ? (res.wmplay.startsWith('http') ? res.wmplay : 'https://www.tikwm.com' + res.wmplay) : '/undefined'
 				}, {
 					type: 'nowatermark',
-					url: res?.play ? 'https://www.tikwm.com' + res.play : '/undefined'
+					url: res?.play ? (res.play.startsWith('http') ? res.play : 'https://www.tikwm.com' + res.play) : '/undefined'
 				}, {
 					type: 'nowatermark_hd',
-					url: res?.hdplay ? 'https://www.tikwm.com' + res.hdplay : '/undefined'
+					url: res?.hdplay ? (res.hdplay.startsWith('http') ? res.hdplay : 'https://www.tikwm.com' + res.hdplay) : '/undefined'
 				})
 			}
 
@@ -127,7 +163,7 @@ async function tiktokv3(url) {
 				id: res.id,
 				durations: res.duration,
 				duration: res.duration + ' Seconds',
-				cover: res.cover ? 'https://www.tikwm.com' + res.cover : null,
+				cover: res.cover ? (res.cover.startsWith('http') ? res.cover : 'https://www.tikwm.com' + res.cover) : null,
 				size_wm: res.wm_size,
 				size_nowm: res.size,
 				size_nowm_hd: res.hd_size,
@@ -137,7 +173,7 @@ async function tiktokv3(url) {
 					title: res.music_info.title,
 					author: res.music_info.author,
 					album: res.music_info.album ? res.music_info.album : null,
-					url: res.music ? 'https://www.tikwm.com' + res.music : res.music_info.play
+					url: res.music ? (res.music.startsWith('http') ? res.music : 'https://www.tikwm.com' + res.music) : res.music_info.play
 				},
 				stats: {
 					views: formatNumber(res.play_count),
@@ -150,7 +186,7 @@ async function tiktokv3(url) {
 					id: res.author.id,
 					fullname: res.author.unique_id,
 					nickname: res.author.nickname,
-					avatar: res.author.avatar ? 'https://www.tikwm.com' + res.author.avatar : null
+					avatar: res.author.avatar ? (res.author.avatar.startsWith('http') ? res.author.avatar : 'https://www.tikwm.com' + res.author.avatar) : null
 				}
 			}
 			resolve(json)
@@ -169,23 +205,23 @@ async function tiktokv2(url) {
 			lang: "id"
 		}).toString()
 
-		const r = await axios.post(
-			'https://savetik.io/api/ajaxSearch',
-			body,
-			{
-				timeout: 45000,
-				headers: {
-					'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-					'x-requested-with': 'XMLHttpRequest',
-					'user-agent': 'Mozilla/5.0 (Linux; Android 10)',
-					'origin': 'https://savetik.io',
-					'referer': 'https://savetik.io/id/download-tiktok-photos',
-					'accept': '*/*'
-				}
-			}
-		)
+		const r = await requestHandler({
+			method: 'POST',
+			url: 'https://savetik.io/api/ajaxSearch',
+			data: body,
+			timeout: 45000,
+			headers: {
+				'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+				'x-requested-with': 'XMLHttpRequest',
+				'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+				'origin': 'https://savetik.io',
+				'referer': 'https://savetik.io/id/download-tiktok-photos',
+				'accept': '*/*'
+			},
+			validateStatus: () => true
+		})
 
-		const html = typeof r.data.data === "string" ? r.data.data : null
+		const html = typeof r.data?.data === "string" ? r.data.data : (typeof r.data === "string" ? r.data : null)
 		if (!html) throw new Error('No HTML returned')
 
 		const $ = cheerio.load(html)
@@ -225,18 +261,19 @@ async function tiktokv2(url) {
 	}
 }
 
-async function tiktokv1(url) {
+async function tiktokv3(url) {
 	try {
 		async function expandTikTokUrl(u) {
 			if (!/https?:\/\/(vt|vm)\.tiktok\.com\//i.test(u)) return u
-			const r = await axios.get(u, {
-				maxRedirects: 10,
+			const r = await requestHandler({
+				method: 'GET',
+				url: u,
 				timeout: 20000,
 				headers: {
-					'User-Agent': 'Mozilla/5.0 (Linux; Android 10) Chrome/120 Mobile Safari/537.36',
+					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/122.0.0.0 Safari/537.36',
 					'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
 				},
-				validateStatus: s => s >= 200 && s < 400
+				validateStatus: () => true
 			})
 			return r?.request?.res?.responseUrl || u
 		}
@@ -248,17 +285,21 @@ async function tiktokv1(url) {
 			Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 			Origin: 'https://savett.cc',
 			Referer: 'https://savett.cc/en1/download',
-			'User-Agent': 'Mozilla/5.0 (Linux; Android 10) Chrome/139.0.0.0 Mobile Safari/537.36'
+			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/122.0.0.0 Safari/537.36'
 		}
 
-		const page = await axios.get('https://savett.cc/en1/download', {
+		const page = await requestHandler({
+			method: 'GET',
+			url: 'https://savett.cc/en1/download',
 			timeout: 30000,
 			headers: { ...baseHeaders },
 			validateStatus: () => true
 		})
+		
 		if (page.status >= 400) throw new Error(`savett page error: ${page.status}`)
 
-		const csrf = page.data?.match(/name="csrf_token" value="([^"]+)"/)?.[1]
+		const pageData = typeof page.data === 'string' ? page.data : JSON.stringify(page.data)
+		const csrf = pageData.match(/name="csrf_token" value="([^"]+)"/)?.[1]
 		const setCookie = page.headers?.['set-cookie'] || []
 		const cookie = Array.isArray(setCookie)
 			? setCookie.map(v => v.split(';')[0]).join('; ')
@@ -267,14 +308,18 @@ async function tiktokv1(url) {
 		if (!csrf) throw new Error('CSRF token tidak ditemukan (savett)')
 
 		const body = `csrf_token=${encodeURIComponent(csrf)}&url=${encodeURIComponent(expanded)}`
-		const post = await axios.post('https://savett.cc/en1/download', body, {
+		const post = await requestHandler({
+			method: 'POST',
+			url: 'https://savett.cc/en1/download',
+			data: body,
 			timeout: 45000,
 			headers: { ...baseHeaders, Cookie: cookie },
 			validateStatus: () => true
 		})
 		if (post.status >= 400) throw new Error(`savett post error: ${post.status}`)
 
-		const $ = cheerio.load(post.data)
+		const postData = typeof post.data === 'string' ? post.data : JSON.stringify(post.data)
+		const $ = cheerio.load(postData)
 
 		const statsArr = []
 		$('#video-info .my-1 span').each((_, el) => statsArr.push($(el).text().trim()))
