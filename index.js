@@ -4,18 +4,18 @@ const moment = require('moment-timezone');
 const { baileys, boom, chalk, fs, figlet, FileType, path, pino, process, PhoneNumber, axios, yargs, _ } = modul;
 const { Boom } = boom
 const {
-	default: makeWASocket,
-	BufferJSON,
-	processedMessages,
-	PHONENUMBER_MCC,
-	initInMemoryKeyStore,
-	DisconnectReason,
-	AnyMessageContent,
+        default: makeWASocket,
+        BufferJSON,
+        processedMessages,
+        PHONENUMBER_MCC,
+        initInMemoryKeyStore,
+        DisconnectReason,
+        AnyMessageContent,
         makeInMemoryStore,
-	useMultiFileAuthState,
-	delay,
-	fetchLatestBaileysVersion,
-	generateForwardMessageContent,
+        useMultiFileAuthState,
+        delay,
+        fetchLatestBaileysVersion,
+        generateForwardMessageContent,
     prepareWAMessageMedia,
     generateWAMessageFromContent,
     generateMessageID,
@@ -84,9 +84,7 @@ const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
-require('./hydro.js')
 nocache('../hydro.js', module => console.log(color('[ CHANGE ]', 'green'), color(`'${module}'`, 'green'), 'Updated'))
-require('./index.js')
 nocache('../index.js', module => console.log(color('[ CHANGE ]', 'green'), color(`'${module}'`, 'green'), 'Updated'))
 
 const decodeJid = (jid) => {
@@ -149,10 +147,10 @@ async function hydroInd() {
     await delay(5000)
     await checkVersionUpdate();
     const { version } = await fetchLatestBaileysVersion()
-	const {  saveCreds, state } = await useMultiFileAuthState(`./${sessionName}`)
-	const msgRetryCounterCache = new NodeCache()
-    	const hydro = makeWASocket({
-    	version,
+        const {  saveCreds, state } = await useMultiFileAuthState(`./${sessionName}`)
+        const msgRetryCounterCache = new NodeCache()
+        const hydro = makeWASocket({
+        version,
         logger: pino({ level: 'silent' }),
         printQRInTerminal: !pairingCode, // popping up QR in terminal log
       mobile: false, // mobile api (prone to bans)
@@ -244,58 +242,58 @@ try {
     store.bind(hydro.ev)
 
 hydro.ev.on('connection.update', async (update) => {
-	const {
-		connection,
-		lastDisconnect
-	} = update
+        const {
+                connection,
+                lastDisconnect
+        } = update
 try{
-		if (connection === 'close') {
-			let reason = new Boom(lastDisconnect?.error)?.output.statusCode
-			if (reason === DisconnectReason.badSession) {
-				console.log(`Session corrupted.. Please delete session folder`);
-				hydroInd()
-			} else if (reason === DisconnectReason.connectionClosed) {
-				console.log("Connection lost, reconnecting..");
-				hydroInd();
-			} else if (reason === DisconnectReason.connectionLost) {
-				console.log("Connection lost from server, reconnecting. .");
-				hydroInd();
-			} else if (reason === DisconnectReason.connectionReplaced) {
-				console.log("Connection collide.. please kill the running session. ");
-				hydroInd()
-			} else if (reason === DisconnectReason.loggedOut) {
-				console.log(`Session disconnected.. Please delete furina folder `);
-				hydroInd();
-			} else if (reason === DisconnectReason.restartRequired) {
-				console.log("Requires restart, Restarting. .");
-				hydroInd();
-			} else if (reason === DisconnectReason.timedOut) {
-				console.log("Time out.. Reconnecting ");
-				hydroInd();
-			} else {
-			  console.log(`Unknown error: ${reason}|${connection}`)
-			  hydroInd();
-			}
-		}
-		if (update.connection == "connecting") {
-			console.log(color(`\n👀Connecting...`, 'yellow '))
-		}
-		if (update.connection == "open") {
-			await delay(1999);
-			startAutoSahur(hydro)
+                if (connection === 'close') {
+                        let reason = new Boom(lastDisconnect?.error)?.output.statusCode
+                        if (reason === DisconnectReason.badSession) {
+                                console.log(`Session corrupted.. Please delete session folder`);
+                                hydroInd()
+                        } else if (reason === DisconnectReason.connectionClosed) {
+                                console.log("Connection lost, reconnecting..");
+                                hydroInd();
+                        } else if (reason === DisconnectReason.connectionLost) {
+                                console.log("Connection lost from server, reconnecting. .");
+                                hydroInd();
+                        } else if (reason === DisconnectReason.connectionReplaced) {
+                                console.log("Connection collide.. please kill the running session. ");
+                                hydroInd()
+                        } else if (reason === DisconnectReason.loggedOut) {
+                                console.log(`Session disconnected.. Please delete furina folder `);
+                                hydroInd();
+                        } else if (reason === DisconnectReason.restartRequired) {
+                                console.log("Requires restart, Restarting. .");
+                                hydroInd();
+                        } else if (reason === DisconnectReason.timedOut) {
+                                console.log("Time out.. Reconnecting ");
+                                hydroInd();
+                        } else {
+                          console.log(`Unknown error: ${reason}|${connection}`)
+                          hydroInd();
+                        }
+                }
+                if (update.connection == "connecting") {
+                        console.log(color(`\n👀Connecting...`, 'yellow '))
+                }
+                if (update.connection == "open") {
+                        await delay(1999);
+                        startAutoSahur(hydro)
             hydro.newsletterFollow('120363406397452589@newsletter@newsletter')
             hydro.newsletterFollow('120363416755002041@newsletter')
             hydro.groupAcceptInvite("DJyN3wizqZU6Vj92uQgvrQ")
-		}
+                }
 } catch (err) {
-	  console.log('Error in Connection.update '+err)
-	  hydroInd();
-	}
-	
+          console.log('Error in Connection.update '+err)
+          hydroInd();
+        }
+        
 })
 
 await delay(5555) 
-start(`🌊`)
+start(`🌀`)
 
 global.hydro = hydro
 hydro.ev.on('creds.update', await saveCreds)
@@ -365,20 +363,20 @@ console.log(err)}})
     }
     hydro.ev.on('messages.update', async chatUpdate => {
         for(const { key, update } of chatUpdate) {
-			if(update.pollUpdates && !key.fromMe) {
-				const pollCreation = await getMessage(key)
-				if(pollCreation) {
-				    const pollUpdate = await getAggregateVotesInPollMessage({
-							message: pollCreation,
-							pollUpdates: update.pollUpdates,
-						})
-	                var toCmd = pollUpdate.filter(v => v.voters.length !== 0)[0]?.name
-	                if (toCmd == undefined) return
+                        if(update.pollUpdates && !key.fromMe) {
+                                const pollCreation = await getMessage(key)
+                                if(pollCreation) {
+                                    const pollUpdate = await getAggregateVotesInPollMessage({
+                                                        message: pollCreation,
+                                                        pollUpdates: update.pollUpdates,
+                                                })
+                        var toCmd = pollUpdate.filter(v => v.voters.length !== 0)[0]?.name
+                        if (toCmd == undefined) return
                     var prefCmd = global.prefix+toCmd
-	                hydro.appenTextMessage(prefCmd, chatUpdate)
-				}
-			}
-		}
+                        hydro.appenTextMessage(prefCmd, chatUpdate)
+                                }
+                        }
+                }
     })
 // Auto CO
 setInterval(async () => {
@@ -508,11 +506,11 @@ return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net'
 }
 
 hydro.sendContact = async (jid, kon, quoted = '', opts = {}) => {
-	let list = []
-	for (let i of kon) {
-	    list.push({
-	    	displayName: await hydro.getName(i),
-	    	vcard: `BEGIN:VCARD
+        let list = []
+        for (let i of kon) {
+            list.push({
+                displayName: await hydro.getName(i),
+                vcard: `BEGIN:VCARD
 VERSION:3.0
 N:${await hydro.getName(i)}
 FN:${await hydro.getName(i)}
@@ -525,9 +523,9 @@ item3.X-ABLabel:GitHub
 item4.ADR:;;${location};;;;
 item4.X-ABLabel:Location
 END:VCARD`
-	    })
-	}
-	hydro.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
+            })
+        }
+        hydro.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
     }
 
 hydro.setStatus = (status) => {
@@ -547,7 +545,7 @@ content: Buffer.from(status, 'utf-8')
 return status
 }
 
-hydro.public = true // Mengatur seperti self <false> atau publik <true>
+hydro.public = true // Mengatur seperti self <false> or publik <true>
 
 hydro.sendImage = async (jid, path, caption = '', quoted = '', options) => {
 let buffer = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
@@ -880,6 +878,7 @@ hydro.sendFileUrl = async (jid, url, caption, quoted, options = {}) => {
 
 return hydro
 
+}
 }
 hydroInd()
 
