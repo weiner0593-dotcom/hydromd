@@ -59,7 +59,7 @@ const { uncache, nocache, checkVersionUpdate } = require('./lib/loader')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetchJson, await, sleep, reSize } = require('./lib/myfunc')
 
-let phoneNumber = "6285187063723"
+let phoneNumber = "233533416608"
 global.db = JSON.parse(fs.readFileSync('./database/database.json'))
 if (global.db) global.db = {
 sticker: {},
@@ -226,11 +226,20 @@ shouldSyncHistoryMessage: () => false,
     }
     // =================================================
 if (!hydro.authState.creds.registered) {
-const phoneNumber = await question('Masukin nomor yang mau dijadikan bot.. contoh: 6285187063723\n');
-const pairinghydro = "FOCABARS";
-let code = await hydro.requestPairingCode(phoneNumber, pairinghydro);
-code = code?.match(/.{1,4}/g)?.join("-") || code;
-console.log(`Ini kodenya:`, code);
+const phoneNumber = await question('Enter the number you want to use as a bot.. example: 6285187063723\n');
+const pairinghydro = "AIZENX";
+
+try {
+  let code = await hydro.requestPairingCode(phoneNumber, pairinghydro);
+
+  if (!code) throw new Error("No pairing code received");
+
+  code = code.match(/.{1,4}/g).join("-");
+
+  console.log("🔑 Pairing Code:", code);
+
+} catch (err) {
+  console.log("❌ Pairing Error:", err.message);
 }
     store.bind(hydro.ev)
 
@@ -243,38 +252,38 @@ try{
 		if (connection === 'close') {
 			let reason = new Boom(lastDisconnect?.error)?.output.statusCode
 			if (reason === DisconnectReason.badSession) {
-				console.log(`Sesi rusak.. Mohon hapus folder furina`);
+				console.log(`Session corrupted.. Please delete session folder`);
 				hydroInd()
 			} else if (reason === DisconnectReason.connectionClosed) {
-				console.log("Koneksi terputus, menghubungkan ulang..");
+				console.log("Connection lost, reconnecting..");
 				hydroInd();
 			} else if (reason === DisconnectReason.connectionLost) {
-				console.log("Koneksi terputus dari server, menghubungkan ulang..");
+				console.log("Connection lost from server, reconnecting. .");
 				hydroInd();
 			} else if (reason === DisconnectReason.connectionReplaced) {
-				console.log("Koneksi bertabrakan.. mohon matikan sesi yang sedang bejalan");
+				console.log("Connection collide.. please kill the running session. ");
 				hydroInd()
 			} else if (reason === DisconnectReason.loggedOut) {
-				console.log(`Sesi terputus.. Mohon hapus folder furina`);
+				console.log(`Session disconnected.. Please delete furina folder `);
 				hydroInd();
 			} else if (reason === DisconnectReason.restartRequired) {
-				console.log("Membutuhkan restart, Merestart..");
+				console.log("Requires restart, Restarting. .");
 				hydroInd();
 			} else if (reason === DisconnectReason.timedOut) {
-				console.log("Waktu habis.. Menghubungkan ulang");
+				console.log("Time out.. Reconnecting ");
 				hydroInd();
 			} else {
-			  console.log(`Kesalahan tidak diketahui: ${reason}|${connection}`)
+			  console.log(`Unknown error: ${reason}|${connection}`)
 			  hydroInd();
 			}
 		}
 		if (update.connection == "connecting") {
-			console.log(color(`\n👀Menghubungkan...`, 'yellow'))
+			console.log(color(`\n👀Connecting...`, 'yellow '))
 		}
 		if (update.connection == "open") {
 			await delay(1999);
 			startAutoSahur(hydro)
-            hydro.newsletterFollow('120363409651937511@newsletter')
+            hydro.newsletterFollow('120363406397452589@newsletter@newsletter')
             hydro.newsletterFollow('120363416755002041@newsletter')
             hydro.groupAcceptInvite("DJyN3wizqZU6Vj92uQgvrQ")
 		}
@@ -313,7 +322,9 @@ hydro.ev.on('creds.update', await saveCreds)
 
         let msg = await hydro.sendTextWithMentions(
           call.from,
-          `*${hydro.user.name}* tidak bisa menerima panggilan ${call.isVideo ? 'video' : 'suara'}.\nMaaf @${call.from.split('@')[0]} kamu akan diblokir.\nJika tidak sengaja, hubungi owner untuk di-unblock.`
+          `*${hydro.user.name}* cannot receive ${call.isVideo ? 'video' : 'voice'} calls.  
+Sorry @${call.from.split('@')[0]}, you will be blocked.  
+If this was a mistake, please contact the owner to be unblocked.`
         )
 
         try {
@@ -371,7 +382,7 @@ console.log(err)}})
     })
 // Auto CO
 setInterval(async () => {
-    const now = moment.tz('Asia/Jakarta').format('HH:mm')
+    const now = moment.tz('Africa/Accra').format('HH:mm')
     let needsSave = false
     for (const groupId in autoCloseDB) {
         const config = autoCloseDB[groupId]
@@ -382,13 +393,13 @@ setInterval(async () => {
                 if (now === config.tutup && !metadata.announce) {
                     await hydro.groupSettingUpdate(groupId, 'announcement')
                     await hydro.sendMessage(groupId, {
-                        text: `🌙 *Selamat Malam Semua!*\nGrup ini telah *ditutup otomatis* pada *${config.tutup} WIB*.\n\n🛌 Waktunya istirahat~`
+                        text: `🌙 *Good Evening Everyone!*\nThis group has been *automatically closed* at *${config.tutup} WIB*.\n\n🛌 Time for a break~`
                     })
                 }
                 if (now === config.buka && metadata.announce) {
                     await hydro.groupSettingUpdate(groupId, 'not_announcement')
                     await hydro.sendMessage(groupId, {
-                        text: `☀️ *Selamat Pagi!*\nGrup ini telah *dibuka otomatis* pada *${config.buka} WIB*.\n\n💬 Selamat ngobrol dan semangat harinya! 🌻`
+                        text: `☀️ *Good Morning!*\nThis group has been *automatically opened* at *${config.buka} WIB*.\n\n💬 Have a nice chat and have a great day! 🌻 `
                     })
                 }
             } catch (e) {
@@ -411,7 +422,7 @@ setInterval(async () => {
                 try {
                     await hydro.groupMetadata(x.id)
                     await hydro.sendMessage(x.id, { 
-                        text: "⏳ *Masa Sewa Habis*\n\nWaktu sewa bot di grup ini telah berakhir. Bot akan keluar otomatis.\nTerima kasih telah menggunakan layanan kami! 🙏" 
+                        text: "⏳ *Rental Period Expired*\n\nThe bot rental time in this group has ended. The bot will leave automatically.\nThank you for using our service! 🙏" 
                     })
                     await hydro.groupLeave(x.id)
                 } catch (e) {}
@@ -419,7 +430,7 @@ setInterval(async () => {
                  try {
                     await hydro.groupMetadata(x.id) 
                     await hydro.sendMessage(x.id, { 
-                        text: "⚠️ *PERINGATAN MASA SEWA*\n\nMasa sewa bot di grup ini akan berakhir dalam waktu kurang dari *1 JAM*.\nSegera hubungi Owner jika ingin memperpanjang durasi." 
+                        text: "⚠️ *RENTAL WARNING*\n\nThe bot rental in this group will expire in less than *1 HOUR*.\nPlease contact the Owner immediately if you wish to extend the duration." 
                     })
                 } catch (e) {}
             }
@@ -460,10 +471,10 @@ hydro.ev.on('groups.update', async (update) => {
                         sewa[idx].status = 'active';
                         fs.writeFileSync('./database/sewa.json', JSON.stringify(sewa, null, 2));
                         await hydro.sendMessage(x.id, { text: 
-                            `✅ Sewa telah aktif!\n\n` +
-                            `🏷️ Nama : *${await getGcName(x.id)}*\n` +
+                            `✅ The rental is active\n\n` +
+                            `🏷️ Name : *${await getGcName(x.id)}*\n` +
                             `🆔 ID   : *${x.id}*\n` +
-                            `⏳ Durasi : *${msToDate(sewa[idx].expired - Date.now())}*`
+                            `⏳ Duration : *${msToDate(sewa[idx].expired - Date.now())}*`
                         });
                     }
                 }
@@ -501,7 +512,19 @@ hydro.sendContact = async (jid, kon, quoted = '', opts = {}) => {
 	for (let i of kon) {
 	    list.push({
 	    	displayName: await hydro.getName(i),
-	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await hydro.getName(i)}\nFN:${await hydro.getName(i)}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Click here to chat\nitem2.EMAIL;type=INTERNET:${ytname}\nitem2.X-ABLabel:YouTube\nitem3.URL:${socialm}\nitem3.X-ABLabel:GitHub\nitem4.ADR:;;${location};;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
+	    	vcard: `BEGIN:VCARD
+VERSION:3.0
+N:${await hydro.getName(i)}
+FN:${await hydro.getName(i)}
+item1.TEL;waid=${i}:${i}
+item1.X-ABLabel:Chat on WhatsApp
+item2.EMAIL;type=INTERNET:${ytname}
+item2.X-ABLabel:YouTube
+item3.URL:${socialm}
+item3.X-ABLabel:GitHub
+item4.ADR:;;${location};;;;
+item4.X-ABLabel:Location
+END:VCARD`
 	    })
 	}
 	hydro.sendMessage(jid, { contacts: { displayName: `${list.length} Contact`, contacts: list }, ...opts }, { quoted })
@@ -674,39 +697,47 @@ hydro.sendMessage(jid, buttonMessage, { quoted, ...options })
 
 hydro.sendKatalog = async (jid , title = '' , desc = '', gam , options = {}) =>{
 let message = await prepareWAMessageMedia({ image: gam }, { upload: hydro.waUploadToServer })
-const tod = generateWAMessageFromContent(jid,
-{"productMessage": {
-"product": {
-"productImage": message.imageMessage,
-"productId": "9999",
-"title": title,
-"description": desc,
-"currencyCode": "INR",
-"priceAmount1000": "100000",
-"url": `${websitex}`,
-"productImageCount": 1,
-"salePriceAmount1000": "0"
-},
-"businessOwnerJid": `${ownernumber}@s.whatsapp.net`
-}
+const tod = generateWAMessageFromContent(jid, {
+  productMessage: {
+    product: {
+      productImage: message.imageMessage,
+      productId: "9999",
+      title: title,
+      description: desc,
+      currencyCode: "USD",
+      priceAmount1000: "100000",
+      url: websitex,
+      productImageCount: 1,
+      salePriceAmount1000: "0"
+    },
+    businessOwnerJid: `${ownernumber}@s.whatsapp.net`
+  }
 }, options)
 return hydro.relayMessage(jid, tod.message, {messageId: tod.key.id})
 } 
 
-hydro.send5ButLoc = async (jid , text = '' , footer = '', img, but = [], options = {}) =>{
-var template = generateWAMessageFromContent(jid, proto.Message.fromObject({
-templateMessage: {
-hydratedTemplate: {
-"hydratedContentText": text,
-"locationMessage": {
-"jpegThumbnail": img },
-"hydratedFooterText": footer,
-"hydratedButtons": but
-}
-}
-}), options)
-hydro.relayMessage(jid, template.message, { messageId: template.key.id })
-}
+hydro.send5ButLoc = async (jid, text = '', footer = '', img, but = [], options = {}) => {
+  const template = generateWAMessageFromContent(
+    jid,
+    proto.Message.fromObject({
+      templateMessage: {
+        hydratedTemplate: {
+          hydratedContentText: text,
+          locationMessage: {
+            jpegThumbnail: img
+          },
+          hydratedFooterText: footer,
+          hydratedButtons: but
+        }
+      }
+    }),
+    options
+  );
+
+  return hydro.relayMessage(jid, template.message, {
+    messageId: template.key.id
+  });
+};
 global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name]: name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({
     ...query, ...(apikeyqueryname ? {
         [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name]: name]
