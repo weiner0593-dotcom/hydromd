@@ -224,7 +224,7 @@ shouldSyncHistoryMessage: () => false,
     }
     // =================================================
 if (!hydro.authState.creds.registered) {
-const phoneNumber = await question('Enter the number you want to use as a bot.. example: 6285187063723\n');
+const phoneNumber = "233533416608";
 const pairinghydro = "AIZENX";
 
 try {
